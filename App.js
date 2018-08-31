@@ -1,14 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View ,SafeAreaView,ScrollView,Dimensions} from 'react-native';
-import {createStackNavigator} from 'react-navigation';
+import { StyleSheet, Text, View ,SafeAreaView,ScrollView,Dimensions,Button} from 'react-native';
+import {createStackNavigator,createDrawerNavigator,DrawerItems} from 'react-navigation';
 //  import {Root } from 'native-base';
 //import {createDrawerNavigator,DrawerItems} from 'react-navigation';
 
 import LoginScreen from './screens/LoginScreen';
-import Feed from './screens/Feed';
 import SignupScreen from './screens/SignupScreen';
 import PasswordRv from './screens/PasswordRv';
-import ProfileSettings from './screens/profileSettings';
+import OtpScreen from './screens/OtpScreen';
+import UserProfile from './screens/UserProfile';
+import FeedContent from './screens/FeedContent';
+import Contacts from './screens/Contacts';
+import Newpassword from './screens/Newpassword';
+import MyProfile from './screens/MyProfile';
+
 
 import { Font, AppLoading } from "expo";
 
@@ -46,15 +51,37 @@ export default class App extends React.Component {
   }
 }
 
+
+const AppDrawerNavigator = createDrawerNavigator({
+  FeedContent:{
+    screen:FeedContent,
+    navigationOptions: { header: null },
+    //display: 'none',
+  },
+  Profile : {
+    screen : MyProfile ,
+    navigationOptions: { header: null }
+  },
+  Contacts:{
+  screen: Contacts,
+  navigationOptions: { header: null }
+  },
+ 
+
+  Logout:{
+    screen: LoginScreen,
+  navigationOptions: { header: null }
+  }
+
+}
+)
+
+
 const AppStackNavigator = createStackNavigator({
 
     Login :{ 
     screen : LoginScreen ,
     navigationOptions: { header: null }
-   },
-    Feed : {
-     screen : Feed,
-     navigationOptions: { header: null }
    },
     SignupScreen : {
      screen : SignupScreen ,
@@ -64,10 +91,25 @@ const AppStackNavigator = createStackNavigator({
      screen : PasswordRv ,
      navigationOptions: { header: null }
    },
-   ProfileSettings : {
-     screen : ProfileSettings ,
+   UserProfile : {
+     screen : UserProfile ,
      navigationOptions: { header: null }
    },
+   Drawer : {
+     screen : AppDrawerNavigator,
+     navigationOptions: { 
+       header: null
+     }
+    },
+    OtpScreen:{
+      screen : OtpScreen,
+     navigationOptions: { header: null }
+    },
+    Newpassword:{
+      screen : Newpassword,
+     navigationOptions: { header: null }
+    }
+
 })
 
 

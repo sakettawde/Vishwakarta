@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Header, Form, Button, Container, Content,Item ,Input, Label } from 'native-base';
 
-export default class PasswordRv extends React.Component {
+export default class Newpassword extends React.Component {
   render() {
     return (
       <Container>
@@ -10,13 +10,17 @@ export default class PasswordRv extends React.Component {
         <Content>
           <Form>
             <Item stackedLabel>
-              <Label>Mobile Number</Label>
+              <Label>Enter New Password</Label>
               <Input />
+            </Item>
+            <Item stackedLabel>
+              <Label>Confirm Password</Label>
+              <Input secureTextEntry={true}/>
             </Item>
             
             <Button rounded full
                 onPress={() => {  
-                this.props.navigation.navigate('OtpScreen');
+                this.props.navigation.navigate('Login');
               }}>
           <Text style={{ color: 'white' }}>Next</Text>
         </Button>

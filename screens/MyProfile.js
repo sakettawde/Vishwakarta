@@ -14,7 +14,7 @@ export default class ProfileSettings extends React.Component {
   render() {
     return (
       <Container style={{paddingTop: 23}}>
-        <Header style={{paddingtop:23}}><Text>James Bond</Text></Header>
+        <Header ><Text>James Bond</Text></Header>
         <Content>
           <Image source={{uri: 'Image URL'}} style={{height: 200, width: 200, flex: 1}}/>
           <Text>Info::</Text>

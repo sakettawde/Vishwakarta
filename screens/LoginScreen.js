@@ -14,26 +14,28 @@ export default class LoginScreen extends Component {
         <Content >
           <Form >
             <Item stackedLabel>
-              <Label>Username</Label>
+              <Label>Mobile Number</Label>
               <Input /> 
             </Item>
             <Item stackedLabel last>
               <Label>Password</Label>
-              <Input />
+              <Input  secureTextEntry={true}/>
             </Item>
            
           </Form>
-          <Button full onPress={() => {this.props.navigation.navigate('Feed')}} >
+          <Button full onPress={() => {this.props.navigation.navigate('Drawer')}} style={styles.container}>
             <Text>Login</Text>
           </Button>
               
           <View style={{flex : 1 , flexDirection : 'row' }}>
-            <Text style={styles.container} onPress={()=>{this.props.navigation.navigate('SignupScreen')}}>
+            <View style={styles.container}>
+            <Text style={styles.headline}  onPress={()=>{this.props.navigation.navigate('SignupScreen')}}>
             SignUp</Text>
-                       
-            <Text style={styles.container } onPress={()=>{this.props.navigation.navigate('PasswordRv')}}>
+            </View>
+            <View style={styles.container}>
+            <Text style={styles.headline} onPress={()=>{this.props.navigation.navigate('PasswordRv')}}>
               Forget Password</Text>
-            
+              </View>
           </View>
         </Content>
         
@@ -44,7 +46,9 @@ export default class LoginScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignSelf : 'center',
-    justifyContent: 'center',
+    paddingTop : 10,
   },
+  headline :{
+    textAlign: 'center'
+  }
 });

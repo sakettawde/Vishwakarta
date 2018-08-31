@@ -5,8 +5,7 @@ Content , List , ListItem , Left , Body , Right , Thumbnail } from 'native-base'
 export default class Contacts extends Component {
   
   openContact = () => {
-    console.log(JSON.stringify(this.props))
-    this.props.navigation.navigate('Profile')
+    this.props.navigation.navigate('UserProfile')
   }
 
   render() {
