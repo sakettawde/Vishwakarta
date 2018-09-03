@@ -19,7 +19,7 @@ export default class Feed extends Component {
             <Right />
      
     </Header>   
-    <Tabs locked='true'>
+    <Tabs locked={true}>
       <Tab heading='ADMIN'>
         <Tab1/>
       </Tab>
@@ -33,7 +33,7 @@ export default class Feed extends Component {
     <View style={{flex:0}}>
     <Fab
             active={true}
-            direction="up"
+            //direction="up"
             containerStyle={{ }}
             style={{ backgroundColor: '#5067FF' }}
             position="bottomRight"

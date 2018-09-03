@@ -15,6 +15,7 @@ import Contacts from './screens/Contacts';
 import Newpassword from './screens/Newpassword';
 import MyProfile from './screens/MyProfile';
 import Newpost from './screens/Newpost';
+import Imgpicker from './screens/Imgpicker';
 
 
 import { Font, AppLoading } from "expo";
@@ -117,6 +118,10 @@ const AppStackNavigator = createStackNavigator({
     },
     Newpost:{
       screen : Newpost,
+     navigationOptions: { header: null }
+    },
+    Imgpicker:{
+      screen : Imgpicker,
      navigationOptions: { header: null }
     }
 
