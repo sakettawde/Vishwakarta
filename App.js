@@ -6,6 +6,7 @@ import {createStackNavigator,createDrawerNavigator,DrawerItems} from 'react-navi
 
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
+import SignupScreen2 from './screens/SignupScreen2';
 import PasswordRv from './screens/PasswordRv';
 import OtpScreen from './screens/OtpScreen';
 import UserProfile from './screens/UserProfile';
@@ -13,6 +14,7 @@ import FeedContent from './screens/FeedContent';
 import Contacts from './screens/Contacts';
 import Newpassword from './screens/Newpassword';
 import MyProfile from './screens/MyProfile';
+import Newpost from './screens/Newpost';
 
 
 import { Font, AppLoading } from "expo";
@@ -87,6 +89,10 @@ const AppStackNavigator = createStackNavigator({
      screen : SignupScreen ,
      navigationOptions: { header: null }
    },
+   SignupScreen2 : {
+    screen : SignupScreen2 ,
+    navigationOptions: { header: null }
+  },
    PasswordRv : {
      screen : PasswordRv ,
      navigationOptions: { header: null }
@@ -107,6 +113,10 @@ const AppStackNavigator = createStackNavigator({
     },
     Newpassword:{
       screen : Newpassword,
+     navigationOptions: { header: null }
+    },
+    Newpost:{
+      screen : Newpost,
      navigationOptions: { header: null }
     }
 

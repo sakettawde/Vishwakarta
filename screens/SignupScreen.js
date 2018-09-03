@@ -93,30 +93,38 @@ export default class SignUp extends React.Component {
               
             </Item>
             <Item>
+            <Text>Profession</Text>
             <Picker
+              style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}
               mode="dropdown"
-              note="Select your Profession"
               Icon={<Icon name="ios-arrow-down-outline" />}
-
               selectedValue={this.state.selected}
               onValueChange={this.onValueChange.bind(this)}
             >
-              <Picker.Item label="Wallet" value="key0" />
-              <Picker.Item label="ATM Card" value="key1" />
-              <Picker.Item label="Debit Card" value="key2" />
-              <Picker.Item label="Credit Card" value="key3" />
-              <Picker.Item label="Net Banking" value="key4" />
+              <Picker.Item label="Doctor" value="key0" />
+              <Picker.Item label="Engineer" value="key1" />
+              <Picker.Item label="CA" value="key2" />
+              <Picker.Item label="Lawyer" value="key3" />
+              <Picker.Item label="Other" value="key4" />
             </Picker>
             </Item>
-            <Item stackedLabel>
-              <Label>Home Location Pincode</Label>
-              <Input/>
+            <Item>
+            <Text>Gotra</Text>
+            <Picker
+              style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}
+              mode="dropdown"
+              Icon={<Icon name="ios-arrow-down-outline" />}
+              selectedValue={this.state.selected}
+              onValueChange={this.onValueChange.bind(this)}
+            >
+              <Picker.Item label="Doctor" value="key0" />
+              <Picker.Item label="Engineer" value="key1" />
+              <Picker.Item label="CA" value="key2" />
+              <Picker.Item label="Lawyer" value="key3" />
+              <Picker.Item label="Other" value="key4" />
+            </Picker>
             </Item>
             
-            <Item stackedLabel last>
-              <Label>Current Location Pincode</Label>
-              <Input />
-            </Item>
             
             
           </Form>
@@ -124,7 +132,7 @@ export default class SignUp extends React.Component {
           rounded
           full
           onPress={() => {
-            this.props.navigation.navigate('Drawer');
+            this.props.navigation.navigate('SignupScreen2');
           }}>
             <Text style={{ color: 'white' }}>Next</Text>
         </Button>

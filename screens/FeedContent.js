@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, Tab, Tabs , Text, Button, Left, Icon, Right } from 'native-base';
+import { Container, Header, Content, Tab, Tabs , Text, Button, Left, Icon, Right,Fab } from 'native-base';
+import {View} from 'react-native';
 import Tab1 from './tabOne';
 import Tab2 from './tabTwo';
 import Tab3 from './tabThree';
@@ -18,17 +19,28 @@ export default class Feed extends Component {
             <Right />
      
     </Header>   
-    <Tabs>
-      <Tab heading='Admin'>
+    <Tabs locked='true'>
+      <Tab heading='ADMIN'>
         <Tab1/>
       </Tab>
-      <Tab heading='My Wall'>
+      <Tab heading='MY WALL'>
         <Tab2/>
       </Tab>
-      <Tab heading='Temple'>
+      <Tab heading='TEMPLE'>
         <Tab3/>
       </Tab>
     </Tabs>
+    <View style={{flex:0}}>
+    <Fab
+            active={true}
+            direction="up"
+            containerStyle={{ }}
+            style={{ backgroundColor: '#5067FF' }}
+            position="bottomRight"
+            onPress={() => this.props.navigation.navigate('Newpost')}>
+            <Icon name="md-cloud-upload"/>
+          </Fab>
+        </View>
   </Container>
   );
   }
