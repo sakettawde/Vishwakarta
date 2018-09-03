@@ -10,12 +10,12 @@ import SignupScreen2 from './screens/SignupScreen2';
 import PasswordRv from './screens/PasswordRv';
 import OtpScreen from './screens/OtpScreen';
 import UserProfile from './screens/UserProfile';
-import FeedContent from './screens/FeedContent';
+import Wall from './screens/FeedContent';
 import Contacts from './screens/Contacts';
 import Newpassword from './screens/Newpassword';
 import MyProfile from './screens/MyProfile';
 import Newpost from './screens/Newpost';
-import Imgpicker from './screens/Imgpicker';
+import Sidebar from './screens/Sidebar';
 
 
 import { Font, AppLoading } from "expo";
@@ -56,8 +56,8 @@ export default class App extends React.Component {
 
 
 const AppDrawerNavigator = createDrawerNavigator({
-  FeedContent:{
-    screen:FeedContent,
+  Wall:{
+    screen:Wall,
     navigationOptions: { header: null },
     //display: 'none',
   },
@@ -76,6 +76,9 @@ const AppDrawerNavigator = createDrawerNavigator({
   navigationOptions: { header: null }
   }
 
+},
+{
+  contentComponent: props => <Sidebar {...props} />
 }
 )
 
@@ -120,10 +123,7 @@ const AppStackNavigator = createStackNavigator({
       screen : Newpost,
      navigationOptions: { header: null }
     },
-    Imgpicker:{
-      screen : Imgpicker,
-     navigationOptions: { header: null }
-    }
+   
 
 })
 

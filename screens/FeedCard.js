@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image ,Dimensions ,View,StyleSheet} from 'react-native';
-import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Left, Right , Body ,Icon } from 'native-base';
+import {  Card, CardItem, Thumbnail, Text, Button, Left, Right , Body ,Icon } from 'native-base';
 import Swiper from 'react-native-swiper';
 
 export default class FeedCard extends Component {
@@ -45,7 +45,8 @@ export default class FeedCard extends Component {
             <CardItem>  
               <Left>
                 <Button transparent textStyle={{color: '#87838B'}}>
-                  <Icon name="ios-heart" />
+                <Icon name="ios-heart" />
+                  
                   <Text>1,926 stars</Text>
                 </Button>
               </Left>

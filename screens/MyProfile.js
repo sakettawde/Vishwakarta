@@ -5,47 +5,91 @@ import {
   StyleSheet,
   Image
 } from 'react-native';
-import {Text , Label , Left ,Right ,Container, Header, Content, List, ListItem,Title } from 'native-base';
+import {Text , Label , Left ,Right ,Container, Header, Content, List, ListItem,Title, Input, Button } from 'native-base';
 
 
 export default class ProfileSettings extends React.Component {
-  
+  constructor(){
+    super();
+    this.state = {
+      value:  false,
+      Name: 'Peter Parker',
+      MobileNo: '9879879879',
+      BirthDate: '03/03/26',
+      Profession:'Social Worker',
+      Gotra :'Kshatriya',
+      Pincode:'444709'
+
+    }
+}
+handleClick(e){
+
+  this.setState({value:!this.state.value})
+   }
 
   render() {
     return (
-      <Container style={{paddingTop: 23}}>
-        <Header ><Text>James Bond</Text></Header>
+      <Container >
+        <Header />
         <Content>
-          <Image source={{uri: 'Image URL'}} style={{height: 200, width: 200, flex: 1}}/>
-          <Text>Info::</Text>
+          <Image source={{uri:"https://res.cloudinary.com/jerrick/image/upload/f_auto,fl_progressive,q_auto,c_fit,w_1100/t3onxzmjhmfbbah9ahzi" }} 
+          style={{height: 200, alignSelf: "stretch", flex: 1}}/>
+          <Text>Info</Text>
           <List>
+
             <ListItem>
             <Left style={{flex:1}}>
               <Text>Name</Text>
             </Left>
-            <Right style={{flex:2}}>
-              <Text>James Bond</Text>
-            </Right>
+              <Input placeholder={this.state.Name} editable={this.state.value}/>
             </ListItem>
-            <ListItem>
+
+             <ListItem>
             <Left style={{flex:1}}>
               <Text>Contact</Text>
             </Left>
-            <Right style={{flex:2}}>
-              <Text>9879879879</Text>
-            </Right>
+              <Input placeholder={this.state.MobileNo} editable={this.state.value}/>
             </ListItem>
+
             <ListItem>
             <Left style={{flex:1}}>
-              <Text>Email</Text>
+              <Text>BirthDate</Text>
             </Left>
-            <Right style={{flex:2}}>
-              <Text>naamtosunahihoga@yolo.com</Text>
-            </Right>
+              <Input placeholder={this.state.BirthDate} editable={this.state.value}/>
             </ListItem>
-            
+
+            <ListItem>
+            <Left style={{flex:1}}>
+              <Text>Profession</Text>
+            </Left>
+              <Input placeholder={this.state.Profession} editable={this.state.value}/>
+            </ListItem>
+
+            <ListItem>
+            <Left style={{flex:1}}>
+              <Text>Gotra</Text>
+            </Left>
+              <Input placeholder={this.state.Gotra} editable={this.state.value}/>
+            </ListItem>
+
+            <ListItem>
+            <Left style={{flex:1}}>
+              <Text>Pincode</Text>
+            </Left>
+              <Input placeholder={this.state.Pincode} editable={this.state.value}/>
+            </ListItem>
            
           </List>
+        <View style={{flexDirection:'row'}}>
+         <Left></Left>
+          <Button onPress={this.handleClick.bind(this)}><Text>Edit</Text></Button>
+          <Button onPress={this.handleClick.bind(this)} editable={this.state.value} >
+              <Text>Save</Text>
+            </Button>
+       </View>
+
+          
+ 
         </Content>
       </Container>
     )
