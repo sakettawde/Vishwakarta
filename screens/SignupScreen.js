@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet,  View } from 'react-native';
+import { StyleSheet,  View  ,AsyncStorage } from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Label , Button ,DatePicker, Text, Left, Right 
 , Radio, Picker,Icon} from 'native-base';
 
@@ -10,18 +10,55 @@ export default class SignUp extends React.Component {
       chosenDate: new Date(),
       isSelect1: true,
       isSelect2: false,
-      selected: undefined,
+      selected_prof: 'key0',
+      selected_gotra: 'key0',
+      name:"",
+      mobile_num:"",
+      password:"",
+     
+      toggle:"",
+      profession:"",
+      gotra:""
+     };
+    this.setDate = this.setDate.bind(this);
+
+  }
+  /*info_array={
       name:"",
       mobile_num:"",
       password:"",
       birthdate:"",
       toggle:"",
-      Profession:"",
-      Gotra:""
-     };
-    this.setDate = this.setDate.bind(this);
-
+      profession:"",
+      gotra:""
   }
+*/
+  _storeData = async () => {
+    try {
+      await AsyncStorage.setItem("name" , this.state.name);
+      await AsyncStorage.setItem("mobile_num" , this.state.mobile_num);
+      await AsyncStorage.setItem("password" , this.state.password);
+      await AsyncStorage.setItem("birthdate" , this.state.chosenDate.toString().substr(4,12));
+      await AsyncStorage.setItem("toggle" , this.state.isSelect1.toString());
+      await AsyncStorage.setItem("prof" , this.state.selected_prof);
+      await AsyncStorage.setItem("gotra" , this.state.selected_gotra);
+    } catch (error) {
+      console.log('error saving item!')
+    }
+  }
+  fillinfo=()=>{
+    console.log(this.state.name)
+    console.log(this.state.mobile_num)
+    console.log(this.state.password)
+    console.log(this.state.chosenDate.toString().substr(4, 12))
+    console.log(this.state.isSelect1)
+    console.log(this.state.selected_prof)
+    console.log(this.state.selected_gotra)
+    this._storeData()
+    this.props.navigation.navigate('SignupScreen2',this.info_array)
+  }
+
+
   _onPressHandle = () => {
     this.setState({isSelect1: !this.state.isSelect1, isSelect2 : !this.state.isSelect2})
   }
@@ -29,9 +66,14 @@ export default class SignUp extends React.Component {
   setDate(newDate) {
     this.setState({ chosenDate: newDate });
   }
-  onValueChange(value : string) {
+  onProfChange(value : string) {
     this.setState({
-      selected: value
+      selected_prof: value
+    });
+  }
+  onGotraChange(value : string) {
+    this.setState({
+      selected_gotra: value
     });
   }
  
@@ -43,15 +85,15 @@ export default class SignUp extends React.Component {
           <Form>
             <Item stackedLabel>
               <Label>Name</Label>
-              <Input />
+              <Input onChangeText={text=>{this.setState({name:text})}}/>
             </Item>
             <Item stackedLabel>
               <Label>Mobile Number</Label>
-              <Input />
+              <Input onChangeText={text=>{this.setState({mobile_num:text})}}/>
             </Item>
             <Item stackedLabel>
               <Label>Password</Label>
-              <Input  secureTextEntry={true}/>
+              <Input  secureTextEntry={true} onChangeText={text=>{this.setState({password:text})}}/>
             </Item>
             <Item stackedLabel>
                 <Label>BirthDate</Label>
@@ -68,10 +110,12 @@ export default class SignUp extends React.Component {
                   placeHolderText={this.state.chosenDate.toString().substr(4, 12)}
                   textStyle={{ color: "green" }}
                   placeHolderTextStyle={{ color: "#d3d3d3" }}
-                  //onDateChange={this.setDate}
+                  onDateChange={text=>this.setState({chosenDate:text})}
                   />
                   
             </Item>
+
+            
             <Item>
               <View style={{flexDirection:'row',justifyContent:"space-evenly",padding:10}}>
               <View style={{flex:1}}></View>
@@ -105,8 +149,8 @@ export default class SignUp extends React.Component {
               style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}
               mode="dropdown"
               Icon={<Icon name="ios-arrow-down-outline" />}
-              selectedValue={this.state.selected}
-              onValueChange={this.onValueChange.bind(this)}
+              selectedValue={this.state.selected_prof}
+              onValueChange={this.onProfChange.bind(this)}
             >
               <Picker.Item label="Doctor" value="key0" />
               <Picker.Item label="Engineer" value="key1" />
@@ -121,8 +165,8 @@ export default class SignUp extends React.Component {
               style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}
               mode="dropdown"
               Icon={<Icon name="ios-arrow-down-outline" />}
-              selectedValue={this.state.selected}
-              onValueChange={this.onValueChange.bind(this)}
+              selectedValue={this.state.selected_gotra}
+              onValueChange={this.onGotraChange.bind(this)}
             >
               <Picker.Item label="Doctor" value="key0" />
               <Picker.Item label="Engineer" value="key1" />
@@ -135,12 +179,8 @@ export default class SignUp extends React.Component {
             
             
           </Form>
-          <Button
-          rounded
-          full
-          onPress={() => {
-            this.props.navigation.navigate('SignupScreen2');
-          }}>
+          <Button rounded full
+          onPress={() => this.fillinfo()}>
             <Text style={{ color: 'white' }}>Next</Text>
         </Button>
         </Content>
@@ -150,4 +190,3 @@ export default class SignUp extends React.Component {
     );
   }
 }
-
