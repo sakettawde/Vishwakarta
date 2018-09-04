@@ -1,9 +1,63 @@
 import React, { Component  } from 'react';
-import { StyleSheet, View  } from 'react-native';
+import { StyleSheet, View ,Alert  } from 'react-native';
 import { Container, Header, Content, Form, Item, Input, Label ,Title , Button ,Text } from 'native-base';
+import { Signin } from "../assets/ApiUrl";
+
 export default class LoginScreen extends Component {
   
+
+
+  state= {
+    phno:"",
+    pwd:""
+  }
+
+  handle_mobileNum(text){
+    this.setState({phno:text})
+    console.log("mob num",this.state.phno  )
+  }
+
+  handlePwd(text){
+    this.setState({pwd:text})
+    console.log("pass",this.state.pwd  )
+  }
  
+LoginApi = (phno,pwd) =>{
+  console.log("In LoginApi")
+  fetch(Signin, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      mobile_no: phno,
+      password: pwd
+    })
+  })
+    .then(data => {
+      return data.json()
+    })
+    .then(data => {
+      console.log("Login Response", data)
+      if(data.status_code==0){
+        console.log("SignIn Failed!")
+        Alert.alert("Invalid Mobile Number or Password")
+        
+      }
+      else if(data.status_code==200){
+        this.navigation.navigate('Drawer')
+      }
+        
+    })
+
+  }
+
+  Login = () =>{
+    console.log('In Login')
+    this.LoginApi(this.state.phno,this.state.pwd)
+
+  }
   
   render() {
     return (
@@ -12,18 +66,19 @@ export default class LoginScreen extends Component {
         <Title>Login</Title>
         </Header>
         <Content >
-          <Form >
+          <Form > 
             <Item stackedLabel>
               <Label>Mobile Number</Label>
-              <Input /> 
+              <Input onChangeText={text=>{this.handle_mobileNum(text)}}/> 
             </Item>
             <Item stackedLabel last>
               <Label>Password</Label>
-              <Input  secureTextEntry={true}/>
+              <Input  secureTextEntry={true} onChangeText={text=>this.handlePwd(text)}/>
             </Item>
            
           </Form>
-          <Button full onPress={() => {this.props.navigation.navigate('Drawer')}} style={styles.container}>
+
+          <Button  full onPress={()=>this.Login()} style={styles.container}>
             <Text>Login</Text>
           </Button>
               

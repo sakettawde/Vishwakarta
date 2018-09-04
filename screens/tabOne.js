@@ -11,6 +11,7 @@ export default class tabOne extends Component{
         <FeedCard/>
         <FeedCard/>
       </ScrollView>
+      
     );
   }
 }

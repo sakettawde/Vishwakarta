@@ -10,7 +10,14 @@ export default class SignUp extends React.Component {
       chosenDate: new Date(),
       isSelect1: true,
       isSelect2: false,
-      selected: undefined
+      selected: undefined,
+      name:"",
+      mobile_num:"",
+      password:"",
+      birthdate:"",
+      toggle:"",
+      Profession:"",
+      Gotra:""
      };
     this.setDate = this.setDate.bind(this);
 
@@ -35,7 +42,7 @@ export default class SignUp extends React.Component {
         <Content>
           <Form>
             <Item stackedLabel>
-              <Label>Username</Label>
+              <Label>Name</Label>
               <Input />
             </Item>
             <Item stackedLabel>
