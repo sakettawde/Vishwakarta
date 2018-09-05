@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet,  View  ,AsyncStorage } from 'react-native';
+import { StyleSheet,  View  ,AsyncStorage,Alert } from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Label , Button ,DatePicker, Text, Left, Right 
 , Radio, Picker,Icon} from 'native-base';
 
@@ -49,6 +49,20 @@ export default class SignUp extends React.Component {
   //   }
   // }
   fillinfo=()=>{
+    if(!this.state.name.length){
+      Alert.alert("Please Enter Your Name")
+      return
+    }
+    if(!this.state.mobile_num.length || this.state.mobile_num.length < 10 ){
+      Alert.alert("Please Enter Valid Number")
+      return
+    }
+    if(this.state.password.length < 5 ){
+      Alert.alert("Password cannot be less than 5 characters")
+      return
+    }
+
+    
     console.log(this.state.name)
     console.log(this.state.mobile_num)
     console.log(this.state.password)
@@ -67,6 +81,7 @@ export default class SignUp extends React.Component {
       profession:this.state.selected_prof,
       gotra:this.state.selected_gotra
     })
+  
   }
 
 
@@ -111,7 +126,7 @@ export default class SignUp extends React.Component {
                 <Label>BirthDate</Label>
               
                 <DatePicker
-                  defaultDate={new Date(2018, 4, 4)}
+                  defaultDate={new Date(1996, 1, 1)}
                   minimumDate={new Date(1975, 1, 1)}
                   maximumDate={new Date(2018, 12, 31)}
                   locale={"en"}

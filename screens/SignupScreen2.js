@@ -69,6 +69,16 @@ export default class SignupScreen2 extends React.Component{
  
 
   SignupApi = () =>{
+
+    if(this.state.home.length < 5){
+      Alert.alert("Enter Valid Pincode")
+      return
+    }
+    if(this.state.current.length < 5){
+      Alert.alert("Enter Valid Pincode")
+      return
+    }
+
     console.log("In SignupApi")
     fetch(Signup, {
       method: "POST",

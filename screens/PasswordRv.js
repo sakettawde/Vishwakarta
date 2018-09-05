@@ -11,6 +11,10 @@ export default class PasswordRv extends React.Component {
   
 
   PassrvApi = () =>{
+    if(this.state.mob_num.length<10){
+      Alert.alert("Please Enter Valid Number")
+      return
+    }
     console.log("In PassrvApi")
     fetch(Passrv, {
       method: "POST",
