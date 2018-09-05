@@ -1,8 +1,42 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View ,Alert} from 'react-native';
 import { Header, Form, Button, Container, Content,Item ,Input, Label } from 'native-base';
+import { Passrv } from "../assets/ApiUrl";
 
 export default class PasswordRv extends React.Component {
+
+  state={
+    mob_num:""
+  }
+
+  PassrvApi = () =>{
+    console.log("In PassrvApi")
+    fetch(Passrv, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        u_number: phno``
+      })
+    })
+      .then(data => {
+        return data.json()
+      })
+      .then(data => {
+        console.log("Passrv Response", data)
+        if(data.message=="Correct number"){
+          this.props.navigation.navigate('OtpScreen')
+                  
+        }
+        else if(data.message){
+          Alert.alert(data.message)
+        }
+          
+      })
+  
+    }
   render() {
     return (
       <Container>
@@ -11,13 +45,12 @@ export default class PasswordRv extends React.Component {
           <Form>
             <Item stackedLabel>
               <Label>Mobile Number</Label>
-              <Input />
+              <Input onChangeText={(text)=>{this.setState({mob_num:text})}} 
+                    keyboardType = 'numeric' maxLength={10}/>
             </Item>
             
             <Button rounded full
-                onPress={() => {  
-                this.props.navigation.navigate('OtpScreen');
-              }}>
+                onPress={() => this.PassrvApi()}>
           <Text style={{ color: 'white' }}>Next</Text>
         </Button>
           </Form>

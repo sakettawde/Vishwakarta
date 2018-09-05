@@ -6,6 +6,8 @@ import {Container, Header, Content, Form, Item, Input, Label , Button ,DatePicke
 export default class SignUp extends React.Component {
   constructor(props) {
     super(props);
+    //  this.fillinfo = this.fillinfo.bind(this);
+
     this.state = { 
       chosenDate: new Date(),
       isSelect1: true,
@@ -33,19 +35,19 @@ export default class SignUp extends React.Component {
       gotra:""
   }
 */
-  _storeData = async () => {
-    try {
-      await AsyncStorage.setItem("name" , this.state.name);
-      await AsyncStorage.setItem("mobile_num" , this.state.mobile_num);
-      await AsyncStorage.setItem("password" , this.state.password);
-      await AsyncStorage.setItem("birthdate" , this.state.chosenDate.toString().substr(4,12));
-      await AsyncStorage.setItem("toggle" , this.state.isSelect1.toString());
-      await AsyncStorage.setItem("prof" , this.state.selected_prof);
-      await AsyncStorage.setItem("gotra" , this.state.selected_gotra);
-    } catch (error) {
-      console.log('error saving item!')
-    }
-  }
+  // _storeData = async () => {
+  //   try {
+  //     await AsyncStorage.setItem("name" , this.state.name);
+  //     await AsyncStorage.setItem("mobile_num" , this.state.mobile_num);
+  //     await AsyncStorage.setItem("password" , this.state.password);
+  //     await AsyncStorage.setItem("birthdate" , this.state.chosenDate.toString());
+  //     await AsyncStorage.setItem("toggle" , this.state.isSelect1.toString());
+  //     await AsyncStorage.setItem("prof" , this.state.selected_prof);
+  //     await AsyncStorage.setItem("gotra" , this.state.selected_gotra);
+  //   } catch (error) {
+  //     console.log('error saving item!')
+  //   }
+  // }
   fillinfo=()=>{
     console.log(this.state.name)
     console.log(this.state.mobile_num)
@@ -54,8 +56,17 @@ export default class SignUp extends React.Component {
     console.log(this.state.isSelect1)
     console.log(this.state.selected_prof)
     console.log(this.state.selected_gotra)
-    this._storeData()
-    this.props.navigation.navigate('SignupScreen2',this.info_array)
+    // this._storeData()
+
+    this.props.navigation.navigate ('SignupScreen2',{
+      name:this.state.name,
+      mobile_num :this.state.mobile_num,
+      password:this.state.password,
+      birthdate: this.state.chosenDate.toString(),
+      toggle:this.state.isSelect1.toString(),
+      profession:this.state.selected_prof,
+      gotra:this.state.selected_gotra
+    })
   }
 
 
@@ -66,12 +77,12 @@ export default class SignUp extends React.Component {
   setDate(newDate) {
     this.setState({ chosenDate: newDate });
   }
-  onProfChange(value : string) {
+  onProfChange(value ) {
     this.setState({
       selected_prof: value
     });
   }
-  onGotraChange(value : string) {
+  onGotraChange(value ) {
     this.setState({
       selected_gotra: value
     });
@@ -89,7 +100,8 @@ export default class SignUp extends React.Component {
             </Item>
             <Item stackedLabel>
               <Label>Mobile Number</Label>
-              <Input onChangeText={text=>{this.setState({mobile_num:text})}}/>
+              <Input onChangeText={text=>{this.setState({mobile_num:text})}}
+                    keyboardType = 'numeric' maxLength={10} />
             </Item>
             <Item stackedLabel>
               <Label>Password</Label>
@@ -100,7 +112,7 @@ export default class SignUp extends React.Component {
               
                 <DatePicker
                   defaultDate={new Date(2018, 4, 4)}
-                  minimumDate={new Date(2018, 1, 1)}
+                  minimumDate={new Date(1975, 1, 1)}
                   maximumDate={new Date(2018, 12, 31)}
                   locale={"en"}
                   timeZoneOffsetInMinutes={undefined}
@@ -180,7 +192,7 @@ export default class SignUp extends React.Component {
             
           </Form>
           <Button rounded full
-          onPress={() => this.fillinfo()}>
+          onPress={this.fillinfo}  >
             <Text style={{ color: 'white' }}>Next</Text>
         </Button>
         </Content>

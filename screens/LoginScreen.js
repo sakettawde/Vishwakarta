@@ -40,13 +40,12 @@ LoginApi = (phno,pwd) =>{
     })
     .then(data => {
       console.log("Login Response", data)
-      if(data.status_code==0){
-        console.log("SignIn Failed!")
-        Alert.alert("Invalid Mobile Number or Password")
-        
+      if(data.message=="Login succesfully"){
+        this.props.navigation.navigate('Drawer')
+                
       }
-      else if(data.status_code==200){
-        this.navigation.navigate('Drawer')
+      else if(data.message){
+        Alert.alert(data.message)
       }
         
     })
@@ -69,7 +68,8 @@ LoginApi = (phno,pwd) =>{
           <Form > 
             <Item stackedLabel>
               <Label>Mobile Number</Label>
-              <Input onChangeText={text=>{this.handle_mobileNum(text)}}/> 
+              <Input onChangeText={text=>{this.handle_mobileNum(text)}}
+                  keyboardType = 'numeric' maxLength={10} /> 
             </Item>
             <Item stackedLabel last>
               <Label>Password</Label>
@@ -78,7 +78,7 @@ LoginApi = (phno,pwd) =>{
            
           </Form>
 
-          <Button  full onPress={()=>this.Login()} style={styles.container}>
+          <Button  full onPress={()=>{this.Login()}} style={styles.container}>
             <Text>Login</Text>
           </Button>
               
