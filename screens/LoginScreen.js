@@ -12,15 +12,6 @@ export default class LoginScreen extends Component {
     pwd:""
   }
 
-  handle_mobileNum(text){
-    this.setState({phno:text})
-    console.log("mob num",this.state.phno  )
-  }
-
-  handlePwd(text){
-    this.setState({pwd:text})
-    console.log("pass",this.state.pwd  )
-  }
  
 LoginApi = (phno,pwd) =>{
   console.log("In LoginApi")
@@ -40,12 +31,16 @@ LoginApi = (phno,pwd) =>{
     })
     .then(data => {
       console.log("Login Response", data)
+      
       if(data.message=="Login succesfully"){
-        this.props.navigation.navigate('Drawer')
+        console.log(data.records.user_id)
+        this.props.navigation.navigate('Drawer',{
+          records:data.records
+        })
                 
       }
       else if(data.message){
-        Alert.alert(data.message)
+        Alert.alert("Invalid Username or Password")
       }
         
     })
@@ -53,6 +48,10 @@ LoginApi = (phno,pwd) =>{
   }
 
   Login = () =>{
+    if(this.state.phno.length<10){
+      Alert.alert("Invalid Number")
+      return
+    }
     console.log('In Login')
     this.LoginApi(this.state.phno,this.state.pwd)
 
@@ -68,12 +67,12 @@ LoginApi = (phno,pwd) =>{
           <Form > 
             <Item stackedLabel>
               <Label>Mobile Number</Label>
-              <Input onChangeText={text=>{this.handle_mobileNum(text)}}
+              <Input onChangeText={text=>{this.setState({phno:text})}}
                   keyboardType = 'numeric' maxLength={10} /> 
             </Item>
             <Item stackedLabel last>
               <Label>Password</Label>
-              <Input  secureTextEntry={true} onChangeText={text=>this.handlePwd(text)}/>
+              <Input  secureTextEntry={true} onChangeText={text=>this.setState({pwd:text})}/>
             </Item>
            
           </Form>

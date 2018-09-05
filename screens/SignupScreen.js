@@ -76,7 +76,7 @@ export default class SignUp extends React.Component {
       name:this.state.name,
       mobile_num :this.state.mobile_num,
       password:this.state.password,
-      birthdate: this.state.chosenDate.toString(),
+      birthdate: this.state.chosenDate.toString().substr(4,12),
       toggle:this.state.isSelect1.toString(),
       profession:this.state.selected_prof,
       gotra:this.state.selected_gotra

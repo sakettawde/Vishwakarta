@@ -4,3 +4,4 @@ export const Passrv="http://35.161.99.113:9000/webapi/vishwkartalogin/forget_pas
 export const UpdateOtp="http://35.161.99.113:9000/webapi/vishwkartalogin/verifyOtp";
 export const CheckOtp="http://35.161.99.113:9000/webapi/vishwkartalogin/otpCheck";
 export const ChangePass="http://35.161.99.113:9000/webapi/vishwkartalogin/changePass";
+export const Userinfo="http://35.161.99.113:9000/webapi/vishwkartalogin/info";
