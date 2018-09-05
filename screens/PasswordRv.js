@@ -8,6 +8,7 @@ export default class PasswordRv extends React.Component {
   state={
     mob_num:""
   }
+  
 
   PassrvApi = () =>{
     console.log("In PassrvApi")
@@ -18,7 +19,7 @@ export default class PasswordRv extends React.Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        u_number: phno``
+        u_number: this.state.mob_num
       })
     })
       .then(data => {
@@ -27,14 +28,20 @@ export default class PasswordRv extends React.Component {
       .then(data => {
         console.log("Passrv Response", data)
         if(data.message=="Correct number"){
-          this.props.navigation.navigate('OtpScreen')
+          this.props.navigation.navigate('OtpScreen',{
+            mobile_num:this.state.mob_num
+          })
                   
         }
-        else if(data.message){
-          Alert.alert(data.message)
+        else {
+          Alert.alert(data)
         }
           
       })
+      .catch((error)=>{
+        console.log("Api call error");
+        console.log(error.message);
+     });
   
     }
   render() {
