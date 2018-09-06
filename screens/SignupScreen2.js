@@ -10,8 +10,8 @@ export default class SignupScreen2 extends React.Component{
  
   state = {
     image: null,
-    home: "",
-    current: ""
+    home_pin: "",
+    current_pin: ""
   };
   info_array={
     name:"",
@@ -119,7 +119,41 @@ export default class SignupScreen2 extends React.Component{
     // componentDidMount(){
     //   this._retrieveData()
     // }
+    PincodeApi=()=>{
+      fetch('http://35.161.99.113:9000/webapi/vishwkartalogin/pinCode', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          pincode:pin
+        })
+    }).then(data => {
+        return data.json();
+    }).then(record => {
+     
+         console.log("data of pincode",record.record.PostOffice)
+      this.setState({pincodeData:record.record.PostOffice})
+          if(record.record.PostOffice){
+            console.log("data is available")
+          }else{
+            console.log("No User")
+            this.setState({pincodeData:[]})
+          }
+    })
+  }
 
+
+home_handler=(text)=>{
+  this.setState({home_pin:text})
+  console.log(text)
+  if(text.length < 6){
+    return
+  }
+
+
+}
 
     render() {
         let { image }=this.state;
@@ -145,13 +179,13 @@ export default class SignupScreen2 extends React.Component{
               <Form>
               <Item stackedLabel>
               <Label>Home Location Pincode</Label>
-              <Input onChangeText={(text)=>this.setState({home:text})}
-                    keyboardType = 'numeric' maxLength={6}/>
+              <Input onChangeText={(text)=>this.home_handler(text)}
+                    keyboardType = 'numeric' maxLength={6} />
             </Item>
             
             <Item stackedLabel >
               <Label>Current Location Pincode</Label>
-              <Input onChangeText={(text)=>this.setState({current:text})}
+              <Input onChangeText={(text)=>this.setState({current_pin:text})}
                   keyboardType = 'numeric' maxLength={6}/>
             </Item>
             <Item stackedLabel Last>

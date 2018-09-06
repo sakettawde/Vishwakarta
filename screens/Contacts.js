@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Header, Item, Input, Icon, Button, Text ,
 Content , List , ListItem , Left , Body , Right , Thumbnail, Picker } from 'native-base';
-import {Switch ,Alert} from 'react-native';
+import {Switch ,Alert,ScrollView} from 'react-native';
+import { UserList, UserSearch } from "../assets/ApiUrl";
 
 export default class Contacts extends Component {
   
@@ -9,7 +10,9 @@ export default class Contacts extends Component {
      super();
      this.state ={
        SwitchOnValueHolder :  false,
-       selected: undefined
+       selected: undefined,
+       search_term:"",
+       list:[{}]
       }
     }
     onValueChange(value : string) {
@@ -17,7 +20,7 @@ export default class Contacts extends Component {
         selected: value
       });
     }
-  
+
 
 
 ShowAlert = (value) =>{
@@ -25,41 +28,96 @@ ShowAlert = (value) =>{
     SwitchOnValueHolder: value
   })
  
-  if(value == true)
-  {
-    Alert.alert("Switch is On.");
-  }
-  else{
-    Alert.alert("Switch is Off.");
-  }
+  // if(value == true)
+  // {
+  //   Alert.alert("Switch is On.");
+  // }
+  // else{
+  //   Alert.alert("Switch is Off.");
+  // }
  
 }
 
 
-  openContact = () => {
-    this.props.navigation.navigate('UserProfile')
+componentDidMount(){      
+  this.UserListApi()      
+}
+
+UserListApi = () =>{
+  console.log("In UserListApi")
+  fetch(UserList, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ })
+  })
+    .then(data => {
+      return data.json()
+    })
+    .then(data => {
+      //console.log("UserList Response", data)
+      if(data.message=="text message."){
+        this.setState({list:data.records})
+        
+      }
+      else {
+        Alert.alert(data)
+      }    
+    })
+    .catch((error)=>{
+      console.log("Api call error");
+      console.log(error.message);
+   });
+
   }
+
+  SearchByDetailsApi = (text) =>{
+    console.log("SearchByDetails")
+    this.state.search_term=text
+    console.log(this.state.search_term)
+    fetch(UserSearch, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ 
+        input: this.state.search_term
+      })
+    })
+      .then(data => {
+        return data.json()
+      })
+      .then(data => {
+        //console.log("UserList Response", data)
+        if(data.msgclass=="text-success"){
+          this.setState({list:data.cust_records})
+          
+        }
+        else {
+          Alert.alert(data)
+        }    
+      })
+      .catch((error)=>{
+        console.log("Api call error");
+        console.log(error.message);
+     });
+  
+    }
+  
 
   render() {
 
-    let contacts = [
-    {
-      avatarURL: "",
-      name: "Kumar Pratik",
-      profession: "CA"
-    },
-    {
-      avatarURL: "",
-      name: "John Rambo",
-      profession: "Engineer"
-    }]
-    if(this.state.SwitchOnValueHolder){
+   
+    if(!this.state.SwitchOnValueHolder){
       return (
         <Container>
           <Header searchBar rounded>
             <Item>
               <Icon name="ios-search" />
-              <Input placeholder="Search" />
+              <Input placeholder="Search" onChangeText={(text)=>{this.SearchByDetailsApi(text)}}/>
               <Icon name="ios-people" />
             </Item>
             <Button transparent>
@@ -73,23 +131,28 @@ ShowAlert = (value) =>{
           
           
           <Content>
+
+          <ScrollView>
             <List>
-            {contacts.map(item=>(
-              <ListItem key={item.name} avatar onPress={this.openContact}>
-                <Left>
-                  <Thumbnail source={{ uri: 'Image URL' }} />
-                </Left>
-                <Body >
-                  <Text>{item.name}</Text>
-                  <Text note>{item.profession}</Text>
-                </Body>
-                <Right>
-                  <Text note>3:43 pm</Text>
-                </Right>
-              </ListItem>
+                    {this.state.list.map(item=>(
+                        <ListItem key={item.user_id} avatar 
+                        onPress={()=>{ this.props.navigation.navigate('UserProfile',{
+                          user_id:item.user_id
+                      })
+                      }} >
+                        <Left>
+                            <Thumbnail source={{ uri: 'http://www.myiconfinder.com/uploads/iconsets/256-256-f86ca6f98affc4bfe9306d9693638920.png' }} />
+                        </Left>
+                        <Body >
+                            <Text>{item.name}</Text>
+                            <Text note>{item.professional}</Text>
+                            <Text note>{item.mobile_no}</Text>
+                        </Body>
+                    </ListItem>
               ))}
               
             </List>
+            </ScrollView>
           </Content>
         </Container>
       );
@@ -99,7 +162,7 @@ ShowAlert = (value) =>{
         <Container>
           <Header>
           <Picker
-              style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}
+              style={{borderWidth: 1 ,borderColor:'white',color:'white'}}
               mode="dropdown"
               Icon={<Icon name="ios-arrow-down-outline" />}
               selectedValue={this.state.selected}
@@ -119,23 +182,23 @@ ShowAlert = (value) =>{
           
           
           <Content>
-            <List>
-            {contacts.map(item=>(
-              <ListItem key={item.name} avatar onPress={this.openContact}>
-                <Left>
-                  <Thumbnail source={{ uri: 'Image URL' }} />
-                </Left>
-                <Body >
-                  <Text>{item.name}</Text>
-                  <Text note>{item.profession}</Text>
-                </Body>
-                <Right>
-                  <Text note>3:43 pm</Text>
-                </Right>
-              </ListItem>
+            <ScrollView>
+          <List>
+                    {this.state.list.map(item=>(
+                    <ListItem key={item.user_id} avatar >
+                        <Left>
+                            <Thumbnail source={{ uri: 'http://www.myiconfinder.com/uploads/iconsets/256-256-f86ca6f98affc4bfe9306d9693638920.png' }} />
+                        </Left>
+                        <Body >
+                            <Text>{item.name}</Text>
+                            <Text note>{item.professional}</Text>
+                            <Text note>{item.mobile_no}</Text>
+                        </Body>
+                    </ListItem>
               ))}
               
             </List>
+            </ScrollView>
           </Content>
         </Container>
       );

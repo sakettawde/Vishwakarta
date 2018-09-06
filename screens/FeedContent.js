@@ -44,7 +44,7 @@ export default class Feed extends Component {
             style={{ backgroundColor: '#5067FF' }}
             position="bottomRight"
             onPress={() => this.props.navigation.navigate('Newpost')}>
-            <Icon name="md-cloud-upload"/>
+            <Icon name="md-add"/>
           </Fab>
         </View>
   </Container>

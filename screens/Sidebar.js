@@ -1,6 +1,6 @@
 import React from "react";
 import { Image } from "react-native";
-import { Container, Content, Text, List, ListItem } from "native-base";
+import { Container, Content, Text, List, ListItem, Left, Thumbnail } from "native-base";
 const routes = ["Wall", "Profile", "Contacts","Logout"];
 export default class SideBar extends React.Component {
   render() {
@@ -17,7 +17,9 @@ export default class SideBar extends React.Component {
               justifyContent: "center",
               alignItems: "center"
             }}>
-           
+            {/* <Left>
+            <Thumbnail square small source={{uri: "https://facebook.github.io/react-native/docs/assets/favicon.png"}} />
+            </Left> */}
           </Image>
           <Text>Peter Parker</Text>
           <List

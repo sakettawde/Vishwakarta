@@ -14,6 +14,9 @@ export default class ProfileSettings extends React.Component {
     super();
     this.state = {
       value:  false,
+      name:"",
+      mobile_num:"",
+      
       records:[{}]
 
     }
@@ -25,7 +28,7 @@ componentDidMount(){
 
   this.UserInfoApi()
   //console.log(this.state.records)
-  this.forceUpdate()
+ // this.forceUpdate()
 
 }
 
@@ -47,10 +50,10 @@ UserInfoApi = () =>{
     .then(data => {
       console.log("UserInfo Response", data)
       if(data.message=="Data available"){
-        this.state.records=data.records
-        console.log(this.state.records)
+        this.setState({records:data.records})
+        //console.log(this.state.records)
         //console.log(data.records)                  
-        console.log(this.state.records[0].name)
+        //console.log(this.state.records[0].name)
       }
       else {
         Alert.alert(data)
@@ -65,7 +68,7 @@ UserInfoApi = () =>{
   }
 
 handleClick(e){
-
+  console.log(this.state.name)
   this.setState({value:!this.state.value})
    }
 
@@ -84,14 +87,16 @@ handleClick(e){
             <Left style={{flex:1}}>
               <Text>Name</Text>
             </Left>
-              <Input placeholder={this.state.records[0].name} editable={this.state.value}/>
+              <Input placeholder={this.state.records[0].name} editable={this.state.value} 
+                    onChangeText={(text)=>{this.setState({name : text})}}/>
             </ListItem>
 
              <ListItem>
             <Left style={{flex:1}}>
               <Text>Contact</Text>
             </Left>
-              <Input placeholder={this.state.records[0].mobile_no} editable={this.state.value}/>
+              <Input placeholder={this.state.records[0].mobile_no} editable={this.state.value}
+                      onChangeText={(text)=>{this.setState({mobile_num : text})}}/>
             </ListItem>
 
             <ListItem>
@@ -131,11 +136,14 @@ handleClick(e){
            
           </List>
         <View style={{flexDirection:'row'}}>
-         <Left></Left>
+         <Left>
           <Button onPress={this.handleClick.bind(this)}><Text>Edit</Text></Button>
+          </Left>
+          <Right>
           <Button onPress={this.handleClick.bind(this)} editable={this.state.value} >
               <Text>Save</Text>
             </Button>
+            </Right>
        </View>
 
           

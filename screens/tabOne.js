@@ -11,14 +11,11 @@ export default class tabOne extends Component{
       refreshing: false,
     };
   }
-  WaitFunc(){
-    this.setState({refreshing: false});
-  }
+
   _onRefresh = () => {
     this.setState({refreshing: true});
 
-    setTimeout(this.WaitFunc, 3000);
-    //this.setState({refreshing: false});
+    this.setState({refreshing: false});
   }
   render(){
     return(

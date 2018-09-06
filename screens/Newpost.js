@@ -20,7 +20,7 @@ export default class StackedLabelExample extends Component {
             </Item>
             <Item stackedLabel last>
               <Label>Caption</Label>
-              <Input />
+              <Input multiline={true}/>
             </Item>
           </Form>
           <Button rounded full

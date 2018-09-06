@@ -16,6 +16,8 @@ import Newpassword from './screens/Newpassword';
 import MyProfile from './screens/MyProfile';
 import Newpost from './screens/Newpost';
 import Sidebar from './screens/Sidebar';
+// import ContactUsersList from './screens/ContactUsersList';
+
 
 
 import { Font, AppLoading } from "expo";
@@ -123,7 +125,7 @@ const AppStackNavigator = createStackNavigator({
       screen : Newpost,
      navigationOptions: { header: null }
     },
-   
+    
 
 })
 

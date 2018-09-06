@@ -21,7 +21,7 @@ export default class Newpassword extends React.Component {
       },
       body: JSON.stringify({
         u_number: this.state.mobile_num,
-        u_pass:this.state.passwd
+        u_pass: this.state.passwd
       })
     })
       .then(data => {

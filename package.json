@@ -13,6 +13,7 @@
     "native-base": "2.8.0",
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-29.0.0.tar.gz",
+    "react-native-dialog": "^5.1.0",
     "react-native-elements": "0.19.1",
     "react-native-image-picker": "^0.26.10",
     "react-native-swiper": "^1.5.13",
