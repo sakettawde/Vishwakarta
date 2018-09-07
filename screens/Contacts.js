@@ -134,8 +134,8 @@ UserListApi = () =>{
 
           <ScrollView>
             <List>
-                    {this.state.list.map(item=>(
-                        <ListItem key={item.user_id} avatar 
+                    {this.state.list.map((item,index)=>(
+                        <ListItem key={index} avatar 
                         onPress={()=>{ this.props.navigation.navigate('UserProfile',{
                           user_id:item.user_id
                       })

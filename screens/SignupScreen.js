@@ -3,7 +3,7 @@ import { StyleSheet,  View  ,AsyncStorage,Alert } from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Label , Button ,DatePicker, Text, Left, Right 
 , Radio, Picker,Icon} from 'native-base';
 import Dialog from "react-native-dialog";
-import { ListGotra } from "../assets/ApiUrl";
+import { ListGotra ,ListProf} from "../assets/ApiUrl";
 
 
 
@@ -14,7 +14,7 @@ export default class SignUp extends React.Component {
       chosenDate: new Date(),
       isSelect1: true,
       isSelect2: false,
-      selected_prof: 'key0',
+      selected_prof: 1,
       selected_gotra: 1,
       name:"",
       mobile_num:"",
@@ -31,8 +31,16 @@ export default class SignUp extends React.Component {
           "id": 1,
        },
       ],
-      gotralen:1,
-      dialogVisible: false,
+      proflist:[ {
+        "name": "Select",
+        "id": 0,
+     },
+     {
+       "name": "Select",
+       "id": 1,
+    },
+   ],
+
      };
     this.setDate = this.setDate.bind(this);
 
@@ -62,41 +70,7 @@ export default class SignUp extends React.Component {
   // }
 
     componentDidMount(){
-
-      fetch(ListGotra, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({  })
-      })
-        .then(data => {
-          return data.json()
-        })
-        .then(data => {
-          if(data.message=="Data available"){
-            this.state.gotralist=data.records
-            //console.log(this.state.records)
-            //console.log(data.records)                  
-            //console.log(this.state.gotralist.length)
-            this.state.gotralen=this.state.gotralist.length + 1
-            this.state.gotralist.push({
-              "gotra": "Other",
-              "id": this.state.gotralen,
-            })
-            this.forceUpdate()
-            
-          }
-          else {
-            Alert.alert(data)
-          }
-            
-        })
-        .catch((error)=>{
-          console.log("Api call error");
-          console.log(error.message);
-       });
+      this.gotra_renderer()      
     }
   
 
@@ -160,19 +134,41 @@ export default class SignUp extends React.Component {
       console.log("Enter Your Gotra:")
     }
   }
-  // showDialog = () => {
-  //   this.setState({ dialogVisible: true });
-  // };
- 
-  // handleCancel = () => {
-  //   this.setState({ dialogVisible: false });
-  // };
- 
-  // handleDelete = () => {
-  //   // The user has pressed the "Delete" button, so here you can do your own logic.
-  //   // ...Your logic
-  //   this.setState({ dialogVisible: false });
-  // };
+  addGotraHandler=()=>{
+    
+    this.props.navigation.navigate('AddGotra', {updateGotra: this.gotra_renderer})
+    
+  }
+
+  gotra_renderer=()=>{
+    fetch(ListGotra, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({  })
+    })
+      .then(data => {
+        return data.json()
+      })
+      .then(data => {
+        if(data.message=="Data available"){
+          this.setState({gotralist:data.records})
+          //console.log(this.state.records)
+          //console.log(data.records)                  
+          //console.log(this.state.gotralist.length)            
+        }
+        else {
+          Alert.alert(data)
+        }
+          
+      })
+      .catch((error)=>{
+        console.log("Api call error");
+        console.log(error.message);
+     });
+  }
  
   render() {
     return (
@@ -250,11 +246,11 @@ export default class SignUp extends React.Component {
               selectedValue={this.state.selected_prof}
               onValueChange={this.onProfChange.bind(this)}
             >
-              <Picker.Item label="Doctor" value="key0" />
-              <Picker.Item label="Engineer" value="key1" />
-              <Picker.Item label="CA" value="key2" />
-              <Picker.Item label="Lawyer" value="key3" />
-              <Picker.Item label="Other" value="key4" />
+              <Picker.Item label="Doctor" value='1' />
+              <Picker.Item label="Engineer" value='2' />
+              <Picker.Item label="CA" value="3" />
+              <Picker.Item label="Lawyer" value="4" />
+              <Picker.Item label="Other" value="5" />
             </Picker>
             </Item>
             <Item>
@@ -275,16 +271,8 @@ export default class SignUp extends React.Component {
                ))}
             </Picker>
             
-            {/* <Dialog visible={true}>
-              <Dialog.Title>Account delete</Dialog.Title>
-              <Dialog.Description>
-                  Do you want to delete this account? You cannot undo this action.
-              </Dialog.Description>
-              <Dialog.Button label="Cancel" onPress={this.handleCancel} />
-              <Dialog.Button label="Delete" onPress={this.handleDelete} />
-            </Dialog> */}
 
-            <Button iconLeft light onPress={this.showDialog}>
+            <Button iconLeft light onPress={()=>this.addGotraHandler()}>
             <Icon name='md-add' />
             <Text>Other</Text>
           </Button>

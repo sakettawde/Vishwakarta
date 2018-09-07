@@ -17,10 +17,11 @@ import MyProfile from './screens/MyProfile';
 import Newpost from './screens/Newpost';
 import Sidebar from './screens/Sidebar';
 // import ContactUsersList from './screens/ContactUsersList';
-
+import ChatPage from './screens/ChatPage';
 
 
 import { Font, AppLoading } from "expo";
+import AddGotra from './screens/AddGotra';
 
 
 
@@ -123,6 +124,14 @@ const AppStackNavigator = createStackNavigator({
     },
     Newpost:{
       screen : Newpost,
+     navigationOptions: { header: null }
+    },
+    AddGotra:{
+      screen : AddGotra,
+     navigationOptions: { header: null }
+    },
+    ChatPage:{
+      screen : ChatPage,
      navigationOptions: { header: null }
     },
     
