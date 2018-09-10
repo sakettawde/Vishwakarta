@@ -44,9 +44,13 @@ export default class Newpassword extends React.Component {
      });
   
     }
+    componentDidMount(){
+      const num=this.props.navigation.getParam('mobile_num');
+      console.log(num)
+      this.setState({mobile_num:num})
+    }
     check(){
       if(this.state.passwd==this.state.confpass){
-        this.state.mobile_num = this.props.navigation.getParam('mobile_num');
         this.NewPassApi();
 
       }

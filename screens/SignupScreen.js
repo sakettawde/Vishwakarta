@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet,  View  ,AsyncStorage,Alert } from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Label , Button ,DatePicker, Text, Left, Right 
 , Radio, Picker,Icon} from 'native-base';
-import Dialog from "react-native-dialog";
+//import Dialog from "react-native-dialog";
 import { ListGotra ,ListProf} from "../assets/ApiUrl";
 
 
@@ -45,32 +45,11 @@ export default class SignUp extends React.Component {
     this.setDate = this.setDate.bind(this);
 
   }
-  /*info_array={
-      name:"",
-      mobile_num:"",
-      password:"",
-      birthdate:"",
-      toggle:"",
-      profession:"",
-      gotra:""
-  }
-*/
-  // _storeData = async () => {
-  //   try {
-  //     await AsyncStorage.setItem("name" , this.state.name);
-  //     await AsyncStorage.setItem("mobile_num" , this.state.mobile_num);
-  //     await AsyncStorage.setItem("password" , this.state.password);
-  //     await AsyncStorage.setItem("birthdate" , this.state.chosenDate.toString());
-  //     await AsyncStorage.setItem("toggle" , this.state.isSelect1.toString());
-  //     await AsyncStorage.setItem("prof" , this.state.selected_prof);
-  //     await AsyncStorage.setItem("gotra" , this.state.selected_gotra);
-  //   } catch (error) {
-  //     console.log('error saving item!')
-  //   }
-  // }
+  
 
     componentDidMount(){
-      this.gotra_renderer()      
+      this.gotra_renderer()    
+      this.prof_renderer()  
     }
   
 
@@ -124,19 +103,22 @@ export default class SignUp extends React.Component {
     this.setState({
       selected_prof: value
     });
+    console.log(this.state.selected_prof)
   }
   
   onGotraChange(value ) {
     this.setState({
       selected_gotra: value
     });
-    if(this.state.selected_gotra==this.state.gotralen){
-      console.log("Enter Your Gotra:")
-    }
   }
   addGotraHandler=()=>{
     
     this.props.navigation.navigate('AddGotra', {updateGotra: this.gotra_renderer})
+    
+  }
+  addProfHandler=()=>{
+    
+    this.props.navigation.navigate('AddProf', {updateGotra: this.prof_renderer})
     
   }
 
@@ -155,9 +137,41 @@ export default class SignUp extends React.Component {
       .then(data => {
         if(data.message=="Data available"){
           this.setState({gotralist:data.records})
+          this.setState({selected_gotra:this.state.gotralist.length})
           //console.log(this.state.records)
           //console.log(data.records)                  
           //console.log(this.state.gotralist.length)            
+        }
+        else {
+          Alert.alert(data)
+        }
+          
+      })
+      .catch((error)=>{
+        console.log("Api call error");
+        console.log(error.message);
+     });
+  }
+
+  prof_renderer=()=>{
+    fetch(ListProf, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({  })
+    })
+      .then(data => {
+        return data.json()
+      })
+      .then(data => {
+        if(data.message=="Data available"){
+          this.setState({proflist:data.records})
+          this.setState({selected_prof:this.state.proflist.length})
+          //console.log(this.state.records)
+          //console.log(data.records)                  
+          console.log(this.state.selected_prof)            
         }
         else {
           Alert.alert(data)
@@ -178,7 +192,7 @@ export default class SignUp extends React.Component {
           <Form>
             <Item stackedLabel>
               <Label>Name</Label>
-              <Input onChangeText={text=>{this.setState({name:text})}}/>
+              <Input autoCapitalize="words" onChangeText={text=>{this.setState({name:text})}}/>
             </Item>
             <Item stackedLabel >
               <Label>Mobile Number</Label>
@@ -237,6 +251,9 @@ export default class SignUp extends React.Component {
               </View>
               
             </Item>
+            
+
+
             <Item>
             <Text>Profession</Text>
             <Picker
@@ -246,16 +263,21 @@ export default class SignUp extends React.Component {
               selectedValue={this.state.selected_prof}
               onValueChange={this.onProfChange.bind(this)}
             >
-              <Picker.Item label="Doctor" value='1' />
-              <Picker.Item label="Engineer" value='2' />
-              <Picker.Item label="CA" value="3" />
-              <Picker.Item label="Lawyer" value="4" />
-              <Picker.Item label="Other" value="5" />
+
+              {this.state.proflist.map(item => (
+                <Picker.Item key={item.id} label={item.name} value={item.id}></Picker.Item>
+               ))}
             </Picker>
-            </Item>
+            
+
+            <Button iconLeft light onPress={()=>this.addProfHandler()}>
+            <Icon name='md-add' />
+            <Text>Other</Text>
+          </Button>
+          </Item>
+
+
             <Item>
-
-
             <Text>Gotra</Text>
             <Picker
               style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}

@@ -7,13 +7,7 @@ import Tab3 from './tabThree';
 
 export default class Feed extends Component {
   
-  state={
-    records:""
-  }
-  componentDidMount(){
-    this.state.records=this.props.navigation.getParam('records')
-    
-  }
+  
   render(){
   return(
   <Container style={{paddingTop: 23}}>

@@ -13,7 +13,8 @@ export default class UserProfile extends React.Component {
   constructor(){
     super();
     this.state = {
-      user_id:"",      
+      user_id:"",
+     // current_id:"",      
       records:[{}],
       value:false
 
@@ -21,6 +22,7 @@ export default class UserProfile extends React.Component {
 } 
 componentDidMount(){
   this.state.user_id=this.props.navigation.getParam('user_id')  
+  //this.state.current_id=this.props.navigation.getParam('current_id')
   console.log(this.state.user_id)
 
   this.UserInfoApi()
@@ -72,7 +74,8 @@ UserInfoApi = () =>{
           style={{height: 200, alignSelf: "stretch", flex: 1}}/>
           <Button onPress={()=>{
             this.props.navigation.navigate('ChatPage',{
-              user_id:this.state.user_id
+              user_id:this.state.user_id,
+              current_id:this.state.current_id
             })}
           }><Text>Chat</Text></Button>
           <Text>Info</Text>

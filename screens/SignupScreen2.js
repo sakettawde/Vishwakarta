@@ -1,8 +1,13 @@
 import React from 'react';
-import { StyleSheet,  View, AsyncStorage,Alert } from 'react-native';
-import {Container, Header, Content, Form, Item, Input, Label , Button, Text, Left, Right,Image} from 'native-base';
+import { StyleSheet,  View, ScrollView,Alert ,Dimensions, TouchableOpacity } from 'react-native';
+import {Container, Header, Content, Form, Item, Input, Label , Button, Text, Left, Right,Image, Picker,Icon, List, ListItem} from 'native-base';
 import { ImagePicker } from 'expo';
-import { Signup } from "../assets/ApiUrl";
+//import Table from 'react-native-simple-table'
+//import { Table, Row, Rows } from 'react-native-table-component';
+
+import { Signup , PincodeUrl } from "../assets/ApiUrl";
+
+
 
 
 
@@ -11,7 +16,12 @@ export default class SignupScreen2 extends React.Component{
   state = {
     image: null,
     home_pin: "",
-    current_pin: ""
+    current_pin: "",
+    showhome:false,
+    showcurrent:false,
+    pincodeData:[],
+    
+
   };
   info_array={
     name:"",
@@ -32,40 +42,7 @@ export default class SignupScreen2 extends React.Component{
   }
 
 
-  // _retrieveData = async () => {
-  //   try {
-  //     this.info_array.name = await AsyncStorage.getItem('name');
-  //     if (this.info_array.name !== null) {
-  //       console.log(this.info_array.name);
-  //     }
-
-  //     this.info_array.mobile_num = await AsyncStorage.getItem('mobile_num');
-
-  //     this.info_array.password = await AsyncStorage.getItem('password');
-      
-  //     this.info_array.birthdate = await AsyncStorage.getItem('birthdate');
-  //     if (this.info_array.birthdate!== null) {
-  //       console.log(this.info_array.birthdate);
-  //     }
-      
-  //     const value = await AsyncStorage.getItem('toggle');
-  //     if(value!==null){
-  //       if (value=='true'){
-  //         this.info_array.toggle="Business"
-  //       }
-  //       else{
-  //         this.info_array.toggle="Employee"
-  //       }
-          
-  //     }
-  //     this.info_array.profession = await AsyncStorage.getItem('prof');
-  //     this.info_array.gotra = await AsyncStorage.getItem('gotra');
-
-  //    } catch (error) {
-  //      // Error retrieving data
-  //    }
-  // }
-
+  
  
 
   SignupApi = () =>{
@@ -119,8 +96,10 @@ export default class SignupScreen2 extends React.Component{
     // componentDidMount(){
     //   this._retrieveData()
     // }
-    PincodeApi=()=>{
-      fetch('http://35.161.99.113:9000/webapi/vishwkartalogin/pinCode', {
+
+    
+    pincodeApi=(pin)=>{
+      fetch(PincodeUrl, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -131,11 +110,12 @@ export default class SignupScreen2 extends React.Component{
         })
     }).then(data => {
         return data.json();
-    }).then(record => {
+    }).then(data => {
      
-         console.log("data of pincode",record.record.PostOffice)
-      this.setState({pincodeData:record.record.PostOffice})
-          if(record.record.PostOffice){
+      console.log("data of pincode",data.record.PostOffice)
+      console.log(pin)
+      this.setState({pincodeData:data.record.PostOffice})
+          if(data.record.PostOffice){
             console.log("data is available")
           }else{
             console.log("No User")
@@ -149,9 +129,25 @@ home_handler=(text)=>{
   this.setState({home_pin:text})
   console.log(text)
   if(text.length < 6){
-    return
+    this.setState({pincodeData:[]})
+  }
+  else{
+  this.pincodeApi(text)
+  this.setState({showhome:true})
   }
 
+
+
+}
+
+onHomeChange=(value)=>{
+  this.setState({selected_home:value})
+  //this.setState({showhome:false})
+}
+selectedPincode=(item)=>{
+  console.log('in onPress')
+  console.log(item)
+  this.setState({showhome:false})
 
 }
 
@@ -182,6 +178,86 @@ home_handler=(text)=>{
               <Input onChangeText={(text)=>this.home_handler(text)}
                     keyboardType = 'numeric' maxLength={6} />
             </Item>
+
+          {this.state.showhome && this.state.pincodeData && this.state.pincodeData.length > 0 ?(
+
+            <ScrollView >
+            <List>
+              <ListItem itemHeader style={{flexDirection:"row",justifyContent:"space-evenly"}}  >
+                  <Text>Name</Text>
+                  <Text>District</Text>
+                  <Text>Region</Text>
+                  <Text>Country</Text>
+              </ListItem>
+
+              {this.state.pincodeData.map((item,index)=>(
+                      <ListItem key={index} style={{flexDirection:"row",justifyContent:"space-evenly"}} >
+                      {/* <TouchableOpacity onPress={this.selectedPincode(item)} >
+                        <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+                          <View><Text>{item.Name}</Text></View>
+                          <View><Text>{item.District}</Text></View>
+                          <View><Text>{item.Region}</Text></View>
+                          <View><Text>{item.Country}</Text></View>
+                        </View>
+                      </TouchableOpacity> */}
+                      <TouchableOpacity onPress={()=>this.selectedPincode(item)}><Text>{item.Name}</Text></TouchableOpacity>
+                      <TouchableOpacity onPress={()=>this.selectedPincode(item)}><Text>{item.District}</Text></TouchableOpacity>
+                      <TouchableOpacity onPress={()=>this.selectedPincode(item)}><Text>{item.Region}</Text></TouchableOpacity>
+                      <TouchableOpacity onPress={()=>this.selectedPincode(item)}><Text>{item.Country}</Text></TouchableOpacity>
+                      </ListItem>
+              ))}
+            </List>
+            </ScrollView>
+          ):(<View></View>)}
+
+         {/* {this.state.pincodeData && this.state.pincodeData.length > 0 ?( <View style={styles.container}>
+        <Table columnWidth={70} columns={columns} dataSource={this.state.pincodeData}/>
+         </View>):(<View></View>)
+         } */}
+
+         
+
+
+            {/* {this.state.pincodeData && this.state.pincodeData.length > 0 ?(
+              <View style={{flex : 1,}} >
+            <Table columns={columns} dataSource={this.state.pincodeData}
+           
+            style={{flex:1,width:Dimensions.get('window').width}} />
+            </View>
+            ):(<View></View> )} */}
+
+
+            {/* <View style={styles.container}>
+              <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                
+                { this.state.pincodeData? (
+                <Row data={this.state.tableHead} /> 
+                <Rows data={['1','2','5','6']} />
+                  )
+                :(<View></View>)}
+              </Table>
+            </View>           */}
+
+            {/* {this.state.pincodeData && this.state.pincodeData.length > 0 ?(
+          <View style={{display:"flex",flexDirection:"column"}}>
+          {this.state.pincodeData.map(item=>{
+            <TouchableOpacity>
+            <View style={{display:"flex",flexDirection:"row"}}>
+            <Text>{item.Name}-{item.District}-{item.Region}</Text>
+            </View>
+            </TouchableOpacity>
+          })}
+          </View>
+         ):(<View></View>)
+         } */}
+
+
+
+           
+           
+
+
+
             
             <Item stackedLabel >
               <Label>Current Location Pincode</Label>
@@ -197,6 +273,8 @@ home_handler=(text)=>{
               {image && <Text>Uploaded</Text>}
             </Item>
           </Form>
+
+          
 
             <Button rounded full
             onPress={() => this.check_func()}>
@@ -221,3 +299,9 @@ home_handler=(text)=>{
         }
       };
 }
+
+ const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
+  head: { height: 40, backgroundColor: '#f1f8ff' },
+  text: { margin: 6 }
+});

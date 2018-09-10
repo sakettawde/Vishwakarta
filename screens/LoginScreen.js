@@ -2,6 +2,7 @@ import React, { Component  } from 'react';
 import { StyleSheet, View ,Alert  } from 'react-native';
 import { Container, Header, Content, Form, Item, Input, Label ,Title , Button ,Text } from 'native-base';
 import { Signin } from "../assets/ApiUrl";
+import { AsyncStorage } from "react-native"
 
 export default class LoginScreen extends Component {
   
@@ -9,7 +10,20 @@ export default class LoginScreen extends Component {
 
   state= {
     phno:"",
-    pwd:""
+    pwd:"",
+   
+  }
+
+
+  _storeData = async (user_id,user_name) => {
+    try {
+      console.log(user_id)
+      console.log(user_name)
+      await AsyncStorage.setItem('user_id', user_id);
+      await AsyncStorage.setItem('user_name',user_name);
+    } catch (error) {
+      // Error saving data
+    }
   }
 
  
@@ -33,10 +47,13 @@ LoginApi = (phno,pwd) =>{
       console.log("Login Response", data)
       
       if(data.message=="Login succesfully"){
-        console.log(data.records.user_id)
-        this.props.navigation.navigate('Drawer',{
-          records:data.records
-        })
+        console.log(data.records)
+        this.setState({records:data.records})
+        // this.setState({user_id:data.records.user_id})
+        // this.setState({user_name:data.records.name})
+        this._storeData(data.records.user_id,data.records.name)
+
+        this.props.navigation.navigate('Drawer')
                 
       }
       else if(data.message){

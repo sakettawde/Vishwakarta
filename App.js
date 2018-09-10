@@ -22,6 +22,7 @@ import ChatPage from './screens/ChatPage';
 
 import { Font, AppLoading } from "expo";
 import AddGotra from './screens/AddGotra';
+import AddProf from './screens/AddProf';
 
 
 
@@ -45,9 +46,8 @@ export default class App extends React.Component {
 
   render() { if (this.state.loading) {
       return (
-                  <AppLoading />
-        
-      );
+                <AppLoading />
+               );
     }
     return (
       
@@ -88,6 +88,7 @@ const AppDrawerNavigator = createDrawerNavigator({
 
 const AppStackNavigator = createStackNavigator({
 
+  
     Login :{ 
     screen : LoginScreen ,
     navigationOptions: { header: null }
@@ -99,7 +100,7 @@ const AppStackNavigator = createStackNavigator({
    SignupScreen2 : {
     screen : SignupScreen2 ,
     navigationOptions: { header: null }
-  },
+  },  
    PasswordRv : {
      screen : PasswordRv ,
      navigationOptions: { header: null }
@@ -128,6 +129,10 @@ const AppStackNavigator = createStackNavigator({
     },
     AddGotra:{
       screen : AddGotra,
+     navigationOptions: { header: null }
+    },
+    AddProf:{
+      screen : AddProf,
      navigationOptions: { header: null }
     },
     ChatPage:{

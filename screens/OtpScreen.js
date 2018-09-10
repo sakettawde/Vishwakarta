@@ -23,18 +23,25 @@ export default class OtpScreen extends React.Component {
     // let authkey = "133779ATT6JFXy0k5850e783"
     // let sender = "SHMGMT"
     // let route = "4"
-    let number = this.state.mobile_no
-    let message = "Hey there, here is ur otp :" + random
+    //let number = this.state.mobile_no
+    let Inquirymsg = "Hey there, here is ur otp :" + random
 
-    let url =
-      "http://bhashsms.com/api/sendmsg.php?" +
-      "user=TEAM_MHOURZ&pass=MECHATRON&text=" +
-      message +
-      "&sender=MHOURZ&phone=" +
-      number +
-      "&priority=ndnd&stype=normal"
+    // let url =
+    //   "http://bhashsms.com/api/sendmsg.php?" +
+    //   "user=TEAM_MHOURZ&pass=MECHATRON&text=" +
+    //   message +
+    //   "&sender=MHOURZ&phone=" +
+    //   number +
+    //   "&priority=ndnd&stype=normal"
     //console.log("url", url)
-    fetch(url, { mode: "no-cors" }).then(response => {
+    let authkey = "226898AmIKM4WBH5b502d68"
+    let sender = "MSGIND"
+    let route = "4"
+    let number = this.state.mobile_num
+    let urlInquiry='http://control.msg91.com/api/sendhttp.php?authkey='+authkey+'&mobiles='+number+'&message='+Inquirymsg+'&sender='+sender+'&route='+route+'&country=91';
+
+
+    fetch(urlInquiry, { mode: "no-cors" }).then(response => {
       //console.log(response)
       fetch(UpdateOtp, {
         method: "POST",
@@ -82,7 +89,7 @@ export default class OtpScreen extends React.Component {
         console.log("Checkotp Response", data)
         if(data.message=="verify OTP"){
           this.props.navigation.navigate('Newpassword',{
-            mobile_num:this.state.mob_num
+            mobile_num:this.state.mobile_num
           })
                   
         }

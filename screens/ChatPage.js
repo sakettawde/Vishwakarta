@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { base } from '../utils/base';
+import { AsyncStorage } from "react-native"
+
 
 
 export default class ChatPage extends React.Component {
@@ -17,11 +19,28 @@ export default class ChatPage extends React.Component {
             },
           },
       ],
-      convId: "101TO105"
+      convId: "101TO105",
+      user_sender:"",
+      user_recv:""
+    }
+
+    _retrieveData = async () => {
+      try {
+        console.log('hi')
+        const value = await AsyncStorage.getItem('user_id');
+        console.log("val ",value)
+       } catch (error) {
+         console.log(error)
+       }
     }
 
     componentDidMount(){
+
         this.listen()
+        this._retrieveData()
+        this.state.user_recv=this.props.navigation.getParam('user_id')  
+      //this.state.user_sender=this.props.navigation.getParam('current_id')
+        
     }
 
 
@@ -34,7 +53,7 @@ export default class ChatPage extends React.Component {
                 limitToLast: 20
               },
             then(chatData){
-              console.log(chatData)
+              //console.log(chatData)
               const toReturn = chatData.map(item=>{
                 let newItem = item
                 newItem.createdAt = item.timestamp  
@@ -46,7 +65,7 @@ export default class ChatPage extends React.Component {
     }
   
     onSend(messages = []) {
-        console.log(messages)
+        //console.log(messages)
         newId = messages[0]._id
         let obj = messages[0]
         obj.timestamp = new Date()

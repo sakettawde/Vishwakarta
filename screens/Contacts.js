@@ -12,7 +12,8 @@ export default class Contacts extends Component {
        SwitchOnValueHolder :  false,
        selected: undefined,
        search_term:"",
-       list:[{}]
+       list:[{}],
+       user_id:""
       }
     }
     onValueChange(value : string) {
@@ -40,7 +41,8 @@ ShowAlert = (value) =>{
 
 
 componentDidMount(){      
-  this.UserListApi()      
+  this.UserListApi()
+  //this.state.user_id=this.props.navigation.getParam('user_id')      
 }
 
 UserListApi = () =>{
@@ -137,7 +139,8 @@ UserListApi = () =>{
                     {this.state.list.map((item,index)=>(
                         <ListItem key={index} avatar 
                         onPress={()=>{ this.props.navigation.navigate('UserProfile',{
-                          user_id:item.user_id
+                          user_id:item.user_id,
+                         // current_id:this.state.user_id
                       })
                       }} >
                         <Left>
@@ -184,8 +187,13 @@ UserListApi = () =>{
           <Content>
             <ScrollView>
           <List>
-                    {this.state.list.map(item=>(
-                    <ListItem key={item.user_id} avatar >
+                {this.state.list.map((item,index)=>(
+                        <ListItem key={index} avatar 
+                        onPress={()=>{ this.props.navigation.navigate('UserProfile',{
+                          user_id:item.user_id,
+                         // current_id:this.state.user_id
+                      })
+                      }} >
                         <Left>
                             <Thumbnail source={{ uri: 'http://www.myiconfinder.com/uploads/iconsets/256-256-f86ca6f98affc4bfe9306d9693638920.png' }} />
                         </Left>
@@ -196,7 +204,6 @@ UserListApi = () =>{
                         </Body>
                     </ListItem>
               ))}
-              
             </List>
             </ScrollView>
           </Content>

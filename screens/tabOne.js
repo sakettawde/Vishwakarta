@@ -20,6 +20,7 @@ export default class tabOne extends Component{
   render(){
     return(
       <ScrollView style={{paddingVertical: 10}}
+          pinchGestureEnabled={true}
           refreshControl={<RefreshControl refreshing={this.state.refreshing}
           onRefresh={this._onRefresh}/>}>
         <FeedCard/>

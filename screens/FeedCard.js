@@ -5,6 +5,22 @@ import Swiper from 'react-native-swiper';
 
 export default class FeedCard extends Component {
 
+    state={
+      like:true,
+      count:1988
+    }
+
+  toggleLike=()=>{
+    if(this.state.like){
+      this.setState({count:this.state.count-1})
+    }
+    else{
+      this.setState({count:this.state.count+1})
+    }
+    this.setState({like:!this.state.like})
+    
+  }
+    
   render() {
     return (
         
@@ -44,16 +60,19 @@ export default class FeedCard extends Component {
 
             <CardItem>  
               <Left>
-                <Button transparent textStyle={{color: '#87838B'}}>
-                <Icon name="ios-heart" />
+                <Button transparent textStyle={{color: '#87838B'}} 
+                onPress={()=>this.toggleLike()}>
+
+                {this.state.like?(<Icon name="ios-heart" />):
+                (<Icon name="ios-heart-outline" />)}
                   
-                  <Text>1,926 stars</Text>
+                  <Text>{this.state.count} Likes</Text>
                 </Button>
               </Left>
               <Right>
                 <Button transparent textStyle={{color: '#87838B'}}>
                   <Icon name="md-chatboxes" />
-                  <Text>1,926 stars</Text>
+                  <Text>1,926 Comments</Text>
                 </Button>
               </Right>
             </CardItem>
