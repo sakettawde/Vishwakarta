@@ -13,8 +13,7 @@ export default class UserProfile extends React.Component {
   constructor(){
     super();
     this.state = {
-      user_id:"",
-     // current_id:"",      
+      user_id:"",      
       records:[{}],
       value:false
 
@@ -72,12 +71,18 @@ UserInfoApi = () =>{
         <Content>
           <Image source={{uri:"https://res.cloudinary.com/jerrick/image/upload/f_auto,fl_progressive,q_auto,c_fit,w_1100/t3onxzmjhmfbbah9ahzi" }} 
           style={{height: 200, alignSelf: "stretch", flex: 1}}/>
+         
+         
+         
           <Button onPress={()=>{
             this.props.navigation.navigate('ChatPage',{
               user_id:this.state.user_id,
-              current_id:this.state.current_id
+              user_name:this.state.records[0].name
             })}
           }><Text>Chat</Text></Button>
+
+
+
           <Text>Info</Text>
           <List>
 

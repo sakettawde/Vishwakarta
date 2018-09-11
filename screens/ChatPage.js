@@ -7,40 +7,49 @@ import moment from 'moment';
 
 export default class ChatPage extends React.Component {
     state = {
-      messages: [
-        {
-            _id: 1,
-            text: 'Hello developer',
-            createdAt: moment().format(),
-            user: {
-              _id: 2,
-              name: 'React Native',
-              avatar: 'https://placeimg.com/140/140/any',
-            },
-          },
-      ],
-      convId: "101TO106",
+      messages: [ ],
+      convId: "",
       user_sender:"",
-      user_recv:""
+      sender_name:"",
+      user_recv:"",
+      recv_name:""
     }
 
     _retrieveData = async () => {
       try {
         console.log('hi')
+        this.state.user_recv=this.props.navigation.getParam('user_id')
+        this.state.recv_name=this.props.navigation.getParam('user_name')
         const value = await AsyncStorage.getItem('user_id');
-        console.log("val ",value)
+        this.setState({user_sender:value})
+        const value2=await AsyncStorage.getItem('user_name');
+        this.setState({sender_name:value})
+        console.log("id ",value)
+        console.log("name ",value2)
+        await this._setConvId()
+        this.listen()
        } catch (error) {
          console.log(error)
        }
     }
 
-    componentDidMount(){
+    _setConvId=()=>{
+      let a=this.state.user_sender
+      let b=this.state.user_recv
+      if(a<b){
+        console.log(a+"TO"+b)
+        this.setState({convId:a+"TO"+b})
+      }
+      else{
+        console.log(b+"TO"+a)
+        this.setState({convId:b+"TO"+a})
 
-        this.listen()
-        this._retrieveData()
-        this.state.user_recv=this.props.navigation.getParam('user_id')  
-      //this.state.user_sender=this.props.navigation.getParam('current_id')
-        
+      }
+    }
+
+    componentDidMount(){
+      this._retrieveData()
+             
     }
 
 
@@ -109,10 +118,10 @@ export default class ChatPage extends React.Component {
     }
   
     render() {
-      let now = new Date()
+      
       //console.log("Date testing")
      // console.log(moment.format())
-      console.log(this.state)
+      //console.log(this.state)
       // console.log(now.getMonth())
       // console.log(now.getDate())
       // console.log(now.getHours())
@@ -124,8 +133,8 @@ export default class ChatPage extends React.Component {
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
           user={{
-            _id: 1,
-            name: "Test User"
+            _id: this.state.user_sender,
+            name: this.state.sender_name
           }}
         />
       )

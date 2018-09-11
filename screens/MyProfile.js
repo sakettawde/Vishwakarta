@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   ScrollView,
-  View,
+  View,AsyncStorage,
   StyleSheet,
   Image,Alert
 } from 'react-native';
@@ -21,12 +21,19 @@ export default class ProfileSettings extends React.Component {
 
     }
 } 
-componentDidMount(){
-  const info=this.props.navigation.getParam('records')
-  this.state.user_id=info["user_id"]
-  console.log(this.state.user_id)
+_retrieveData = async () => {
+  try {
+    const value = await AsyncStorage.getItem('user_id');
+    await this.setState({user_id:value})
+    console.log("id ",value)
+    this.UserInfoApi()
+   } catch (error) {
+     console.log(error)
+   }
+}
 
-  this.UserInfoApi()
+componentDidMount(){
+  this._retrieveData()
   //console.log(this.state.records)
  // this.forceUpdate()
 

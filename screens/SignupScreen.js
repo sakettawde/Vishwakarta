@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet,  View  ,AsyncStorage,Alert } from 'react-native';
+import { StyleSheet,  View ,Alert } from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Label , Button ,DatePicker, Text, Left, Right 
 , Radio, Picker,Icon} from 'native-base';
 //import Dialog from "react-native-dialog";
@@ -47,21 +47,13 @@ export default class SignUp extends React.Component {
     this.setDate = this.setDate.bind(this);
 
   }
-  _retrieveData = async () => {
-    try {
-      console.log('hi')
-      const value = await AsyncStorage.getItem('user_id');
-      console.log("val ",value)
-     } catch (error) {
-       console.log(error)
-     }
-  }
+  
   
 
     componentDidMount(){
       this.gotra_renderer()    
       this.prof_renderer()  
-      this._retrieveData()
+     
     }
   
 
