@@ -51,7 +51,7 @@ export default class AddProf extends React.Component {
 
     return (
       <Container>
-        <Header ><Text style={styles.headline}>Add New Profession</Text></Header>
+        {/* <Header ><Text style={styles.headline}>Add New Profession</Text></Header> */}
         <Content>
           <Form>
             <Item stackedLabel>

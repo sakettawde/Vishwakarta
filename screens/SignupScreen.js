@@ -15,6 +15,8 @@ export default class SignUp extends React.Component {
       isSelect1: true,
       isSelect2: false,
       selected_prof: 1,
+      prof_name:"",
+      gotra_name:"",
       selected_gotra: 1,
       name:"",
       mobile_num:"",
@@ -45,11 +47,21 @@ export default class SignUp extends React.Component {
     this.setDate = this.setDate.bind(this);
 
   }
+  _retrieveData = async () => {
+    try {
+      console.log('hi')
+      const value = await AsyncStorage.getItem('user_id');
+      console.log("val ",value)
+     } catch (error) {
+       console.log(error)
+     }
+  }
   
 
     componentDidMount(){
       this.gotra_renderer()    
       this.prof_renderer()  
+      this._retrieveData()
     }
   
 
@@ -72,8 +84,8 @@ export default class SignUp extends React.Component {
     console.log(this.state.password)
     console.log(this.state.chosenDate.toString().substr(4, 12))
     console.log(this.state.isSelect1)
-    console.log(this.state.selected_prof)
-    console.log(this.state.selected_gotra)
+    console.log(this.state.prof_name)
+    console.log(this.state.gotra_name)
 
    
 
@@ -85,8 +97,8 @@ export default class SignUp extends React.Component {
       password:this.state.password,
       birthdate: this.state.chosenDate.toString().substr(4,12),
       toggle:this.state.isSelect1.toString(),
-      profession:this.state.selected_prof,
-      gotra:this.state.selected_gotra
+      profession:this.state.prof_name,
+      gotra:this.state.gotra_name
     })
   
   }
@@ -99,17 +111,31 @@ export default class SignUp extends React.Component {
   setDate(newDate) {
     this.setState({ chosenDate: newDate });
   }
-  onProfChange(value ) {
-    this.setState({
+  onProfChange=async(value )=> {
+    await this.setState({
       selected_prof: value
     });
-    console.log(this.state.selected_prof)
+    var temp=this.state.proflist.find((item)=>{
+      return item.id ===this.state.selected_prof
+    })
+    await this.setState({
+      prof_name: temp.name
+    });
   }
   
-  onGotraChange(value ) {
-    this.setState({
+  onGotraChange=async(value )=> {
+    await this.setState({
       selected_gotra: value
     });
+    //console.log(value)
+    var temp=this.state.gotralist.find((item)=>{
+      return item.id ===this.state.selected_gotra
+    })
+    //console.log(temp)
+    await this.setState({
+      gotra_name: temp.gotra
+    });
+    //console.log(this.state.gotra_name)
   }
   addGotraHandler=()=>{
     
@@ -137,7 +163,14 @@ export default class SignUp extends React.Component {
       .then(data => {
         if(data.message=="Data available"){
           this.setState({gotralist:data.records})
-          this.setState({selected_gotra:this.state.gotralist.length})
+          this.setState({selected_gotra:this.state.gotralist[this.state.gotralist.length-1].id})
+          var temp=this.state.gotralist.find((item)=>{
+            return item.id ===this.state.selected_gotra
+          })
+          //console.log(temp)
+          this.setState({
+            gotra_name: temp.gotra
+          });
           //console.log(this.state.records)
           //console.log(data.records)                  
           //console.log(this.state.gotralist.length)            
@@ -168,7 +201,13 @@ export default class SignUp extends React.Component {
       .then(data => {
         if(data.message=="Data available"){
           this.setState({proflist:data.records})
-          this.setState({selected_prof:this.state.proflist.length})
+          this.setState({selected_prof:this.state.proflist[this.state.proflist.length-1].id})
+          var temp=this.state.proflist.find((item)=>{
+            return item.id ===this.state.selected_prof
+          })
+          this.setState({
+            prof_name: temp.name
+          });
           //console.log(this.state.records)
           //console.log(data.records)                  
           console.log(this.state.selected_prof)            

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { base } from '../utils/base';
-import { AsyncStorage } from "react-native"
-
+import { AsyncStorage } from "react-native";
+import moment from 'moment'; 
 
 
 export default class ChatPage extends React.Component {
@@ -11,7 +11,7 @@ export default class ChatPage extends React.Component {
         {
             _id: 1,
             text: 'Hello developer',
-            createdAt: new Date(),
+            createdAt: moment().format(),
             user: {
               _id: 2,
               name: 'React Native',
@@ -19,7 +19,7 @@ export default class ChatPage extends React.Component {
             },
           },
       ],
-      convId: "101TO105",
+      convId: "101TO106",
       user_sender:"",
       user_recv:""
     }
@@ -50,13 +50,13 @@ export default class ChatPage extends React.Component {
             asArray: true,
             queries: {
                 orderByChild: 'timestamp',
-                limitToLast: 20
+                limitToFirst: 20
               },
             then(chatData){
-              //console.log(chatData)
+             // console.log(chatData)
               const toReturn = chatData.map(item=>{
                 let newItem = item
-                newItem.createdAt = item.timestamp  
+                newItem.createdAt = moment(item.timestamp).toDate()  
                 return newItem
               })
                 this.addMessages(toReturn)
@@ -65,10 +65,11 @@ export default class ChatPage extends React.Component {
     }
   
     onSend(messages = []) {
-        //console.log(messages)
+        //console.log(messages[0])
         newId = messages[0]._id
         let obj = messages[0]
-        obj.timestamp = new Date()
+        obj.timestamp = moment().format()
+        //console.log(obj)
         base.post(`conversations/${this.state.convId}/${newId}`, {
             data: obj,
             then(err){
@@ -78,6 +79,17 @@ export default class ChatPage extends React.Component {
             }
           })
     }
+
+    compare(prop) {  
+      return function(a, b) {  
+          if (a[prop] > b[prop]) {  
+              return -1;  
+          } else if (a[prop] < b[prop]) {  
+              return 1;  
+          }  
+          return 0;  
+      }  
+  }  
 
     addMessages = (messages=[]) => {
         // this.setState(previousState => ({
@@ -90,12 +102,23 @@ export default class ChatPage extends React.Component {
         let latestm = newm.filter(item=>{
             return !(prevKeys.indexOf(item.key) > -1)
         })
+        let newlatestm = latestm.sort(this.compare("timestamp"))
         this.setState(previousState => ({
-                messages: GiftedChat.append(previousState.messages, latestm)
+                messages: GiftedChat.append(previousState.messages, newlatestm)
               }))
     }
   
     render() {
+      let now = new Date()
+      //console.log("Date testing")
+     // console.log(moment.format())
+      console.log(this.state)
+      // console.log(now.getMonth())
+      // console.log(now.getDate())
+      // console.log(now.getHours())
+      // console.log(now.getMinutes())
+      // console.log(now.getSeconds())
+
       return (
         <GiftedChat
           messages={this.state.messages}

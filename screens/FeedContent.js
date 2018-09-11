@@ -21,13 +21,13 @@ export default class Feed extends Component {
     </Header>   
     <Tabs locked={true}>
       <Tab heading='ADMIN'>
-        <Tab1/>
+        <Tab1 {...this.props}/>
       </Tab>
       <Tab heading='MY WALL'>
-        <Tab2/>
+        <Tab2  {...this.props}/>
       </Tab>
       <Tab heading='TEMPLE'>
-        <Tab3/>
+        <Tab3  {...this.props}/>
       </Tab>
     </Tabs>
     <View style={{flex:0}}>

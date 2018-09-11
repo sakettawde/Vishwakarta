@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet,  View, ScrollView,Alert ,Dimensions, TouchableOpacity } from 'react-native';
-import {Container, Header, Content, Form, Item, Input, Label , Button, Text, Left, Right,Image, Picker,Icon, List, ListItem} from 'native-base';
+import { StyleSheet,  View, ScrollView,Alert ,Dimensions, TouchableOpacity,Image } from 'react-native';
+import {Container, Header, Content, Form, Item, Input, Label , Button, Text, Left, Right, Picker,Icon, List, ListItem} from 'native-base';
 import { ImagePicker } from 'expo';
 //import Table from 'react-native-simple-table'
 //import { Table, Row, Rows } from 'react-native-table-component';
@@ -13,12 +13,26 @@ import { Signup , PincodeUrl } from "../assets/ApiUrl";
 
 export default class SignupScreen2 extends React.Component{
  
+  static navigationOptions = {
+    title: 'Signup',
+  };
+
   state = {
     image: null,
     home_pin: "",
+    hvillage:"",
+    htaluka:"",
+    hdistrict:"",
+    hstate:"",
     current_pin: "",
+    cvillage:"",
+    ctaluka:"",
+    cdistrict:"",
+    cstate:"",
     showhome:false,
+    homedata:false,
     showcurrent:false,
+    currentdata:false,
     pincodeData:[],
     
 
@@ -35,7 +49,7 @@ export default class SignupScreen2 extends React.Component{
 
 
   check_func=()=>{
-    console.log("Code here")
+    //console.log("Code here")
     console.log(this.info_array)
     this.SignupApi();
     
@@ -47,11 +61,11 @@ export default class SignupScreen2 extends React.Component{
 
   SignupApi = () =>{
 
-    if(this.state.home.length < 5){
+    if(this.state.home_pin.length < 5){
       Alert.alert("Enter Valid Pincode")
       return
     }
-    if(this.state.current.length < 5){
+    if(this.state.current_pin.length < 5){
       Alert.alert("Enter Valid Pincode")
       return
     }
@@ -72,14 +86,22 @@ export default class SignupScreen2 extends React.Component{
         professional:this.info_array.profession,
         home_pincode:this.state.home,
         current_pincode:this.state.current,
-        gotra:this.info_array.gotra
+        gotra:this.info_array.gotra,
+        hvillage:this.state.hvillage,
+        htaluka:this.state.htaluka,
+        hdistrict:this.state.hdistrict,
+        hstate:this.state.hstate,
+        cvillage:this.state.cvillage,
+        ctaluka:this.state.ctaluka,
+        cdistrict:this.state.cdistrict,
+        cstate:this.state.cstate,
       })
     })
       .then(data => {
         return data.json()
       })
       .then(data => {
-        console.log("Signup Response", data)
+       // console.log("Signup Response", data)
         if(data.message=="Registration succesfully "){
           this.props.navigation.navigate('Drawer')
         }          
@@ -98,7 +120,7 @@ export default class SignupScreen2 extends React.Component{
     // }
 
     
-    pincodeApi=(pin)=>{
+pincodeApi=(pin)=>{
       fetch(PincodeUrl, {
         method: 'POST',
         headers: {
@@ -112,13 +134,13 @@ export default class SignupScreen2 extends React.Component{
         return data.json();
     }).then(data => {
      
-      console.log("data of pincode",data.record.PostOffice)
-      console.log(pin)
+      //console.log("data of pincode",data.record.PostOffice)
+     // console.log(pin)
       this.setState({pincodeData:data.record.PostOffice})
           if(data.record.PostOffice){
             console.log("data is available")
           }else{
-            console.log("No User")
+            Alert.alert('Wrong Pincode')
             this.setState({pincodeData:[]})
           }
     })
@@ -127,7 +149,7 @@ export default class SignupScreen2 extends React.Component{
 
 home_handler=(text)=>{
   this.setState({home_pin:text})
-  console.log(text)
+  //console.log(text)
   if(text.length < 6){
     this.setState({pincodeData:[]})
   }
@@ -135,20 +157,39 @@ home_handler=(text)=>{
   this.pincodeApi(text)
   this.setState({showhome:true})
   }
-
-
-
 }
 
-onHomeChange=(value)=>{
-  this.setState({selected_home:value})
-  //this.setState({showhome:false})
-}
-selectedPincode=(item)=>{
-  console.log('in onPress')
-  console.log(item)
+selectedHomePincode=(item)=>{
+  //console.log('in home onPress')
+  //console.log(item)
+  this.setState({hvillage:item.Name})
+  this.setState({htaluka:item.Taluk})
+  this.setState({hdistrict:item.District})
+  this.setState({hstate:item.State})
   this.setState({showhome:false})
+  this.setState({homedata:true})
+}
 
+current_handler=(text)=>{
+  this.setState({current_pin:text})
+ // console.log(text)
+  if(text.length < 6){
+    this.setState({pincodeData:[]})
+  }
+  else{
+  this.pincodeApi(text)
+  this.setState({showcurrent:true})
+  }
+}
+selectedCurrentPincode=(item)=>{
+  //console.log('in onPress')
+  //console.log(item)
+  this.setState({cvillage:item.Name})
+  this.setState({ctaluka:item.Taluk})
+  this.setState({cdistrict:item.District})
+  this.setState({cstate:item.State})
+  this.setState({showcurrent:false})
+  this.setState({currentdata:true})
 }
 
     render() {
@@ -170,7 +211,7 @@ selectedPincode=(item)=>{
 
         return (
           <Container>
-            <Header ><Text>SignUp </Text></Header>
+            {/* <Header ><Text>SignUp </Text></Header> */}
             <Content>
               <Form>
               <Item stackedLabel>
@@ -185,85 +226,74 @@ selectedPincode=(item)=>{
             <List>
               <ListItem itemHeader style={{flexDirection:"row",justifyContent:"space-evenly"}}  >
                   <Text>Name</Text>
+                  <Text>Taluka</Text>
                   <Text>District</Text>
-                  <Text>Region</Text>
-                  <Text>Country</Text>
+                  <Text>State</Text>
               </ListItem>
 
               {this.state.pincodeData.map((item,index)=>(
                       <ListItem key={index} style={{flexDirection:"row",justifyContent:"space-evenly"}} >
-                      {/* <TouchableOpacity onPress={this.selectedPincode(item)} >
-                        <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                          <View><Text>{item.Name}</Text></View>
-                          <View><Text>{item.District}</Text></View>
-                          <View><Text>{item.Region}</Text></View>
-                          <View><Text>{item.Country}</Text></View>
-                        </View>
-                      </TouchableOpacity> */}
-                      <TouchableOpacity onPress={()=>this.selectedPincode(item)}><Text>{item.Name}</Text></TouchableOpacity>
-                      <TouchableOpacity onPress={()=>this.selectedPincode(item)}><Text>{item.District}</Text></TouchableOpacity>
-                      <TouchableOpacity onPress={()=>this.selectedPincode(item)}><Text>{item.Region}</Text></TouchableOpacity>
-                      <TouchableOpacity onPress={()=>this.selectedPincode(item)}><Text>{item.Country}</Text></TouchableOpacity>
+                      
+                      <TouchableOpacity onPress={()=>this.selectedHomePincode(item)}><Text>{item.Name}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.selectedHomePincode(item)}><Text>{item.Taluk}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.selectedHomePincode(item)}><Text>{item.District}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.selectedHomePincode(item)}><Text>{item.State}</Text></TouchableOpacity>
                       </ListItem>
               ))}
             </List>
             </ScrollView>
-          ):(<View></View>)}
-
-         {/* {this.state.pincodeData && this.state.pincodeData.length > 0 ?( <View style={styles.container}>
-        <Table columnWidth={70} columns={columns} dataSource={this.state.pincodeData}/>
-         </View>):(<View></View>)
-         } */}
-
-         
-
-
-            {/* {this.state.pincodeData && this.state.pincodeData.length > 0 ?(
-              <View style={{flex : 1,}} >
-            <Table columns={columns} dataSource={this.state.pincodeData}
+          ):(<View></View>)}     
            
-            style={{flex:1,width:Dimensions.get('window').width}} />
-            </View>
-            ):(<View></View> )} */}
-
-
-            {/* <View style={styles.container}>
-              <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                
-                { this.state.pincodeData? (
-                <Row data={this.state.tableHead} /> 
-                <Rows data={['1','2','5','6']} />
-                  )
-                :(<View></View>)}
-              </Table>
-            </View>           */}
-
-            {/* {this.state.pincodeData && this.state.pincodeData.length > 0 ?(
-          <View style={{display:"flex",flexDirection:"column"}}>
-          {this.state.pincodeData.map(item=>{
-            <TouchableOpacity>
-            <View style={{display:"flex",flexDirection:"row"}}>
-            <Text>{item.Name}-{item.District}-{item.Region}</Text>
-            </View>
-            </TouchableOpacity>
-          })}
-          </View>
-         ):(<View></View>)
-         } */}
+          {this.state.homedata && 
+          <Item stackedLabel>
+          <Label>Home Address</Label>
+          <Input editable={false} placeholder={this.state.hvillage+", "+this.state.htaluka
+               +", "+this.state.hdistrict+", "+this.state.hstate}
+        multiline={true}/> 
+          </Item>
+          }
 
 
 
-           
-           
-
-
-
-            
-            <Item stackedLabel >
+           <Item stackedLabel >
               <Label>Current Location Pincode</Label>
-              <Input onChangeText={(text)=>this.setState({current_pin:text})}
+              <Input onChangeText={(text)=>this.current_handler(text)}
                   keyboardType = 'numeric' maxLength={6}/>
             </Item>
+
+                {this.state.showcurrent && this.state.pincodeData && this.state.pincodeData.length > 0 ?(
+
+            <ScrollView >
+            <List>
+              <ListItem itemHeader style={{flexDirection:"row",justifyContent:"space-evenly"}}  >
+                  <Text>Name</Text>
+                  <Text>Taluka</Text>
+                  <Text>District</Text>
+                  <Text>State</Text>
+              </ListItem>
+
+              {this.state.pincodeData.map((item,index)=>(
+                      <ListItem key={index} style={{flexDirection:"row",justifyContent:"space-evenly"}} >
+                      
+                        <TouchableOpacity onPress={()=>this.selectedCurrentPincode(item)}><Text>{item.Name}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.selectedCurrentPincode(item)}><Text>{item.Taluk}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.selectedCurrentPincode(item)}><Text>{item.District}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.selectedCurrentPincode(item)}><Text>{item.State}</Text></TouchableOpacity>
+                      </ListItem>
+              ))}
+            </List>
+            </ScrollView>
+             ):(<View></View>)}
+
+             {this.state.currentdata && 
+          <Item stackedLabel>
+          <Label>Current Address</Label>
+          <Input editable={false} placeholder={this.state.cvillage+", "+this.state.ctaluka
+               +", "+this.state.cdistrict+", "+this.state.cstate}
+        multiline={true}/> 
+          </Item>
+          }
+
             <Item stackedLabel Last>
               <Label>Profile Picture</Label>
               
@@ -271,9 +301,16 @@ selectedPincode=(item)=>{
               <Button onPress={this._pickImage}><Text>Upload</Text></Button>
               </Right>
               {image && <Text>Uploaded</Text>}
+              
+            </Item>
+            <Item>
+              <View><Image source={{uri: this.state.image}} 
+                  style={{flex:1 ,height:300, width: Dimensions.get('window').width}}/>
+                  </View>
             </Item>
           </Form>
 
+          
           
 
             <Button rounded full
@@ -292,7 +329,7 @@ selectedPincode=(item)=>{
           base64:true,
         });
     
-        console.log(result);
+        console.log(result.uri);
     
         if (!result.cancelled) {
           this.setState({ image: result.uri });

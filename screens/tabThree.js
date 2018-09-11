@@ -7,9 +7,9 @@ export default class tabThree extends Component{
   render(){
     return(
       <ScrollView style={{paddingVertical: 10}}>
-        <FeedCard/>
-        <FeedCard/>
-        <FeedCard/>
+       <FeedCard {...this.props}/>
+        <FeedCard {...this.props}/>
+        <FeedCard {...this.props}/>
       </ScrollView>
     );
   }

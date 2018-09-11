@@ -1,13 +1,30 @@
 import React from 'react';
-import { StyleSheet, Text, View ,Alert} from 'react-native';
+import { StyleSheet, Text, View ,Alert,BackHandler} from 'react-native';
 import { Header, Form, Button, Container, Content,Item ,Input, Label } from 'native-base';
 import { Passrv } from "../assets/ApiUrl";
 
 export default class PasswordRv extends React.Component {
 
-  state={
-    mob_num:""
+  constructor(props) {
+    super(props);
+    this.state = { mob_num:"" };
+    //this.onBackPress = this.onBackPress.bind(this)
   }
+  
+  // componentDidMount () {
+  //   BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
+  // }
+
+  // componentWillUnmount () {
+  //   BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
+  // }
+
+  // onBackPress () {
+  //   console.log("onBack called")
+  //   const { dispatch, nav } = this.props
+  //   dispatch(NavigationActions.back())
+  //   return nav !== this.props.nav
+  // }
   
 
   PassrvApi = () =>{

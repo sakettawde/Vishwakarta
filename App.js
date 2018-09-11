@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View ,SafeAreaView,ScrollView,Dimensions,Button} from 'react-native';
+import { BackHandler} from 'react-native';
 import {createStackNavigator,createDrawerNavigator,DrawerItems} from 'react-navigation';
 //  import {Root } from 'native-base';
 //import {createDrawerNavigator,DrawerItems} from 'react-navigation';
@@ -17,6 +17,7 @@ import MyProfile from './screens/MyProfile';
 import Newpost from './screens/Newpost';
 import Sidebar from './screens/Sidebar';
 // import ContactUsersList from './screens/ContactUsersList';
+import Comments from './screens/Comments';
 import ChatPage from './screens/ChatPage';
 
 
@@ -31,6 +32,7 @@ export default class App extends React.Component {
     constructor(props) {
     super(props);
     this.state = { loading: true };
+    //this.onBackPress = this.onBackPress.bind(this)
   }
 
   async componentWillMount() {
@@ -39,12 +41,26 @@ export default class App extends React.Component {
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
     });
     this.setState({ loading: false });
+    
   }
 
 
+  // componentDidMount () {
+  //   BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
+  // }
 
+  // componentWillUnmount () {
+  //   BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
+  // }
 
-  render() { if (this.state.loading) {
+  // onBackPress () {
+  //   const { dispatch, navigation } = this.props
+  //   dispatch(NavigationActions.back())
+  //   //return navigation !== this.props.navigation
+  // }
+
+  render() { 
+    if (this.state.loading) {
       return (
                 <AppLoading />
                );
@@ -56,6 +72,7 @@ export default class App extends React.Component {
     );
   }
 }
+
 
 
 const AppDrawerNavigator = createDrawerNavigator({
@@ -99,7 +116,7 @@ const AppStackNavigator = createStackNavigator({
    },
    SignupScreen2 : {
     screen : SignupScreen2 ,
-    navigationOptions: { header: null }
+    //navigationOptions: { header: null }
   },  
    PasswordRv : {
      screen : PasswordRv ,
@@ -107,7 +124,7 @@ const AppStackNavigator = createStackNavigator({
    },
    UserProfile : {
      screen : UserProfile ,
-     navigationOptions: { header: null }
+     //navigationOptions: { header: null }
    },
    Drawer : {
      screen : AppDrawerNavigator,
@@ -125,21 +142,22 @@ const AppStackNavigator = createStackNavigator({
     },
     Newpost:{
       screen : Newpost,
-     navigationOptions: { header: null }
+     //navigationOptions: { header: null }
     },
     AddGotra:{
       screen : AddGotra,
-     navigationOptions: { header: null }
+     //navigationOptions: { header: null }
     },
     AddProf:{
       screen : AddProf,
-     navigationOptions: { header: null }
+     //navigationOptions: { header: null }
     },
     ChatPage:{
-      screen : ChatPage,
-     navigationOptions: { header: null }
+      screen : ChatPage
     },
-    
+    Comments:{
+      screen:Comments
+    },
 
 })
 

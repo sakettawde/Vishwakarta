@@ -68,7 +68,7 @@ UserInfoApi = () =>{
     
     return (
       <Container >
-        <Header />
+        {/* <Header /> */}
         <Content>
           <Image source={{uri:"https://res.cloudinary.com/jerrick/image/upload/f_auto,fl_progressive,q_auto,c_fit,w_1100/t3onxzmjhmfbbah9ahzi" }} 
           style={{height: 200, alignSelf: "stretch", flex: 1}}/>

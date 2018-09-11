@@ -51,7 +51,7 @@ export default class AddGotra extends React.Component {
 
     return (
       <Container>
-        <Header ><Text style={styles.headline}>Add New Gotra</Text></Header>
+        {/* <Header ><Text style={styles.headline}>Add New Gotra</Text></Header> */}
         <Content>
           <Form>
             <Item stackedLabel>

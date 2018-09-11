@@ -9,8 +9,8 @@ export default class LoginScreen extends Component {
 
 
   state= {
-    phno:"",
-    pwd:"",
+    phno:"8484902449",
+    pwd:"123",
    
   }
 

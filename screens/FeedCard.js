@@ -70,7 +70,8 @@ export default class FeedCard extends Component {
                 </Button>
               </Left>
               <Right>
-                <Button transparent textStyle={{color: '#87838B'}}>
+                <Button transparent textStyle={{color: '#87838B'}}
+                onPress={()=>{this.props.navigation.navigate('Comments')}}>
                   <Icon name="md-chatboxes" />
                   <Text>1,926 Comments</Text>
                 </Button>

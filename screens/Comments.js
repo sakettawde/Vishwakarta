@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Form, Item, Input, Label, Right, Button, Text } from 'native-base';
-import { ImagePicker } from 'expo';
 
-export default class Newpost extends Component {
+export default class Comments extends Component {
     state = {
         image: null,
       };
@@ -12,14 +11,8 @@ export default class Newpost extends Component {
         {/* <Header /> */}
         <Content>
           <Form>
-            <Item stackedLabel>
-              <Label>Select Image</Label>
-              <Right>
-              <Button onPress={this._pickImage}><Text>Upload Image</Text></Button>
-              </Right>
-            </Item>
             <Item stackedLabel last>
-              <Label>Caption</Label>
+              <Label>Comment</Label>
               <Input multiline={true} numberOfLines={8} />
             </Item>
           </Form>

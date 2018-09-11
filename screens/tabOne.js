@@ -23,9 +23,9 @@ export default class tabOne extends Component{
           pinchGestureEnabled={true}
           refreshControl={<RefreshControl refreshing={this.state.refreshing}
           onRefresh={this._onRefresh}/>}>
-        <FeedCard/>
-        <FeedCard/>
-        <FeedCard/>
+        <FeedCard {...this.props}/>
+        <FeedCard {...this.props}/>
+        <FeedCard {...this.props}/>
       </ScrollView>
       
     );
