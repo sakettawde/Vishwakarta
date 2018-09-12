@@ -12,3 +12,4 @@ export const AddGotraUrl="http://35.161.99.113:9000/webapi/vishwkartalogin/addGo
 export const ListProf="http://35.161.99.113:9000/webapi/vishwkartalogin/listProfession";
 export const AddProfUrl="http://35.161.99.113:9000/webapi/vishwkartalogin/addProfession";
 export const PincodeUrl="http://35.161.99.113:9000/webapi/vishwkartalogin/pinCode";
+export const EditUrl="http://35.161.99.113:9000/webapi/vishwkartalogin/edit";

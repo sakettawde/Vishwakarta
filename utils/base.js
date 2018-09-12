@@ -1,6 +1,6 @@
-import firebase from '@firebase/app'
+import firebase from 'firebase/app'
 import 'firebase/auth'
-import 'firebase/database'
+import database from 'firebase/database'
 import Rebase from 're-base'
 
 
@@ -14,6 +14,12 @@ let app = firebase.initializeApp({
     messagingSenderId: "373273139171"
 });
 
-export const auth = firebase.auth
+export const auth = firebase.auth;
+//export const ref = firebase.database().ref()
 let db = firebase.database(app);
-export let base = Rebase.createClass(db)
+//export let base = Rebase.createClass(db);
+
+//export const storageRef = firebase.storage().ref("Image");
+
+
+

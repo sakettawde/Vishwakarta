@@ -2,11 +2,22 @@ import React from 'react';
 import { StyleSheet,  View, ScrollView,Alert ,Dimensions, TouchableOpacity,Image } from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Label , Button, Text, Left, Right, Picker,Icon, List, ListItem} from 'native-base';
 import { ImagePicker } from 'expo';
-//import Table from 'react-native-simple-table'
-//import { Table, Row, Rows } from 'react-native-table-component';
+//import { storageRef } from '../utils/base';
+// import firebase from 'firebase';
+// import uuid from 'uuid';
+
+
 
 import { Signup , PincodeUrl } from "../assets/ApiUrl";
 
+// let config = firebase.initializeApp({
+//   apiKey: "AIzaSyCm0jK5vNR0ReGioasbburhDboFMqoVvM0",
+//   authDomain: "viswakarta-chat.firebaseapp.com",
+//   databaseURL: "https://viswakarta-chat.firebaseio.com",
+//   projectId: "viswakarta-chat",
+//   storageBucket: "viswakarta-chat.appspot.com",
+//   messagingSenderId: "373273139171"
+// });
 
 
 
@@ -84,8 +95,8 @@ export default class SignupScreen2 extends React.Component{
         dob:this.info_array.birthdate,
         status:this.info_array.toggle,
         professional:this.info_array.profession,
-        home_pincode:this.state.home,
-        current_pincode:this.state.current,
+        home_pincode:this.state.home_pin,
+        current_pincode:this.state.current_pin,
         gotra:this.info_array.gotra,
         hvillage:this.state.hvillage,
         htaluka:this.state.htaluka,
@@ -196,6 +207,7 @@ selectedCurrentPincode=(item)=>{
         let { image }=this.state;
         this.info_array.name = this.props.navigation.getParam('name', '');
         this.info_array.mobile_num = this.props.navigation.getParam('mobile_num', '');
+        this.info_array.password = this.props.navigation.getParam('password', '');
         this.info_array.birthdate = this.props.navigation.getParam('birthdate', '');
         const value = this.props.navigation.getParam('toggle', '');
         if (value=='true'){
@@ -326,16 +338,61 @@ selectedCurrentPincode=(item)=>{
       _pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
           allowsEditing: true,
-          base64:true,
+          aspect: [4, 3],
+          base64:true
         });
-    
-        console.log(result.uri);
-    
+        if(!result.cancelled){
+        console.log(result.uri)
+        //this._handleImagePicked(result);   
+
+        // const response = await fetch(result.uri);
+        // const blob = await response.blob();
+        // storageRef.put(blob).then(function(snapshot) {
+        //   console.log('Uploaded a blob or file!');
+        //   console.log(snapshot.getDownloadUrl())
+        // });
+      }
+
+     }
+
+     _handleImagePicked = async result => {
+      try {
+        this.setState({ uploading: true });
+  
         if (!result.cancelled) {
-          this.setState({ image: result.uri });
+          uploadUrl = await uploadImageAsync(result.uri);
+          console.log(uploadUrl)
+          this.setState({ image: uploadUrl });
         }
-      };
-}
+      } catch (e) {
+        console.log(e);
+        alert('Upload failed, sorry :(');
+      } finally {
+        this.setState({ uploading: false });
+      }
+    };
+  }
+  async function uploadImageAsync(uri) {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    
+    // const snapshot = base.push(`ImageTry4/`, {
+    //   data: blob,
+    //   then(err){
+    //     if(!err){
+    //       console.log("success")
+    //     }
+    //   }
+    // });
+    const ref = firebase
+        .storage
+        .ref()
+        .child(uuid.v4());
+    const snapshot = await ref.put(blob);
+    console.log(snapshot.downloadURL)
+    return snapshot.downloadURL;
+  }
+
 
  const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },

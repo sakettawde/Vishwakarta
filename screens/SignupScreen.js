@@ -136,7 +136,7 @@ export default class SignUp extends React.Component {
   }
   addProfHandler=()=>{
     
-    this.props.navigation.navigate('AddProf', {updateGotra: this.prof_renderer})
+    this.props.navigation.navigate('AddProf', {updateProf: this.prof_renderer})
     
   }
 
@@ -246,10 +246,11 @@ export default class SignUp extends React.Component {
                   modalTransparent={false}
                   animationType={"fade"}
                   androidMode={"default"}
-                  placeHolderText={this.state.chosenDate.toString().substr(4, 12)}
+                  //placeHolderText={this.state.chosenDate.toString().substr(4, 12)}
                   textStyle={{ color: "green" }}
                   placeHolderTextStyle={{ color: "#d3d3d3" }}
                   onDateChange={text=>this.setState({chosenDate:text})}
+                  
                   />
                   
             </Item>
