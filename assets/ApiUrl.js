@@ -13,3 +13,7 @@ export const ListProf="http://35.161.99.113:9000/webapi/vishwkartalogin/listProf
 export const AddProfUrl="http://35.161.99.113:9000/webapi/vishwkartalogin/addProfession";
 export const PincodeUrl="http://35.161.99.113:9000/webapi/vishwkartalogin/pinCode";
 export const EditUrl="http://35.161.99.113:9000/webapi/vishwkartalogin/edit";
+export const Addfeed="http://35.161.99.113:9000/webapi/feed/addFeed";
+export const AdminFeed="http://35.161.99.113:9000/webapi/feed/adminFeed";
+export const AddLike="http://35.161.99.113:9000/webapi/feed/addLike";
+export const UnLike="http://35.161.99.113:9000/webapi/feed/unLike";

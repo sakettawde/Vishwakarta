@@ -159,6 +159,9 @@ const AppStackNavigator = createStackNavigator({
       screen:Comments
     },
 
+},{
+  initialRouteName:'Login',
+  
 })
 
 

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { base } from '../utils/base';
-import { AsyncStorage } from "react-native";
+import { AsyncStorage,View,KeyboardAvoidingView } from "react-native";
 import moment from 'moment'; 
 
+
+console.disableYellowBox = true;
 
 export default class ChatPage extends React.Component {
     state = {
@@ -23,7 +25,7 @@ export default class ChatPage extends React.Component {
         const value = await AsyncStorage.getItem('user_id');
         this.setState({user_sender:value})
         const value2=await AsyncStorage.getItem('user_name');
-        this.setState({sender_name:value})
+        this.setState({sender_name:value2})
         console.log("id ",value)
         console.log("name ",value2)
         await this._setConvId()
@@ -129,14 +131,19 @@ export default class ChatPage extends React.Component {
       // console.log(now.getSeconds())
 
       return (
+        <View style={{flex:1}}>
         <GiftedChat
           messages={this.state.messages}
+          // forceGetKeyboardHeight={true}
           onSend={messages => this.onSend(messages)}
           user={{
             _id: this.state.user_sender,
             name: this.state.sender_name
           }}
         />
+        <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={80}/>
+       
+        </View>
       )
     }
   }

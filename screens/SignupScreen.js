@@ -5,9 +5,12 @@ import {Container, Header, Content, Form, Item, Input, Label , Button ,DatePicke
 //import Dialog from "react-native-dialog";
 import { ListGotra ,ListProf} from "../assets/ApiUrl";
 
+import {NextButton,ButtonText ,FlexColumn,ScreenTitle} from "../utils/styles";
+import { LinearGradient } from "expo";
 
 
 export default class SignUp extends React.Component {
+  
   constructor(props) {
     super(props);
     this.state = { 
@@ -214,12 +217,14 @@ export default class SignUp extends React.Component {
         console.log(error.message);
      });
   }
+  
  
   render() {
     return (
-      <Container>
-        <Header ><Text>SignUp </Text></Header>
-        <Content>
+      <FlexColumn style={{flex:1,margin:10}}>
+        <ScreenTitle>SignUp</ScreenTitle>
+
+        <FlexColumn>
           <Form>
             <Item stackedLabel>
               <Label>Name</Label>
@@ -258,7 +263,6 @@ export default class SignUp extends React.Component {
             
             <Item>
               <View style={{flexDirection:'row',justifyContent:"space-evenly",padding:10}}>
-              <View style={{flex:1}}></View>
                 <View style={{flex:5,flexDirection:"row"}}><Left>
                   
                   <Radio selected={this.state.isSelect1} onPress={this._onPressHandle}/>
@@ -279,7 +283,6 @@ export default class SignUp extends React.Component {
                    <Text>Employed</Text>
                   </Right>
                 </View>
-                <View style={{flex:1}}></View>
               </View>
               
             </Item>
@@ -336,15 +339,32 @@ export default class SignUp extends React.Component {
             
             
           </Form>
-          <Button rounded full
-          onPress={this.fillinfo}  >
-            <Text style={{ color: 'white' }}>Next</Text>
-        </Button>
-        </Content>
+
+          
+
+          <NextButton 
+          onPress={this.fillinfo}
+          style={{marginTop: 10,}}  
+          >
+          <LinearGradient
+                colors={["#7c98fd", "#4e43f9"]}
+                start={{ x: 0.0, y: 1.0 }}
+                end={{ x: 1.0, y: 0.0 }}
+                style={{ width: "100%", height: "100%",borderRadius:10}}
+              >
+
+            <ButtonText>Next</ButtonText>
+          </LinearGradient>
+        </NextButton>
+
+
+        </FlexColumn>
         
-      </Container>
+      </FlexColumn>
     
       
     );
   }
 }
+
+

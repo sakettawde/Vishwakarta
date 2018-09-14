@@ -15,11 +15,10 @@ let app = firebase.initializeApp({
 });
 
 export const auth = firebase.auth;
-//export const ref = firebase.database().ref()
-let db = firebase.database(app);
-//export let base = Rebase.createClass(db);
 
-//export const storageRef = firebase.storage().ref("Image");
+let db = firebase.database(app);
+export let base = Rebase.createClass(db);
+
 
 
 

@@ -1,15 +1,18 @@
 import React from "react";
 import { Image } from "react-native";
 import { Container, Content, Text, List, ListItem, Left, Thumbnail } from "native-base";
+import {FlexColumn} from "../utils/styles"
+import styled from "styled-components"
+
 const routes = ["Wall", "Profile", "Contacts","Logout"];
 export default class SideBar extends React.Component {
   render() {
     return (
-      <Container>
-        <Content>
+      <FlexColumn>
+        
           <Image
             source={{
-              uri: "https://res.cloudinary.com/jerrick/image/upload/f_auto,fl_progressive,q_auto,c_fit,w_1100/t3onxzmjhmfbbah9ahzi"
+              uri: "https://images.pexels.com/photos/443383/pexels-photo-443383.jpeg?auto=compress&cs=tinysrgb&h=350"
             }}
             style={{
               height: 120,
@@ -34,8 +37,7 @@ export default class SideBar extends React.Component {
               );
             }}
           />
-        </Content>
-      </Container>
+      </FlexColumn>
     );
   }
 }

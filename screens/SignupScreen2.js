@@ -1,10 +1,12 @@
 import React from 'react';
 import { StyleSheet,  View, ScrollView,Alert ,Dimensions, TouchableOpacity,Image } from 'react-native';
-import {Container, Header, Content, Form, Item, Input, Label , Button, Text, Left, Right, Picker,Icon, List, ListItem} from 'native-base';
-import { ImagePicker } from 'expo';
-//import { storageRef } from '../utils/base';
-// import firebase from 'firebase';
-// import uuid from 'uuid';
+import {Container,  Content, Form, Item, Input, Label , Button, Text, Left, Right, Picker,Icon, List, ListItem} from 'native-base';
+import { ImagePicker ,LinearGradient,Permissions} from 'expo';
+import {NextButton,ButtonText,ScreenTitle,FlexColumn} from '../utils/styles';
+import uuid from 'uuid';
+import * as firebase from 'firebase';
+
+
 
 
 
@@ -26,10 +28,12 @@ export default class SignupScreen2 extends React.Component{
  
   static navigationOptions = {
     title: 'Signup',
+    headerBackTitleVisible :true
   };
 
   state = {
     image: null,
+    imageurl:null,
     home_pin: "",
     hvillage:"",
     htaluka:"",
@@ -48,6 +52,11 @@ export default class SignupScreen2 extends React.Component{
     
 
   };
+
+
+//   async componentDidMount() {
+//     await Permissions.askAsync(Permissions.CAMERA_ROLL);
+// }
   info_array={
     name:"",
     mobile_num:"",
@@ -106,6 +115,7 @@ export default class SignupScreen2 extends React.Component{
         ctaluka:this.state.ctaluka,
         cdistrict:this.state.cdistrict,
         cstate:this.state.cstate,
+        avatar:this.state.imageurl
       })
     })
       .then(data => {
@@ -126,9 +136,7 @@ export default class SignupScreen2 extends React.Component{
      });
   
     }
-    // componentDidMount(){
-    //   this._retrieveData()
-    // }
+    
 
     
 pincodeApi=(pin)=>{
@@ -173,12 +181,9 @@ home_handler=(text)=>{
 selectedHomePincode=(item)=>{
   //console.log('in home onPress')
   //console.log(item)
-  this.setState({hvillage:item.Name})
-  this.setState({htaluka:item.Taluk})
-  this.setState({hdistrict:item.District})
-  this.setState({hstate:item.State})
-  this.setState({showhome:false})
-  this.setState({homedata:true})
+  this.setState({hvillage:item.Name,htaluka:item.Taluk,hdistrict:item.District,
+  hstate:item.State,showhome:false,
+  homedata:true})
 }
 
 current_handler=(text)=>{
@@ -195,16 +200,12 @@ current_handler=(text)=>{
 selectedCurrentPincode=(item)=>{
   //console.log('in onPress')
   //console.log(item)
-  this.setState({cvillage:item.Name})
-  this.setState({ctaluka:item.Taluk})
-  this.setState({cdistrict:item.District})
-  this.setState({cstate:item.State})
-  this.setState({showcurrent:false})
-  this.setState({currentdata:true})
+  this.setState({cvillage:item.Name,ctaluka:item.Taluk,
+  cdistrict:item.District, cstate:item.State,
+  showcurrent:false, currentdata:true})
 }
 
     render() {
-        let { image }=this.state;
         this.info_array.name = this.props.navigation.getParam('name', '');
         this.info_array.mobile_num = this.props.navigation.getParam('mobile_num', '');
         this.info_array.password = this.props.navigation.getParam('password', '');
@@ -310,11 +311,16 @@ selectedCurrentPincode=(item)=>{
               <Label>Profile Picture</Label>
               
               <Right>
-              <Button onPress={this._pickImage}><Text>Upload</Text></Button>
+              <Button iconLeft light onPress={()=>this._pickImage()}>
+            <Icon name='md-add' />
+            <Text>Upload</Text>
+          </Button>
               </Right>
-              {image && <Text>Uploaded</Text>}
+              {this.state.image && <Text>Uploaded</Text>}
               
             </Item>
+
+
             <Item>
               <View><Image source={{uri: this.state.image}} 
                   style={{flex:1 ,height:300, width: Dimensions.get('window').width}}/>
@@ -325,10 +331,20 @@ selectedCurrentPincode=(item)=>{
           
           
 
-            <Button rounded full
-            onPress={() => this.check_func()}>
-            <Text style={{ color: 'white' }}>SignUp</Text>
-        </Button>
+            <NextButton 
+          onPress={()=>this.check_func()}
+          style={{marginTop: 10,}}  
+          >
+          <LinearGradient
+                colors={["#7c98fd", "#4e43f9"]}
+                start={{ x: 0.0, y: 1.0 }}
+                end={{ x: 1.0, y: 0.0 }}
+                style={{ width: "100%", height: "100%",borderRadius:10}}
+              >
+
+            <ButtonText>SignUp</ButtonText>
+          </LinearGradient>
+        </NextButton>
             </Content>
           </Container>
         
@@ -339,60 +355,44 @@ selectedCurrentPincode=(item)=>{
         let result = await ImagePicker.launchImageLibraryAsync({
           allowsEditing: true,
           aspect: [4, 3],
-          base64:true
         });
-        if(!result.cancelled){
-        console.log(result.uri)
-        //this._handleImagePicked(result);   
+       console.log(result.uri);
+       this.setState({ image: result.uri });
+        this._handleImagePicked(result);   
 
-        // const response = await fetch(result.uri);
-        // const blob = await response.blob();
-        // storageRef.put(blob).then(function(snapshot) {
-        //   console.log('Uploaded a blob or file!');
-        //   console.log(snapshot.getDownloadUrl())
-        // });
-      }
+      };
+      _handleImagePicked = async pickerResult => {
+        try {
+            this.setState({ uploading: true });
+  
+            if (!pickerResult.cancelled) {
+                uploadUrl = await uploadImageAsync(pickerResult.uri);
+                console.log(uploadUrl)
+                this.setState({ imageurl: uploadUrl });
+            }
+        } catch (e) {
+            console.log(e);
+            alert('Upload failed, sorry :(');
+        } finally {
+            this.setState({ uploading: false });
+        }
+    };
 
      }
 
-     _handleImagePicked = async result => {
-      try {
-        this.setState({ uploading: true });
-  
-        if (!result.cancelled) {
-          uploadUrl = await uploadImageAsync(result.uri);
-          console.log(uploadUrl)
-          this.setState({ image: uploadUrl });
-        }
-      } catch (e) {
-        console.log(e);
-        alert('Upload failed, sorry :(');
-      } finally {
-        this.setState({ uploading: false });
-      }
-    };
-  }
+    
+
   async function uploadImageAsync(uri) {
     const response = await fetch(uri);
     const blob = await response.blob();
-    
-    // const snapshot = base.push(`ImageTry4/`, {
-    //   data: blob,
-    //   then(err){
-    //     if(!err){
-    //       console.log("success")
-    //     }
-    //   }
-    // });
     const ref = firebase
-        .storage
+        .storage()
         .ref()
-        .child(uuid.v4());
-    const snapshot = await ref.put(blob);
-    console.log(snapshot.downloadURL)
-    return snapshot.downloadURL;
-  }
+        .child("images/" + uuid.v4());
 
+    const snapshot = await ref.put(blob);
+    return snapshot.downloadURL;
+}
 
  const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },

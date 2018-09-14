@@ -30,17 +30,7 @@ export default class Feed extends Component {
         <Tab3  {...this.props}/>
       </Tab>
     </Tabs>
-    <View style={{flex:0}}>
-    <Fab
-            active={true}
-            //direction="up"
-            containerStyle={{ }}
-            style={{ backgroundColor: '#5067FF' }}
-            position="bottomRight"
-            onPress={() => this.props.navigation.navigate('Newpost')}>
-            <Icon name="md-add"/>
-          </Fab>
-        </View>
+    
   </Container>
   );
   }
