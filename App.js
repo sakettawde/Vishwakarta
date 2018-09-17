@@ -129,7 +129,7 @@ const AppStackNavigator = createStackNavigator({
    Drawer : {
      screen : AppDrawerNavigator,
      navigationOptions: { 
-       header: null
+       header: null,
      }
     },
     OtpScreen:{
