@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Icon, Content, Form, Item, Input, Label, Right, Button, Text } from 'native-base';
-import {AsyncStorage,View,Image,Dimensions,KeyboardAvoidingView,Alert,} from 'react-native'
+import {AsyncStorage,View,Image,Dimensions,KeyboardAvoidingView,Alert, ActivityIndicator} from 'react-native'
 import { ImagePicker ,LinearGradient,Permissions} from 'expo';
 import {NextButton,ButtonText,ScreenTitle,FlexColumn} from '../utils/styles';
 import moment from 'moment';
@@ -19,7 +19,8 @@ export default class Newpost extends Component {
         tab:"",
         user_id:"",
         user_name:"",
-        caption:""
+        caption:"",
+        loading_image:false
       };
       
 
@@ -46,7 +47,7 @@ export default class Newpost extends Component {
     }
     AddfeedApi = () => {
       console.log("In AddfeedApi")
-      this.setState({loading:true})
+      
       fetch(Addfeed, {
         method: "POST",
         headers: {
@@ -107,10 +108,11 @@ export default class Newpost extends Component {
                        
             </Item>
           </Form>
-
+          {this.state.loading_image && <ActivityIndicator size="large"/>}
           <NextButton 
           onPress={() =>this.AddfeedApi()}
-          style={{marginTop: 10,marginBottom:10,}}  
+          style={{marginTop: 10,marginBottom:10,}} 
+          disabled={this.state.loading_image} 
           >
           <LinearGradient
                 colors={["#7c98fd", "#4e43f9"]}
@@ -122,6 +124,7 @@ export default class Newpost extends Component {
             <ButtonText>Post</ButtonText>
           </LinearGradient>
         </NextButton>
+        
 
         {this.state.imageurl &&
               <Swiper style={{height:200, width:Dimensions.get('window').width}} loop={false} >
@@ -141,6 +144,7 @@ export default class Newpost extends Component {
     );
   }
   _pickImage = async () => {
+    this.setState({loading_image:true})
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
@@ -153,7 +157,7 @@ export default class Newpost extends Component {
   };
   _handleImagePicked = async pickerResult => {
     try {
-        this.setState({ uploading: true });
+       
 
         if (!pickerResult.cancelled) {
           let location="images/feed/"+this.state.user_id+"_"+moment().format();
@@ -161,7 +165,7 @@ export default class Newpost extends Component {
             uploadUrl = await uploadImageAsync(pickerResult.uri,location);
             this.state.url_array.push(uploadUrl);
             console.log("url array ",this.state.url_array)
-            this.setState({ imageurl: uploadUrl });
+            this.setState({ imageurl: uploadUrl , loading_image:false });
         }
     } catch (e) {
         console.log(e);

@@ -3,11 +3,12 @@ import {
   ScrollView,
   View,AsyncStorage,
   StatusBar,
-  Image,Alert,TouchableOpacity
+  Image,Alert,TouchableOpacity,ImageBackground
 } from 'react-native';
 import {Text , Label , Left ,Right ,Container, Header, Content, List, ListItem,Title, Input, Button 
       , DatePicker,Picker,Icon} from 'native-base';
 import { Userinfo ,ListGotra ,ListProf ,PincodeUrl,EditUrl} from "../assets/ApiUrl";
+import styled from 'styled-components';
 
 
 export default class ProfileSettings extends React.Component {
@@ -15,7 +16,7 @@ export default class ProfileSettings extends React.Component {
     super();
     this.state = {
       value:  false,
-      user_id:"",
+      user_id:"21",
       name:"",
       mobile_num:"",
       chosenDate: new Date(),
@@ -53,11 +54,12 @@ _retrieveData = async () => {
    } catch (error) {
      console.log(error)
    }
+  
 }
 
 componentDidMount(){
-  this._retrieveData()
-  
+  // this._retrieveData()
+ this.UserInfoApi() 
 
 }
 
@@ -376,9 +378,15 @@ selectedCurrentPincode=(item)=>{
       <Container style={{marginTop:StatusBar.currentHeight}}>
         {/* <Header /> */}
         <Content>
-          <Image source={{uri:"https://res.cloudinary.com/jerrick/image/upload/f_auto,fl_progressive,q_auto,c_fit,w_1100/t3onxzmjhmfbbah9ahzi" }} 
-          style={{height: 200, alignSelf: "stretch", flex: 1}}/>
-          <Text>Info</Text>
+          <ImageBackground source={{uri:"https://images.pexels.com/photos/443383/pexels-photo-443383.jpeg?auto=compress&cs=tinysrgb&h=350" }} 
+          style={{height: 144, alignSelf: "stretch"}}>
+            
+            <Image  source={{uri: "https://res.cloudinary.com/jerrick/image/upload/f_auto,fl_progressive,q_auto,c_fit,w_1100/t3onxzmjhmfbbah9ahzi"}}
+            style={{marginTop:104,height:80,width:80 ,borderRadius:40,alignSelf:"center"}}/> 
+
+          </ImageBackground>
+
+          <TitleText style={{alignSelf:"center",marginTop:64}}>{this.state.name}</TitleText>
           <List>
 
             <ListItem>
@@ -570,14 +578,15 @@ selectedCurrentPincode=(item)=>{
           </List>
         <View style={{flexDirection:'row'}}>
          <Left>
-          <Button onPress={this.handleEditClick.bind(this)}><Text>Edit</Text></Button>
+          <SaveButton onPress={this.handleEditClick.bind(this)}><SaveText>Edit</SaveText></SaveButton>
           </Left>
           <Right>
-          <Button onPress={this.handleSaveClick.bind(this)} editable={this.state.value} >
-              <Text>Save</Text>
-            </Button>
+          <SaveButton onPress={this.handleSaveClick.bind(this)} editable={this.state.value} >
+              <SaveText>Save</SaveText>
+            </SaveButton>
             </Right>
        </View>
+       <View style={{marginTop:10}}></View>
 
           
  
@@ -586,3 +595,29 @@ selectedCurrentPincode=(item)=>{
     )
   }
 }
+
+const TitleText=styled.Text`
+width: 146px;
+  height: 22px;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: center;
+  color: rgba(3, 15, 41, 0.9);`
+
+const SaveButton=styled.TouchableOpacity`
+width: 120px;
+  height: 40px;
+  border-radius: 25px;
+  border: solid 1px #030f29;
+  justify-content:center;
+  align-items:center;
+  elevation:-3;
+  `
+
+const SaveText=styled.Text`
+  width: 71px;
+  height: 20px;
+  font-size: 12px;
+  font-weight: normal;
+  text-align: center;
+  color: #030f29;`

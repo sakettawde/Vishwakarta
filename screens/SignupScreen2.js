@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet,  View, ScrollView,Alert ,Dimensions, TouchableOpacity,Image } from 'react-native';
+import { StyleSheet,  View, ScrollView,Alert ,Dimensions, TouchableOpacity,Image,ActivityIndicator } from 'react-native';
 import {Container,  Content, Form, Item, Input, Label , Button, Text, Left, Right, Picker,Icon, List, ListItem} from 'native-base';
 import { ImagePicker ,LinearGradient,Permissions} from 'expo';
 import {NextButton,ButtonText,ScreenTitle,FlexColumn} from '../utils/styles';
@@ -32,7 +32,7 @@ export default class SignupScreen2 extends React.Component{
   };
 
   state = {
-    image: null,
+    image_loading: false,
     imageurl:null,
     home_pin: "",
     hvillage:"",
@@ -316,13 +316,13 @@ selectedCurrentPincode=(item)=>{
             <Text>Upload</Text>
           </Button>
               </Right>
-              {this.state.image && <Text>Uploaded</Text>}
+              {this.state.imageurl && <Text>Uploaded</Text>}
               
             </Item>
 
 
             <Item>
-              <View><Image source={{uri: this.state.image}} 
+              <View><Image source={{uri: this.state.imageurl}} 
                   style={{flex:1 ,height:300, width: Dimensions.get('window').width}}/>
                   </View>
             </Item>
@@ -330,10 +330,11 @@ selectedCurrentPincode=(item)=>{
 
           
           
-
+          {this.state.image_loading && <ActivityIndicator size="large"/>}
             <NextButton 
           onPress={()=>this.check_func()}
-          style={{marginTop: 10,}}  
+          style={{marginTop: 10,marginBottom: 10,}}  
+          disabled={this.state.image_loading}
           >
           <LinearGradient
                 colors={["#7c98fd", "#4e43f9"]}
@@ -357,7 +358,7 @@ selectedCurrentPincode=(item)=>{
           aspect: [4, 3],
         });
        console.log(result.uri);
-       this.setState({ image: result.uri });
+       this.setState({ image_loading: true  });
         this._handleImagePicked(result);   
 
       };
@@ -368,7 +369,7 @@ selectedCurrentPincode=(item)=>{
             if (!pickerResult.cancelled) {
                 uploadUrl = await uploadImageAsync(pickerResult.uri);
                 console.log(uploadUrl)
-                this.setState({ imageurl: uploadUrl });
+                this.setState({ imageurl: uploadUrl , image_loading:false });
             }
         } catch (e) {
             console.log(e);

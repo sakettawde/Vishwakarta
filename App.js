@@ -98,7 +98,8 @@ const AppDrawerNavigator = createDrawerNavigator({
 
 },
 {
-  contentComponent: props => <Sidebar {...props} />
+  contentComponent: props => <Sidebar {...props} />,
+  initialRouteName:'Wall',
 }
 )
 
@@ -160,8 +161,8 @@ const AppStackNavigator = createStackNavigator({
     },
 
 },{
-  initialRouteName:'Login',
-  
+  initialRouteName:'Drawer',
+
 })
 
 

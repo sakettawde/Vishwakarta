@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FeedCard2 from './FeedCard2';
-import { StatusBar, AsyncStorage, View ,Button,ScrollView,RefreshControl } from 'react-native';
-import { Fab,Icon } from 'native-base';
+import { StatusBar, AsyncStorage, View ,Button,ScrollView,RefreshControl,Alert } from 'react-native';
+import { Fab,Icon, Text } from 'native-base';
 import {AdminFeed} from '../assets/ApiUrl';
 
 
@@ -11,8 +11,11 @@ export default class tabOne extends Component{
     this.state = {
       refreshing: false,
       records:{},
+      imageData:{},
       flag:false,
-      user_id:""
+      user_id:"",
+      like_count:0,
+      comment_count:0
     };
   }
   componentDidMount(){
@@ -43,11 +46,18 @@ export default class tabOne extends Component{
         return data.json()
       })
       .then(data => {
-        console.log("AdminfeedApi Response", data)
+        //console.log("AdminfeedApi Response", data)
 
-        if (data.message == "text message.") {
+        if (data.message == "Get The data") {
           console.log("Success")
-          this.setState({records:data.records,flag:true})
+          // console.log(data.imageData)
+          // console.log(data.imageData.filter((image)=>{return image.feedCount==="10" ;}))
+          data.records.map(item=>{
+            item.image=data.imageData.filter((image)=>{return image.feedCount==item.id ;})
+          })
+          console.log(data.records)
+
+          this.setState({records:data.records,like_count:data.loveCount,comment_count:data.commentNo,flag:true})
         } else if (data.message) {
           Alert.alert(data.message)
         }
@@ -66,7 +76,9 @@ export default class tabOne extends Component{
   }
   render(){
     return(
+      
       <View style={{flex:1}}>
+    
       <ScrollView style={{paddingVertical: 10}}
           pinchGestureEnabled={true}
           refreshControl={<RefreshControl refreshing={this.state.refreshing}
@@ -88,23 +100,28 @@ export default class tabOne extends Component{
 
         { this.state.flag && 
         (this.state.records.reverse().map((item,index)=>
+              // { let id=item.id
+              //   console.log(this.state.imageData.filter((image)=>{
+              //     console.log("feed",image.feedCount)
+              //     console.log("id",id)
+              //     return image.feedCount==item.id ;}));}
              <FeedCard2 {...this.props} 
              name={item.name} 
-             avatar='https://facebook.github.io/react/logo-og.png'
+             avatar={item.avatar}
              date={item.date} 
              caption={item.status}
-             array={['https://wallpaper-house.com/data/out/2/wallpaper2you_20995.jpg','https://wallpaper-house.com/data/out/2/wallpaper2you_20996.jpg']}
-             likes={200}
-             comments={250}
+             array={item.image}
+             likes={this.state.like_count}
+             comments={this.state.comment_count}
              feed_id={item.id}
              user_id={this.state.user_id}
              key={index}
-             /> 
+        /> 
         ))
         }
         </ScrollView>
       
-
+      
       <View style={{flex:0}}>
       <Fab
               active={true}

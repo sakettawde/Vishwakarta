@@ -10,13 +10,15 @@ export default class FeedCard2 extends Component {
     state={
       like:true,
       like_count:0,
-      comments_count:0
+      comments_count:0,
+      image_array:{}
     }
 
   
     componentDidMount(){
       this.setState({like_count:this.props.likes,
-        comments_count:this.props.comments})
+        comments_count:this.props.comments,
+        image_array:this.props.array})
     }
 
     addLikeApi = () => {
@@ -115,13 +117,13 @@ export default class FeedCard2 extends Component {
 
             
               
-              {this.props.array && (
+              {this.props.array[0] && (
 
               <Swiper style={{height:200, width:Dimensions.get('window').width}} loop={false} >
                  
                 {this.props.array.map((item,index)=>
                   <View style={styles.slide} key={index}>
-                  <Image source={{uri: item}} 
+                  <Image source={{uri: item.link}} 
                   style={{flex:1 ,height: 200, width: Dimensions.get('window').width}}/>
                 </View>
                   )

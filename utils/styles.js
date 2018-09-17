@@ -32,5 +32,5 @@ export const ScreenTitle = styled.Text`
   font-weight: 900;
   font-style: normal;
   text-align: center;
-  color: #4e43f9;
+  color:  rgba(3, 15, 41, 0.9);
 `

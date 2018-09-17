@@ -57,7 +57,9 @@ export default class PasswordRv extends React.Component {
   render() {
     return (
       <FlexColumn style={{marginTop: StatusBar.currentHeight}}>
-        <Header ><Text style={styles.headline}>Password Recovery</Text></Header>
+        {/* <Header ><Text style={styles.headline}>Password Recovery</Text></Header> */}
+
+        <ScreenTitle>Password Recovery</ScreenTitle>
         
           <Form>
             <Item stackedLabel>

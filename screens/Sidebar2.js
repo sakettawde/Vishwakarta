@@ -18,7 +18,7 @@ export default class SideBar extends React.Component {
       const value = await AsyncStorage.getItem('user_name');
       await this.setState({user_name:value})
       console.log("name ",value)
-
+      this.AdminFeedApi();
      } catch (error) {
        console.log(error)
      }
@@ -27,23 +27,14 @@ export default class SideBar extends React.Component {
     return (
       <FlexColumn style={{marginTop: StatusBar.currentHeight,}}>
         
-          <ImageBackground
-            source={{
-              uri: "https://images.pexels.com/photos/443383/pexels-photo-443383.jpeg?auto=compress&cs=tinysrgb&h=350"
-            }}
-            style={{
-              height: 112,
-              alignSelf: "stretch",
-
-            }}>
+         
              
             <Image  source={{uri: "https://res.cloudinary.com/jerrick/image/upload/f_auto,fl_progressive,q_auto,c_fit,w_1100/t3onxzmjhmfbbah9ahzi"}} 
              style={{marginTop:78,marginLeft:16,marginRight:192,height:80,width:80 ,borderRadius:40}}/>
            
            
           
-           
-          </ImageBackground>
+        
           <NameText style={{marginTop:52,marginLeft:18,}}>{this.state.user_name}</NameText>
           <SubText style={{marginLeft:18}}>Pune</SubText>
           {/* <View

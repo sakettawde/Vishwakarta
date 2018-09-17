@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View ,Alert,StatusBar} from 'react-native';
 import { Header, Form, Item ,Input, Label } from 'native-base';
 import { UpdateOtp,CheckOtp } from "../assets/ApiUrl";
-import {NextButton,ButtonText ,FlexColumn} from "../utils/styles";
+import {NextButton,ButtonText ,FlexColumn,ScreenTitle} from "../utils/styles";
 import {LinearGradient} from 'expo';
 
 
@@ -113,8 +113,8 @@ export default class OtpScreen extends React.Component {
 
     return (
       <FlexColumn style={{marginTop:StatusBar.currentHeight}}>
-        <Header ><Text style={styles.headline}>Password Recovery</Text></Header>
-        
+        {/* <Header ><Text style={styles.headline}>Password Recovery</Text></Header> */}
+        <ScreenTitle>Password Recovery</ScreenTitle>
           <Form>
             <Item stackedLabel>
               <Label>Enter OTP</Label>
