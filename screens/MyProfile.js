@@ -2,7 +2,7 @@ import React from 'react';
 import {
   ScrollView,
   View,AsyncStorage,
-  StyleSheet,
+  StatusBar,
   Image,Alert,TouchableOpacity
 } from 'react-native';
 import {Text , Label , Left ,Right ,Container, Header, Content, List, ListItem,Title, Input, Button 
@@ -373,8 +373,8 @@ selectedCurrentPincode=(item)=>{
   render() {
     
     return (
-      <Container >
-        <Header />
+      <Container style={{marginTop:StatusBar.currentHeight}}>
+        {/* <Header /> */}
         <Content>
           <Image source={{uri:"https://res.cloudinary.com/jerrick/image/upload/f_auto,fl_progressive,q_auto,c_fit,w_1100/t3onxzmjhmfbbah9ahzi" }} 
           style={{height: 200, alignSelf: "stretch", flex: 1}}/>

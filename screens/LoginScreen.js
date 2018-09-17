@@ -5,7 +5,7 @@ import {
   Alert,
   AsyncStorage,
   TextInput,
-  Image,
+  StatusBar,
   Button,
   TouchableOpacity,
   ActivityIndicator
@@ -92,7 +92,7 @@ export default class LoginScreen extends Component {
                 colors={["#7c98fd", "#4e43f9"]}
                 start={{ x: 0.0, y: 0.0 }}
                 end={{ x: 0.0, y: 1.0 }}
-                style={{ width: "100%", height: "100%"}}
+                style={{ width: "100%", height: "100%",marginTop: StatusBar.currentHeight}}
               >
               <FlexColumn style={{flex:1}}>
 

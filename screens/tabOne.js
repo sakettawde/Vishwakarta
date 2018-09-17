@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import FeedCard2 from './FeedCard2';
-import { StyleSheet, Text, View ,Button,ScrollView,RefreshControl } from 'react-native';
+import { StatusBar, AsyncStorage, View ,Button,ScrollView,RefreshControl } from 'react-native';
 import { Fab,Icon } from 'native-base';
 import {AdminFeed} from '../assets/ApiUrl';
 
@@ -11,11 +11,22 @@ export default class tabOne extends Component{
     this.state = {
       refreshing: false,
       records:{},
-      flag:false
+      flag:false,
+      user_id:""
     };
   }
   componentDidMount(){
-    this.AdminFeedApi();
+    this._retrieveData()
+  }
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('user_id');
+      await this.setState({user_id:value})
+      console.log("id ",value)
+      this.AdminFeedApi();
+     } catch (error) {
+       console.log(error)
+     }
   }
   AdminFeedApi = () => {
     console.log("In AdminFeedApi")
@@ -49,6 +60,7 @@ export default class tabOne extends Component{
 
   _onRefresh = () => {
     this.setState({refreshing: true});
+    this.AdminFeedApi();
 
     this.setState({refreshing: false});
   }
@@ -75,7 +87,7 @@ export default class tabOne extends Component{
           /> */}
 
         { this.state.flag && 
-        (this.state.records.map((item,index)=>
+        (this.state.records.reverse().map((item,index)=>
              <FeedCard2 {...this.props} 
              name={item.name} 
              avatar='https://facebook.github.io/react/logo-og.png'
@@ -85,7 +97,8 @@ export default class tabOne extends Component{
              likes={200}
              comments={250}
              feed_id={item.id}
-             user_id={item.userId}
+             user_id={this.state.user_id}
+             key={index}
              /> 
         ))
         }

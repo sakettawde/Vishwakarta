@@ -1,7 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View ,Alert} from 'react-native';
-import { Header, Form, Button, Container, Content,Item ,Input, Label } from 'native-base';
+import { StyleSheet,  StatusBar ,Alert} from 'react-native';
+import { Header, Form,Item ,Input, Label } from 'native-base';
 import { AddProfUrl } from "../assets/ApiUrl";
+import {NextButton,ButtonText ,FlexColumn} from "../utils/styles";
+import {LinearGradient} from 'expo';
 
 
 export default class AddProf extends React.Component {
@@ -50,22 +52,33 @@ export default class AddProf extends React.Component {
     
 
     return (
-      <Container>
+      <FlexColumn style={{marginTop:StatusBar.currentHeight }}>
         {/* <Header ><Text style={styles.headline}>Add New Profession</Text></Header> */}
-        <Content>
+        
           <Form>
             <Item stackedLabel>
               <Label>Enter your Profession</Label>
               <Input onChangeText={(text)=>{this.setState({prof:text})}} />
             </Item>
             
-            <Button rounded full
-                onPress={()=>this.addProfApi()}>
-          <Text style={{ color: 'white' }}>Add</Text>
-        </Button>
           </Form>
-        </Content>
-      </Container>
+
+           <NextButton 
+          onPress={()=>this.addProfApi()}
+          style={{marginTop: 10,}}  
+          >
+          <LinearGradient
+                colors={["#7c98fd", "#4e43f9"]}
+                start={{ x: 0.0, y: 1.0 }}
+                end={{ x: 1.0, y: 0.0 }}
+                style={{ width: "100%", height: "100%",borderRadius:10}}
+              >
+
+            <ButtonText>Add</ButtonText>
+          </LinearGradient>
+        </NextButton>
+        
+      </FlexColumn>
 
     );
   }

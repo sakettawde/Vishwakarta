@@ -1,7 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View ,Alert} from 'react-native';
+import { StyleSheet, Text, StatusBar ,Alert} from 'react-native';
 import { Header, Form, Button, Container, Content,Item ,Input, Label } from 'native-base';
 import { AddGotraUrl } from "../assets/ApiUrl";
+import {NextButton,ButtonText ,FlexColumn} from "../utils/styles";
+import {LinearGradient} from 'expo';
 
 
 export default class AddGotra extends React.Component {
@@ -50,22 +52,33 @@ export default class AddGotra extends React.Component {
     
 
     return (
-      <Container>
+      <FlexColumn style={{marginTop:StatusBar.currentHeight}}>
         {/* <Header ><Text style={styles.headline}>Add New Gotra</Text></Header> */}
-        <Content>
+        
           <Form>
             <Item stackedLabel>
               <Label>Enter your Gotra</Label>
               <Input onChangeText={(text)=>{this.setState({gotra:text})}} />
             </Item>
             
-            <Button rounded full
-                onPress={()=>this.addGotraApi()}>
-          <Text style={{ color: 'white' }}>Add</Text>
-        </Button>
           </Form>
-        </Content>
-      </Container>
+
+          <NextButton 
+          onPress={()=>this.addGotraApi()}
+          style={{marginTop: 10,}}  
+          >
+          <LinearGradient
+                colors={["#7c98fd", "#4e43f9"]}
+                start={{ x: 0.0, y: 1.0 }}
+                end={{ x: 1.0, y: 0.0 }}
+                style={{ width: "100%", height: "100%",borderRadius:10}}
+              >
+
+            <ButtonText>Add</ButtonText>
+          </LinearGradient>
+        </NextButton>
+       
+      </FlexColumn>
 
     );
   }

@@ -20,9 +20,7 @@ export default class SideBar extends React.Component {
               justifyContent: "center",
               alignItems: "center"
             }}>
-            {/* <Left>
-            <Thumbnail square small source={{uri: "https://facebook.github.io/react-native/docs/assets/favicon.png"}} />
-            </Left> */}
+           
           </Image>
           <Text>Peter Parker</Text>
           <List

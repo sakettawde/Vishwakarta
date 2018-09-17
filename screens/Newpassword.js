@@ -1,7 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View,Alert } from 'react-native';
+import { StyleSheet, Text, View,Alert,StatusBar } from 'react-native';
 import { Header, Form, Button, Container, Content,Item ,Input, Label, CheckBox } from 'native-base';
 import { ChangePass } from "../assets/ApiUrl";
+import {NextButton,ButtonText ,FlexColumn,ScreenTitle} from "../utils/styles";
+import {LinearGradient} from 'expo';
 
 
 export default class Newpassword extends React.Component {
@@ -61,9 +63,9 @@ export default class Newpassword extends React.Component {
 
   render() {
     return (
-      <Container>
+      <FlexColumn style={{marginTop:StatusBar.currentHeight}}>
         <Header ><Text style={styles.headline}>Password Recovery</Text></Header>
-        <Content>
+        
           <Form>
             <Item stackedLabel>
               <Label>Enter New Password</Label>
@@ -74,15 +76,24 @@ export default class Newpassword extends React.Component {
               <Input secureTextEntry={true} onChangeText={(text)=>{this.setState({confpass:text})}}/>
             </Item>
             
-            <Button rounded full
-                onPress={() => {  
-                this.check();
-              }}>
-          <Text style={{ color: 'white' }}>Next</Text>
-        </Button>
           </Form>
-        </Content>
-      </Container>
+
+           <NextButton 
+          onPress={()=>this.check()}
+          style={{marginTop: 10,}}  
+          >
+          <LinearGradient
+                colors={["#7c98fd", "#4e43f9"]}
+                start={{ x: 0.0, y: 1.0 }}
+                end={{ x: 1.0, y: 0.0 }}
+                style={{ width: "100%", height: "100%",borderRadius:10}}
+              >
+
+            <ButtonText>Verify</ButtonText>
+          </LinearGradient>
+        </NextButton>
+        
+      </FlexColumn>
 
     );
   }

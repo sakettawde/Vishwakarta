@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet,  View ,Alert } from 'react-native';
+import { StatusBar,  View ,Alert } from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Label , Button ,DatePicker, Text, Left, Right 
 , Radio, Picker,Icon} from 'native-base';
 //import Dialog from "react-native-dialog";
@@ -221,7 +221,7 @@ export default class SignUp extends React.Component {
  
   render() {
     return (
-      <FlexColumn style={{flex:1,margin:10}}>
+      <FlexColumn style={{flex:1,margin:10,marginTop: StatusBar.currentHeight}}>
         <ScreenTitle>SignUp</ScreenTitle>
 
         <FlexColumn>

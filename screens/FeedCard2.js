@@ -3,6 +3,7 @@ import { Image ,Dimensions ,View,StyleSheet} from 'react-native';
 import { CardItem, Thumbnail, Text, Button, Left, Right , Body ,Icon } from 'native-base';
 import Swiper from 'react-native-swiper';
 import styled from "styled-components";
+import {AddLike,UnLike} from '../assets/ApiUrl';
 
 export default class FeedCard2 extends Component {
 
@@ -18,15 +19,81 @@ export default class FeedCard2 extends Component {
         comments_count:this.props.comments})
     }
 
+    addLikeApi = () => {
+      console.log("In AddLikeApi")
+      this.setState({loading:true})
+      fetch(AddLike, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          feedId:this.props.feed_id,
+          userId:this.props.user_id
+        })
+      })
+        .then(data => {
+          return data.json()
+        })
+        .then(data => {
+          console.log("AddLike Response", data)
   
+          if (data.message == "Liked") {
+            console.log("Success")
+            this.setState({like_count:data.likeCount})
+            
+          } else if (data.message) {
+            Alert.alert(data.message)
+          }
+        }).catch((error)=>{
+      console.log("Api call error");
+      console.log(error.message);
+   });
+  }
+
+  unLikeApi = () => {
+    console.log("In unLikeApi")
+    this.setState({loading:true})
+    fetch(UnLike, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        feedId:this.props.feed_id,
+        userId:this.props.user_id
+      })
+    })
+      .then(data => {
+        return data.json()
+      })
+      .then(data => {
+        console.log("AddLike Response", data)
+
+        if (data.message == "UnLiked") {
+          console.log("Success")
+          this.setState({like_count:data.likeCount})
+          
+        } else if (data.message) {
+          Alert.alert(data.message)
+        }
+      }).catch((error)=>{
+    console.log("Api call error");
+    console.log(error.message);
+ });
+}  
 
 
   toggleLike=()=>{
     if(this.state.like){
       this.setState({like_count:this.state.like_count-1,like:!this.state.like})
+      this.unLikeApi()
     }
     else{
       this.setState({like_count:this.state.like_count+1,like:!this.state.like})
+      this.addLikeApi()
     }
     
   }

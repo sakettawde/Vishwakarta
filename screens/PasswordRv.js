@@ -1,30 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View ,Alert,BackHandler} from 'react-native';
+import { StyleSheet, Text, View ,Alert,StatusBar} from 'react-native';
 import { Header, Form, Button, Container, Content,Item ,Input, Label } from 'native-base';
 import { Passrv } from "../assets/ApiUrl";
+import {NextButton,ButtonText ,FlexColumn,ScreenTitle} from "../utils/styles";
+import {LinearGradient} from 'expo';
+
 
 export default class PasswordRv extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = { mob_num:"" };
-    //this.onBackPress = this.onBackPress.bind(this)
+   
   }
-  
-  // componentDidMount () {
-  //   BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
-  // }
 
-  // componentWillUnmount () {
-  //   BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
-  // }
-
-  // onBackPress () {
-  //   console.log("onBack called")
-  //   const { dispatch, nav } = this.props
-  //   dispatch(NavigationActions.back())
-  //   return nav !== this.props.nav
-  // }
   
 
   PassrvApi = () =>{
@@ -67,9 +56,9 @@ export default class PasswordRv extends React.Component {
     }
   render() {
     return (
-      <Container>
+      <FlexColumn style={{marginTop: StatusBar.currentHeight}}>
         <Header ><Text style={styles.headline}>Password Recovery</Text></Header>
-        <Content>
+        
           <Form>
             <Item stackedLabel>
               <Label>Mobile Number</Label>
@@ -77,13 +66,25 @@ export default class PasswordRv extends React.Component {
                     keyboardType = 'numeric' maxLength={10}/>
             </Item>
             
-            <Button rounded full
-                onPress={() => this.PassrvApi()}>
-          <Text style={{ color: 'white' }}>Next</Text>
-        </Button>
+           
           </Form>
-        </Content>
-      </Container>
+
+          <NextButton 
+          onPress={() => this.PassrvApi()}
+          style={{marginTop: 10}}  
+          >
+          <LinearGradient
+                colors={["#7c98fd", "#4e43f9"]}
+                start={{ x: 0.0, y: 1.0 }}
+                end={{ x: 1.0, y: 0.0 }}
+                style={{ width: "100%", height: "100%",borderRadius:10}}
+              >
+
+            <ButtonText>Next</ButtonText>
+          </LinearGradient>
+        </NextButton>
+        
+      </FlexColumn>
 
     );
   }
