@@ -16,6 +16,10 @@ import Newpassword from './screens/Newpassword';
 import MyProfile from './screens/MyProfile';
 import Newpost from './screens/Newpost';
 import Sidebar from './screens/Sidebar';
+import Sidebar2 from './screens/Sidebar2';
+import HelpPage from './screens/HelpPage';
+import AreaHead from './screens/AreaHead';
+
 // import ContactUsersList from './screens/ContactUsersList';
 import Comments from './screens/Comments';
 import ChatPage from './screens/ChatPage';
@@ -88,8 +92,7 @@ const AppDrawerNavigator = createDrawerNavigator({
   Contacts:{
   screen: Contacts,
   navigationOptions: { header: null }
-  },
- 
+  }, 
 
   Logout:{
     screen: LoginScreen,
@@ -98,7 +101,7 @@ const AppDrawerNavigator = createDrawerNavigator({
 
 },
 {
-  contentComponent: props => <Sidebar {...props} />,
+  contentComponent: props => <Sidebar2 {...props} />,
   initialRouteName:'Wall',
 }
 )
@@ -119,6 +122,7 @@ const AppStackNavigator = createStackNavigator({
     screen : SignupScreen2 ,
     //navigationOptions: { header: null }
   },  
+ 
    PasswordRv : {
      screen : PasswordRv ,
      navigationOptions: { header: null }
@@ -159,9 +163,17 @@ const AppStackNavigator = createStackNavigator({
     Comments:{
       screen:Comments
     },
+    HelpPage:{
+      screen: HelpPage,
+      // navigationOptions: { header: null }
+      },
+   AreaHead:{
+      screen: AreaHead,
+        // navigationOptions: { header: null }
+  },
 
 },{
-  initialRouteName:'Drawer',
+  initialRouteName:'Login',
 
 })
 

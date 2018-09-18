@@ -3,6 +3,7 @@ import { StyleSheet,  View, ScrollView,Alert ,Dimensions, TouchableOpacity,Image
 import {Container,  Content, Form, Item, Input, Label , Button, Text, Left, Right, Picker,Icon, List, ListItem} from 'native-base';
 import { ImagePicker ,LinearGradient,Permissions} from 'expo';
 import {NextButton,ButtonText,ScreenTitle,FlexColumn} from '../utils/styles';
+import ActionSheet from 'react-native-actionsheet';
 import uuid from 'uuid';
 import * as firebase from 'firebase';
 
@@ -54,9 +55,11 @@ export default class SignupScreen2 extends React.Component{
   };
 
 
-//   async componentDidMount() {
-//     await Permissions.askAsync(Permissions.CAMERA_ROLL);
-// }
+  async componentDidMount() {
+    await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    await Permissions.askAsync(Permissions.CAMERA);
+}
+
   info_array={
     name:"",
     mobile_num:"",
@@ -74,6 +77,9 @@ export default class SignupScreen2 extends React.Component{
     this.SignupApi();
     
   }
+  showActionSheet = () => {
+    this.ActionSheet.show();
+  };
 
 
   
@@ -311,7 +317,7 @@ selectedCurrentPincode=(item)=>{
               <Label>Profile Picture</Label>
               
               <Right>
-              <Button iconLeft light onPress={()=>this._pickImage()}>
+              <Button iconLeft light onPress={()=>this.showActionSheet()}>
             <Icon name='md-add' />
             <Text>Upload</Text>
           </Button>
@@ -327,7 +333,7 @@ selectedCurrentPincode=(item)=>{
                   </View>
             </Item>
           </Form>
-
+          
           
           
           {this.state.image_loading && <ActivityIndicator size="large"/>}
@@ -346,19 +352,50 @@ selectedCurrentPincode=(item)=>{
             <ButtonText>SignUp</ButtonText>
           </LinearGradient>
         </NextButton>
+        <View
+        style={{
+          alignContent: 'center',
+          justifyContent: 'center',
+          marginTop: 100,
+        }}>
+        
+        <ActionSheet
+          ref={o => (this.ActionSheet = o)}
+          options={['Take a photo', 'Choose from Camera Roll', 'cancel']}
+          cancelButtonIndex={2}
+          destructiveButtonIndex={1}
+          onPress={index => this.handleImageSource(index)}
+        />
+      </View>
             </Content>
           </Container>
         
           
         );
       }
+      handleImageSource=(index)=>{
+        if(index==1){
+          this._pickImage()
+        }
+        if(index==0){
+          this._takePhoto()
+        }
+        console.log(index)
+      }
+      _takePhoto = async () => {
+        let pickerResult = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+        });
+
+        this._handleImagePicked(pickerResult);
+    };
       _pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
           allowsEditing: true,
           aspect: [4, 3],
         });
        console.log(result.uri);
-       this.setState({ image_loading: true  });
         this._handleImagePicked(result);   
 
       };
@@ -367,6 +404,7 @@ selectedCurrentPincode=(item)=>{
             this.setState({ uploading: true });
   
             if (!pickerResult.cancelled) {
+              this.setState({ image_loading: true  });
                 uploadUrl = await uploadImageAsync(pickerResult.uri);
                 console.log(uploadUrl)
                 this.setState({ imageurl: uploadUrl , image_loading:false });

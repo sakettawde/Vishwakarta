@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import {
-  KeyboardAvoidingView,
   View,
   Alert,
   AsyncStorage,
@@ -21,9 +20,12 @@ import {
   Title,
   Text
 } from "native-base"
+
 import { LinearGradient } from "expo"
 import { Signin } from "../assets/ApiUrl"
 import styled from "styled-components"
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 
 export default class LoginScreen extends Component {
   state = {
@@ -32,12 +34,15 @@ export default class LoginScreen extends Component {
     loading: false
   }
 
-  _storeData = async (user_id, user_name) => {
+  _storeData = async (user_id, user_name,avatar,cvillage) => {
     try {
       console.log(user_id)
       console.log(user_name)
+      console.log(avatar)
       await AsyncStorage.setItem("user_id", JSON.stringify(user_id))
       await AsyncStorage.setItem("user_name", user_name)
+      await AsyncStorage.setItem("avatar", avatar)
+      await AsyncStorage.setItem("cvillage", cvillage)
     } catch (error) {
       // Error saving data
     }
@@ -68,7 +73,7 @@ export default class LoginScreen extends Component {
           this.setState({ records: data.records })
           // this.setState({user_id:data.records.user_id})
           // this.setState({user_name:data.records.name})
-          this._storeData(data.records.user_id, data.records.name)
+          this._storeData(data.records.user_id, data.records.name,data.records.avatar,data.records.cvillage)
           this.setState({loading:false})
           this.props.navigation.navigate("Drawer")
         } else if (data.message) {
@@ -101,8 +106,10 @@ export default class LoginScreen extends Component {
         <FlexColumn style={{ alignItems: "center" }}>
           <Logo source={require("../assets/logo-small.png")} />
           <LoginTitle style={{marginBottom:48}}>Login</LoginTitle>
-          <TextField>
-            <FlexRow style={{alignItems:"center"}}>
+
+          <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}} enableAutomaticScroll={false}>
+          <TextField style={{alignSelf: 'center'}}>
+            <FlexRow style={{alignItems:"center",}}>
               <TextLabel>Mobile</TextLabel>
               <StyledTextInput
               selectionColor="#fff"
@@ -115,8 +122,11 @@ export default class LoginScreen extends Component {
               />
             </FlexRow>
           </TextField>
-          <TextField style={{marginTop:12}}>
-          <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={80}>
+          </KeyboardAwareScrollView>
+
+          <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>
+
+          <TextField style={{marginTop:12,alignSelf: 'center',}}>
             <FlexRow style={{alignItems:"center"}}>
               <TextLabel>Password</TextLabel>
               <StyledTextInput
@@ -126,8 +136,8 @@ export default class LoginScreen extends Component {
               onChangeText={text => this.setState({ pwd: text })}
               />
             </FlexRow>
-            </KeyboardAvoidingView>
-          </TextField>
+           </TextField>
+           </KeyboardAwareScrollView>
         </FlexColumn>
 
         <Spacer/>

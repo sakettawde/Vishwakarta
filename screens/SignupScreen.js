@@ -195,8 +195,7 @@ export default class SignUp extends React.Component {
       })
       .then(data => {
         if(data.message=="Data available"){
-          this.setState({proflist:data.records})
-          this.setState({selected_prof:this.state.proflist[this.state.proflist.length-1].id})
+          this.setState({proflist:data.records,selected_prof:this.state.proflist[this.state.proflist.length-1].id})
           var temp=this.state.proflist.find((item)=>{
             return item.id ===this.state.selected_prof
           })

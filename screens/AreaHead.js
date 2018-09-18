@@ -6,23 +6,19 @@ import {
 } from 'react-native';
 import {Text , Label , Left ,Right ,Container, Header, Content, List, ListItem,Title, Input, Button } from 'native-base';
 import { Userinfo } from "../assets/ApiUrl";
-
+import styled from 'styled-components';
 
 export default class UserProfile extends React.Component {
   constructor(){
     super();
     this.state = {
-      user_id:"",      
+      user_id:1,      
       records:[{}],
       value:false
 
     }
 } 
 componentDidMount(){
-  this.state.user_id=this.props.navigation.getParam('user_id')  
-  //this.state.current_id=this.props.navigation.getParam('current_id')
-  console.log(this.state.user_id)
-
   this.UserInfoApi()
 }
 
@@ -139,6 +135,9 @@ UserInfoApi = () =>{
           </List>
 
 
+        <CustomText style={{marginTop: 10,marginBottom: 10,alignSelf: 'center',}}>
+        Do you wanna be Area Head?</CustomText>
+          
           
  
         </Content>
@@ -146,3 +145,10 @@ UserInfoApi = () =>{
     )
   }
 }
+
+const CustomText=styled.Text`
+height: 22px;
+font-size: 17px;
+font-weight: 600;
+font-style: normal;
+color: rgba(3, 15, 41, 0.9);`

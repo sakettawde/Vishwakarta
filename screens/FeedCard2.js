@@ -3,28 +3,30 @@ import { Image ,Dimensions ,View,StyleSheet} from 'react-native';
 import { CardItem, Thumbnail, Text, Button, Left, Right , Body ,Icon } from 'native-base';
 import Swiper from 'react-native-swiper';
 import styled from "styled-components";
-import {AddLike,UnLike} from '../assets/ApiUrl';
+import {AddLike,UnLike,AddTempleLike,UnTempleLike,AddMyLike,UnMyLike} from '../assets/ApiUrl';
 
 export default class FeedCard2 extends Component {
 
     state={
-      like:true,
+      like:false,
       like_count:0,
       comments_count:0,
-      image_array:{}
+      image_array:{},
+      tab:""
     }
 
   
     componentDidMount(){
       this.setState({like_count:this.props.likes,
         comments_count:this.props.comments,
-        image_array:this.props.array})
+        image_array:this.props.array,
+        tab:this.props.tab})
     }
 
-    addLikeApi = () => {
+    addLikeApi = (link) => {
       console.log("In AddLikeApi")
       this.setState({loading:true})
-      fetch(AddLike, {
+      fetch(link, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -54,10 +56,10 @@ export default class FeedCard2 extends Component {
    });
   }
 
-  unLikeApi = () => {
+  unLikeApi = (link) => {
     console.log("In unLikeApi")
     this.setState({loading:true})
-    fetch(UnLike, {
+    fetch(link, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -72,7 +74,7 @@ export default class FeedCard2 extends Component {
         return data.json()
       })
       .then(data => {
-        console.log("AddLike Response", data)
+        console.log("UnLike Response", data)
 
         if (data.message == "UnLiked") {
           console.log("Success")
@@ -91,11 +93,36 @@ export default class FeedCard2 extends Component {
   toggleLike=()=>{
     if(this.state.like){
       this.setState({like_count:this.state.like_count-1,like:!this.state.like})
-      this.unLikeApi()
+      console.log("unlike")
+      if(this.state.tab=='admin'){
+        console.log("admin")
+       this.unLikeApi(UnLike)
+      }
+      else if(this.state.tab=='temple'){
+        console.log("temple")
+        this.unLikeApi(UnTempleLike)
+      }
+      else if(this.state.tab=='my'){
+        console.log("my")
+        this.unLikeApi(UnMyLike)
+      }
     }
     else{
       this.setState({like_count:this.state.like_count+1,like:!this.state.like})
-      this.addLikeApi()
+      if(this.state.tab=='admin'){
+        console.log("admin")
+        this.addLikeApi(AddLike)
+        }
+        else if(this.state.tab=='temple'){
+          console.log("temple")
+          this.addLikeApi(AddTempleLike)
+        }
+        else if(this.state.tab=='my'){
+          console.log("my")
+          this.addLikeApi(AddMyLike)
+  
+        }
+      console.log("like")
     }
     
   }

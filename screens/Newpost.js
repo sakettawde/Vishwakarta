@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { Container, Icon, Content, Form, Item, Input, Label, Right, Button, Text } from 'native-base';
-import {AsyncStorage,View,Image,Dimensions,KeyboardAvoidingView,Alert, ActivityIndicator} from 'react-native'
+import {AsyncStorage,View,Image,Dimensions,Alert, ActivityIndicator} from 'react-native'
 import { ImagePicker ,LinearGradient,Permissions} from 'expo';
 import {NextButton,ButtonText,ScreenTitle,FlexColumn} from '../utils/styles';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
 import * as firebase from 'firebase';
-import {Addfeed} from "../assets/ApiUrl";
+import {Addfeed,AddTemplefeed,AddMyfeed} from "../assets/ApiUrl";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import ActionSheet from 'react-native-actionsheet';
+
 
 
 export default class Newpost extends Component {
@@ -45,10 +47,15 @@ export default class Newpost extends Component {
          console.log(error)
        }
     }
-    AddfeedApi = () => {
+
+    showActionSheet = () => {
+      this.ActionSheet.show();
+    };
+
+    AddfeedApi = (link) => {
       console.log("In AddfeedApi")
       
-      fetch(Addfeed, {
+      fetch(link, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -84,6 +91,27 @@ export default class Newpost extends Component {
     console.log(text);
     this.setState({caption:text});
   }
+
+  postHandler=()=>{
+    if(!this.state.image && !this.state.caption){
+      Alert.alert("Please select data to upload")
+      return
+    }
+    console.log(this.state.tab)
+    if(this.state.tab=='admin'){
+      console.log("admin addfeed")
+      this.AddfeedApi(Addfeed)
+    }
+    else if(this.state.tab=='temple'){
+      console.log("temple addfeed")
+      this.AddfeedApi(AddTemplefeed)
+    }
+    else if(this.state.tab=="my"){
+      console.log("My addfeed")
+      this.AddfeedApi(AddMyfeed)
+    }
+
+  }
   render() {
     return (
     
@@ -92,7 +120,7 @@ export default class Newpost extends Component {
             <Item stackedLabel>
               <Label>Select Image</Label>
               <Right>
-              <Button iconLeft light onPress={()=>this._pickImage()}>
+              <Button iconLeft light onPress={()=>this.showActionSheet()}>
             <Icon name='md-add' />
             <Text>Select Image</Text>
           </Button>
@@ -101,16 +129,16 @@ export default class Newpost extends Component {
             
            
 
-            
             <Item stackedLabel last >
               <Label>Caption</Label>    
+              <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>
               <Input multiline={true} numberOfLines={8} onChangeText={(text)=>this.caption_handler(text)}/>
-                       
+              </KeyboardAwareScrollView>        
             </Item>
           </Form>
           {this.state.loading_image && <ActivityIndicator size="large"/>}
           <NextButton 
-          onPress={() =>this.AddfeedApi()}
+          onPress={() =>this.postHandler()}
           style={{marginTop: 10,marginBottom:10,}} 
           disabled={this.state.loading_image} 
           >
@@ -129,7 +157,7 @@ export default class Newpost extends Component {
         {this.state.imageurl &&
               <Swiper style={{height:200, width:Dimensions.get('window').width}} loop={false} >
               
-            {this.state.url_array.map((item,index)=>
+            {this.state.image_array.map((item,index)=>
             <View style={{flex: 1,justifyContent: 'center', alignItems: 'center',height:200}} key={index}>
             <Image source={{uri: item}} 
             style={{flex:1 ,height: 200, width: Dimensions.get('window').width}}/>
@@ -139,12 +167,48 @@ export default class Newpost extends Component {
             }
             </Swiper>
             }
+
+           <View
+          style={{
+            alignContent: 'center',
+            justifyContent: 'center',
+            marginTop: 100,
+          }}>
+          
+          <ActionSheet
+            ref={o => (this.ActionSheet = o)}
+            options={['Take a photo', 'Choose from Camera Roll', 'cancel']}
+            cancelButtonIndex={2}
+            destructiveButtonIndex={1}
+            onPress={index => this.handleImageSource(index)}
+          />
+        </View>  
+
           </KeyboardAwareScrollView>
+         
+        
 
     );
   }
+
+  handleImageSource=(index)=>{
+    if(index==1){
+      this._pickImage()
+    }
+    if(index==0){
+      this._takePhoto()
+    }
+    console.log(index)
+  }
+  _takePhoto = async () => {
+    let pickerResult = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+    });
+
+    this._handleImagePicked(pickerResult);
+};
   _pickImage = async () => {
-    this.setState({loading_image:true})
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
@@ -161,10 +225,11 @@ export default class Newpost extends Component {
 
         if (!pickerResult.cancelled) {
           let location="images/feed/"+this.state.user_id+"_"+moment().format();
-          this.state.image_array.push(pickerResult.uri);
+            this.state.image_array.push(pickerResult.uri);
+            this.setState({loading_image:true});
             uploadUrl = await uploadImageAsync(pickerResult.uri,location);
             this.state.url_array.push(uploadUrl);
-            console.log("url array ",this.state.url_array)
+            console.log("url array ",this.state.url_array);
             this.setState({ imageurl: uploadUrl , loading_image:false });
         }
     } catch (e) {

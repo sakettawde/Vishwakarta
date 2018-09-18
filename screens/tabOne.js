@@ -15,7 +15,8 @@ export default class tabOne extends Component{
       flag:false,
       user_id:"",
       like_count:0,
-      comment_count:0
+      comment_count:0,
+      refreshCount:0
     };
   }
   componentDidMount(){
@@ -27,6 +28,19 @@ export default class tabOne extends Component{
       await this.setState({user_id:value})
       console.log("id ",value)
       this.AdminFeedApi();
+      
+    //   let interval = 15000
+    //   let startInterval = setInterval(() => {
+    //   //console.log("start interval run..",this.state.refreshCount)
+    //   if (this.state.refreshCount < 12) {
+    //     this.AdminFeedApi()
+    //     this.setState({ refreshCount: this.state.refreshCount + 1 })
+    //   } else {
+    //     clearInterval(startInterval)
+    //   }
+    // }, interval)
+
+
      } catch (error) {
        console.log(error)
      }
@@ -55,7 +69,7 @@ export default class tabOne extends Component{
           data.records.map(item=>{
             item.image=data.imageData.filter((image)=>{return image.feedCount==item.id ;})
           })
-          console.log(data.records)
+          //console.log(data.records)
 
           this.setState({records:data.records,like_count:data.loveCount,comment_count:data.commentNo,flag:true})
         } else if (data.message) {

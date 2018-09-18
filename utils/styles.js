@@ -34,3 +34,7 @@ export const ScreenTitle = styled.Text`
   text-align: center;
   color:  rgba(3, 15, 41, 0.9);
 `
+export const FlexRow = styled.View`
+  display: flex;
+  flex-direction: row;
+`
