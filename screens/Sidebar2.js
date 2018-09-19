@@ -1,5 +1,5 @@
 import React from "react";
-import { Image,ImageBackground,StatusBar,AsyncStorage,View,Text } from "react-native";
+import { Image,TouchableOpacity,StatusBar,AsyncStorage,View,Text } from "react-native";
 import {FlexColumn,FlexRow} from "../utils/styles"
 import styled from "styled-components"
 import { Icon } from "native-base";
@@ -10,7 +10,8 @@ export default class SideBar extends React.Component {
   state={
     user_name:"",
     avatar:"",
-    cvillage:""
+    cvillage:"",
+    prof:""
   }
   componentDidMount(){
     this._retrieveData()
@@ -20,9 +21,10 @@ export default class SideBar extends React.Component {
       const value = await AsyncStorage.getItem('user_name');
       const value2 = await AsyncStorage.getItem('avatar');
       const value3 = await AsyncStorage.getItem('cvillage');
+      const value4 = await AsyncStorage.getItem('prof');
 
       // console.log(value2)
-      await this.setState({user_name:value,avatar:value2,cvillage:value3})
+      await this.setState({user_name:value,avatar:value2,cvillage:value3,prof:value4})
       console.log("name ",value)
      } catch (error) {
        console.log(error)
@@ -32,28 +34,20 @@ export default class SideBar extends React.Component {
     return (
       <FlexColumn style={{marginTop: StatusBar.currentHeight,flex:1}}>
         
-         <View style={{width:"100%",height:152}}>
-        <ImageBackground
-            source={{
-              uri: "https://images.pexels.com/photos/443383/pexels-photo-443383.jpeg?auto=compress&cs=tinysrgb&h=350"
-            }}
-            style={{
-              height: 112,
-              alignSelf: "stretch",
-
-            }}>
-             
+         <View style={{width:"100%",height:150}}>
+        
+            <TouchableOpacity  onPress={()=>{this.props.navigation.navigate('Profile')}}> 
             <Image  source={{uri:this.state.avatar}}
-             style={{marginTop:78,marginLeft:16,marginRight:192,height:80,width:80 ,borderRadius:40}}/>
+             style={{marginTop:15,height:80,width:80 ,borderRadius:40,alignSelf:"center"}}
+            />
            
            
           
-           
-          </ImageBackground>
-        
-          <NameText style={{marginTop:12,marginLeft:114,}}>{this.state.user_name}</NameText>
-          <SubText style={{marginLeft:114}}>{this.state.cvillage}</SubText>
-         
+          <View style={{marginTop:12}}>         
+          <NameText style={{textAlign: 'center'}}>{this.state.user_name}</NameText>
+          <SubText style={{textAlign: 'center'}}>{this.state.cvillage}</SubText>
+          </View>
+          </TouchableOpacity>
           </View>
 
             <FlexRow style={{flex:.3}}></FlexRow>
@@ -62,7 +56,7 @@ export default class SideBar extends React.Component {
                 <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
                 onPress={()=>{this.props.navigation.navigate('Contacts')}}>
                   <NumberText>270</NumberText>
-                  <NumberSubText>CA</NumberSubText>
+                  <NumberSubText>{this.state.prof}</NumberSubText>
                 </ColumnButton>
               </View>
               <View style={{flex: 1,}}>
@@ -154,7 +148,6 @@ export default class SideBar extends React.Component {
 }
 
 const NameText=styled.Text`
-width: 146px;
 height: 22px;
 font-size: 17px;
 font-weight: 600;
@@ -163,7 +156,6 @@ color: rgba(3, 15, 41, 0.9);`
 
 
 const SubText=styled.Text`
-width: 74px;
 height: 16px;
 font-size: 12px;
 font-weight: normal;

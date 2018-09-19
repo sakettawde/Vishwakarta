@@ -12,7 +12,8 @@ export default class FeedCard2 extends Component {
       like_count:0,
       comments_count:0,
       image_array:{},
-      tab:""
+      tab:"",
+      feedId:""
     }
 
   
@@ -20,7 +21,7 @@ export default class FeedCard2 extends Component {
       this.setState({like_count:this.props.likes,
         comments_count:this.props.comments,
         image_array:this.props.array,
-        tab:this.props.tab})
+        tab:this.props.tab,feedId:this.props.feed_id})
     }
 
     addLikeApi = (link) => {
@@ -181,7 +182,11 @@ export default class FeedCard2 extends Component {
               </Left>
               <Right>
                 <Button transparent textStyle={{color: '#87838B'}}
-                onPress={()=>{this.props.navigation.navigate('Comments')}}>
+                onPress={()=>{this.props.navigation.navigate('Comments',{
+                  tab:this.props.tab,
+                  feedId:this.props.feed_id,
+                  userid:this.props.user_id
+                })}}>
                   <Icon name="md-chatboxes" />
                   <Text>{this.state.comments_count} Comments</Text>
                 </Button>

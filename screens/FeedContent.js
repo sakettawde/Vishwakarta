@@ -4,6 +4,7 @@ import {View,StatusBar} from 'react-native';
 import Tab1 from './tabOne';
 import Tab2 from './tabTwo';
 import Tab3 from './tabThree';
+import Tab4 from './VideoTab';
 
 export default class Feed extends Component {
   
@@ -28,6 +29,9 @@ export default class Feed extends Component {
       </Tab>
       <Tab heading='TEMPLE'>
         <Tab3  {...this.props}/>
+      </Tab>
+      <Tab heading='VIDEOS'>
+        <Tab4  {...this.props}/>
       </Tab>
     </Tabs>
     

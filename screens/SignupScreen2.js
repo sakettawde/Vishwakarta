@@ -73,8 +73,14 @@ export default class SignupScreen2 extends React.Component{
 
   check_func=()=>{
     //console.log("Code here")
-    console.log(this.info_array)
-    this.SignupApi();
+    let temp='http://www.myiconfinder.com/uploads/iconsets/256-256-f86ca6f98affc4bfe9306d9693638920.png'
+    if(this.state.imageurl){
+      temp=this.state.imageurl
+    }
+
+    console.log(this.info_array);
+    console.log(temp);
+     this.SignupApi(temp);
     
   }
   showActionSheet = () => {
@@ -85,7 +91,7 @@ export default class SignupScreen2 extends React.Component{
   
  
 
-  SignupApi = () =>{
+  SignupApi = (avatar) =>{
 
     if(this.state.home_pin.length < 5){
       Alert.alert("Enter Valid Pincode")
@@ -121,7 +127,7 @@ export default class SignupScreen2 extends React.Component{
         ctaluka:this.state.ctaluka,
         cdistrict:this.state.cdistrict,
         cstate:this.state.cstate,
-        avatar:this.state.imageurl
+        avatar:avatar      
       })
     })
       .then(data => {
@@ -130,7 +136,7 @@ export default class SignupScreen2 extends React.Component{
       .then(data => {
        // console.log("Signup Response", data)
         if(data.message=="Registration succesfully "){
-          this.props.navigation.navigate('Drawer')
+          this.props.navigation.navigate('Login')
         }          
         else{
           Alert.alert(data.message)

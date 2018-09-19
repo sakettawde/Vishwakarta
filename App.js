@@ -161,7 +161,8 @@ const AppStackNavigator = createStackNavigator({
       screen : ChatPage
     },
     Comments:{
-      screen:Comments
+      screen:Comments,
+      //navigationOptions: { header: null }
     },
     HelpPage:{
       screen: HelpPage,
@@ -176,5 +177,4 @@ const AppStackNavigator = createStackNavigator({
   initialRouteName:'Login',
 
 })
-
 

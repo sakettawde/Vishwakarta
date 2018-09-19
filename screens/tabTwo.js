@@ -29,16 +29,16 @@ export default class tabOne extends Component{
       console.log("id ",value)
       this.MyFeedApi();
       
-    //   let interval = 15000
-    //   let startInterval = setInterval(() => {
-    //   //console.log("start interval run..",this.state.refreshCount)
-    //   if (this.state.refreshCount < 12) {
-    //     this.MyFeedApi()
-    //     this.setState({ refreshCount: this.state.refreshCount + 1 })
-    //   } else {
-    //     clearInterval(startInterval)
-    //   }
-    // }, interval)
+      let interval = 15000
+      let startInterval = setInterval(() => {
+      //console.log("start interval run..",this.state.refreshCount)
+      if (this.state.refreshCount < 12) {
+        this.MyFeedApi()
+        this.setState({ refreshCount: this.state.refreshCount + 1 })
+      } else {
+        clearInterval(startInterval)
+      }
+    }, interval)
 
 
      } catch (error) {

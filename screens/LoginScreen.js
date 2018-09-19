@@ -34,15 +34,16 @@ export default class LoginScreen extends Component {
     loading: false
   }
 
-  _storeData = async (user_id, user_name,avatar,cvillage) => {
+  _storeData = async (user_id, user_name,avatar,cvillage,prof) => {
     try {
       console.log(user_id)
-      console.log(user_name)
+      console.log(prof)
       console.log(avatar)
       await AsyncStorage.setItem("user_id", JSON.stringify(user_id))
       await AsyncStorage.setItem("user_name", user_name)
       await AsyncStorage.setItem("avatar", avatar)
       await AsyncStorage.setItem("cvillage", cvillage)
+      await AsyncStorage.setItem("prof", prof) 
     } catch (error) {
       // Error saving data
     }
@@ -73,7 +74,8 @@ export default class LoginScreen extends Component {
           this.setState({ records: data.records })
           // this.setState({user_id:data.records.user_id})
           // this.setState({user_name:data.records.name})
-          this._storeData(data.records.user_id, data.records.name,data.records.avatar,data.records.cvillage)
+          this._storeData(data.records.user_id, data.records.name,data.records.avatar,
+            data.records.cvillage,data.records.professional)
           this.setState({loading:false})
           this.props.navigation.navigate("Drawer")
         } else if (data.message) {

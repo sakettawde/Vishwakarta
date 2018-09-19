@@ -1,67 +1,193 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input, Label, Right, Button } from 'native-base';
+import {  Form, Item,  Label, Icon, Button,  } from 'native-base';
 import {StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Image,
   TextInput,
-  FlatList} from 'react-native';
-import {NextButton,ButtonText ,FlexColumn,ScreenTitle} from "../utils/styles";
-import {LinearGradient} from 'expo';
-import styled from 'styled-components';
-
+  FlatList,} from 'react-native';
+import {FlexColumn} from "../utils/styles";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import moment from "moment";
+import {ViewComment,AddComment,ViewMyComment,ViewTempleComment,
+        AddTempleComment,AddMyComment} from "../assets/ApiUrl";
+ 
 
 
 export default class Comments extends Component {
     state = {
         comment: "",
-        id:7,
-        data:[
-          {id:1, image: "https://bootdey.com/img/Content/avatar/avatar1.png", name:"Frank Odalthh",    comment:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor."},
-          {id:2, image: "https://bootdey.com/img/Content/avatar/avatar6.png", name:"John DoeLink",     comment:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor."},
-          {id:3, image: "https://bootdey.com/img/Content/avatar/avatar7.png", name:"March SoulLaComa", comment:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor."},
-          {id:4, image: "https://bootdey.com/img/Content/avatar/avatar2.png", name:"Finn DoRemiFaso",  comment:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor."},
-          {id:5, image: "https://bootdey.com/img/Content/avatar/avatar3.png", name:"Maria More More",  comment:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor."},
-          {id:6, image: "https://bootdey.com/img/Content/avatar/avatar4.png", name:"Clark June Boom!", comment:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor."},
-          {id:7, image: "https://bootdey.com/img/Content/avatar/avatar5.png", name:"The googler",      comment:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor."},
-        ]
+        tab:"",
+        id:4,
+        // data:[
+        //   {id:1, image: "https://bootdey.com/img/Content/avatar/avatar1.png", name:"Frank Odalthh", time:moment().format(),   comment:"Looks Good."},
+        //   {id:2, image: "https://bootdey.com/img/Content/avatar/avatar6.png", name:"John DoeLink", time:moment().format(),    comment:"We can scroll through Comments."},
+        //   {id:3, image: "https://bootdey.com/img/Content/avatar/avatar7.png", name:"March SoulLaComa", time:moment().format(), comment:"My avatar is so cool."},
+        //   {id:4, image: "https://bootdey.com/img/Content/avatar/avatar2.png", name:"Finn DoRemiFaso",  time:moment().format(),comment:"Wow look at the timestamp, it updates when component renders again."},
+        //   ]
+        data:[]
       };
 
-      onPostHandler=()=>{
-        let temp={
-          id:this.state.id+1,
-          image:"https://facebook.github.io/react/logo-og.png",
-          name:"User",
-          comment:this.state.comment
+      componentDidMount(){
+        this.setState({tab:this.props.navigation.getParam('tab')});
+        
+        
+        this.CommentHandler()
+
+      }
+
+      CommentHandler=()=>{
+        let temp=this.props.navigation.getParam('tab');
+        if(temp=='admin'){
+          this.LoadComments(ViewComment)
         }
-        console.log(temp)
-        let array1=this.state.data
-        array1.push(temp)
-        console.log(array1)
-        this.setState({data:array1,id:this.state.id+1})
+        else if(temp=='temple'){
+          this.LoadComments(ViewTempleComment)
+        }
+        else if(temp=='my'){
+          this.LoadComments(ViewMyComment)
+        }
+      }
+
+      LoadComments = (link) => {
+        
+        fetch(link, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            feedId:this.props.navigation.getParam("feedId")
+          })
+        })
+          .then(data => {
+            return data.json()
+          })
+          .then(data => {
+            console.log("LoadComments Response", data)
+    
+            if (data.message == "Commented") {
+              console.log("Success")
+              // console.log(data.imageData)
+              // console.log(data.imageData.filter((image)=>{return image.feedCount==="10" ;}))    
+              this.setState({data:data.records})
+            } else if (data.message) {
+              Alert.alert(data.message)
+            }
+          }).catch((error)=>{
+        console.log("Api call error");
+        console.log(error.message);
+     });
+    }
+
+
+    AddComment=(link)=>{
+      fetch(link, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        feedId:this.props.navigation.getParam("feedId"),
+        date:moment().format(),
+        comment:this.state.comment,
+        userid:this.props.navigation.getParam("userid")
+      })
+    })
+      .then(data => {
+        return data.json()
+      })
+      .then(data => {
+        console.log("LoadComments Response", data)
+
+        if (data.message == "Commented") {
+          console.log("Success")
+          this.CommentHandler()
+        } else if (data.message) {
+          Alert.alert(data.message)
+        }
+      }).catch((error)=>{
+    console.log("Api call error");
+    console.log(error.message);
+ });}
+     
+      onPostHandler=()=>{
+        let temp=this.props.navigation.getParam('tab');
+        if(temp=='admin'){
+          this.AddComment(AddComment)
+        }
+        else if(temp=='temple'){
+          this.AddComment(AddTempleComment)
+        }
+        else if(temp=='my'){
+          this.AddComment(AddMyComment)
+        }   
         
       }
   render() {
     return (
-      <FlexColumn>    
+      <FlexColumn style={{flex:1}}>    
        
-      
-
-      
-
-         
+        
+       <FlatList
+        style={styles.root}
+        data={this.state.data}
+        scrollEnabled={true}
+        ItemSeparatorComponent={() => {
+          return (
+            <View style={styles.separator}/>
+          )
+        }}
+        keyExtractor={(item)=>{
+          return item.id;
+        }}
+        renderItem={(item) => {
+          const Notification = item.item;   
+          return(
+            <View style={styles.container}>
+              <TouchableOpacity onPress={() => {console.log(Notification.name)}}>
+                <Image style={styles.image} source={{uri: Notification.avatar}}/>
+              </TouchableOpacity>
+              <View style={styles.content}>
+                <View style={styles.contentHeader}>
+                  <Text  style={styles.name}>{Notification.name}</Text>
+                  <Text style={styles.time}>
+                  {moment(Notification.date).fromNow()}
+                  </Text>
+                </View>
+                <Text rkType='primary3 mediumLine'>{Notification.comment}</Text>
+              </View>
+            </View>
+          );
+        }}/>
+       
+        <View>
+        <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>
+        
         <Form>
-            <Item stackedLabel last>
-              <Label>Comment</Label>
-              <TextInput underlineColorAndroid='transparent' multiline={true} numberOfLines={8} 
-              onChangeText={(text)=>{this.setState({comment:text})}} editable={true}
-              style={{width:'100%',textAlign:"left",textAlignVertical:"top",fontSize:18,marginTop:5}}/>
+            <Item>
+              {/* <Label>Comment</Label> */}
+              <View style={{flexDirection:"row"}}>
+                <View style={{flex:4}}>
+                    <TextInput underlineColorAndroid='transparent' multiline={true}  clearButtonMode="always"
+                    onChangeText={(text)=>{this.setState({comment:text})}} editable={true}
+                    style={{width:'100%',textAlign:"left",textAlignVertical:"top",fontSize:18,marginTop:3}}/>
+                </View>
+                <View style={{flex:1,alignSelf:"flex-end"}}>
+                    <Button icon light onPress={() => this.onPostHandler()}>
+                    <Icon  active name="md-send" />
+                    </Button>
+                  </View>
+              </View>
             </Item>
           </Form>
-        <NextButton 
+
+        {/* <NextButton 
           onPress={() => this.onPostHandler()}
-          style={{marginTop: 10,}}  
+          style={{marginTop: 10}}  
           >
           <LinearGradient
                 colors={["#7c98fd", "#4e43f9"]}
@@ -72,39 +198,12 @@ export default class Comments extends Component {
 
             <ButtonText>Post</ButtonText>
           </LinearGradient>
-        </NextButton>
+        </NextButton> */}
+        </KeyboardAwareScrollView>
 
-       <FlatList
-        style={styles.root}
-        data={this.state.data}
-        //extraData={this.state}
-        ItemSeparatorComponent={() => {
-          return (
-            <View style={styles.separator}/>
-          )
-        }}
-        keyExtractor={(item)=>{
-          return item.id;
-        }}
-        renderItem={(item) => {
-          const Notification = item.item;
-          return(
-            <View style={styles.container}>
-              <TouchableOpacity onPress={() => {console.log(Notification.name)}}>
-                <Image style={styles.image} source={{uri: Notification.image}}/>
-              </TouchableOpacity>
-              <View style={styles.content}>
-                <View style={styles.contentHeader}>
-                  <Text  style={styles.name}>{Notification.name}</Text>
-                  <Text style={styles.time}>
-                    9:58 am
-                  </Text>
-                </View>
-                <Text rkType='primary3 mediumLine'>{Notification.comment}</Text>
-              </View>
-            </View>
-          );
-        }}/>
+        </View>
+
+    
           
         
 
@@ -121,7 +220,7 @@ const styles = StyleSheet.create({
   root: {
     backgroundColor: "#ffffff",
     marginTop:10,
-    marginBottom:10
+    marginBottom:10,
   },
   container: {
     paddingLeft: 19,
