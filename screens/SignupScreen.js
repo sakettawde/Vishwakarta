@@ -18,7 +18,7 @@ export default class SignUp extends React.Component {
       isSelect1: true,
       isSelect2: false,
       selected_prof: 1,
-      prof_name:"",
+      prof_name:"Businessman",
       gotra_name:"",
       selected_gotra: 1,
       name:"",
@@ -116,6 +116,7 @@ export default class SignUp extends React.Component {
     await this.setState({
       prof_name: temp.name
     });
+    console.log(this.state.prof_name)
   }
   
   onGotraChange=async(value )=> {
@@ -204,7 +205,6 @@ export default class SignUp extends React.Component {
           });
           //console.log(this.state.records)
           //console.log(data.records)                  
-          console.log(this.state.selected_prof)            
         }
         else {
           Alert.alert(data)

@@ -19,6 +19,7 @@ import Sidebar from './screens/Sidebar';
 import Sidebar2 from './screens/Sidebar2';
 import HelpPage from './screens/HelpPage';
 import AreaHead from './screens/AreaHead';
+import NewVideo from './screens/NewVideo';
 
 // import ContactUsersList from './screens/ContactUsersList';
 import Comments from './screens/Comments';
@@ -102,7 +103,7 @@ const AppDrawerNavigator = createDrawerNavigator({
 },
 {
   contentComponent: props => <Sidebar2 {...props} />,
-  initialRouteName:'Wall',
+  initialRouteName:'Contacts',
 }
 )
 
@@ -171,6 +172,10 @@ const AppStackNavigator = createStackNavigator({
    AreaHead:{
       screen: AreaHead,
         // navigationOptions: { header: null }
+  }, 
+  NewVideo:{
+    screen:NewVideo,
+    //navigationOptions: { header: null }
   },
 
 },{

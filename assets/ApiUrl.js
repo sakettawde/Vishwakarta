@@ -8,6 +8,7 @@ export const Userinfo="http://35.161.99.113:9000/webapi/vishwkartalogin/info";
 export const ListGotra="http://35.161.99.113:9000/webapi/vishwkartalogin/listGotra";
 export const UserList="http://35.161.99.113:9000/webapi/vishwkartalogin/list";
 export const UserSearch="http://35.161.99.113:9000/webapi/vishwkartalogin/userDetails";
+export const ProfSearch="http://35.161.99.113:9000/webapi/vishwkartalogin/searchProfession";
 export const AddGotraUrl="http://35.161.99.113:9000/webapi/vishwkartalogin/addGotra";
 export const ListProf="http://35.161.99.113:9000/webapi/vishwkartalogin/listProfession";
 export const AddProfUrl="http://35.161.99.113:9000/webapi/vishwkartalogin/addProfession";

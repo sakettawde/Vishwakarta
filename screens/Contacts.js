@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Container, Header, Item, Input, Icon, Button, Text ,
 Content , List , ListItem , Left , Body , Right , Thumbnail, Picker } from 'native-base';
 import {Switch ,Alert,ScrollView,StatusBar} from 'react-native';
-import { UserList, UserSearch } from "../assets/ApiUrl";
-import {NextButton,ButtonText ,FlexColumn} from "../utils/styles";
+import { UserList, UserSearch,ListProf,ProfSearch } from "../assets/ApiUrl";
 
 
 export default class Contacts extends Component {
@@ -15,8 +14,15 @@ export default class Contacts extends Component {
        selected: undefined,
        search_term:"",
        list:[{}],
-       user_id:""
+       user_id:"",
+       prof_name:"",
+       proflist:[ ],
+       selected_prof:1
       }
+    }
+    componentDidMount(){      
+      this.UserListApi()
+      this.prof_renderer()
     }
     onValueChange(value : string) {
       this.setState({
@@ -24,7 +30,39 @@ export default class Contacts extends Component {
       });
     }
 
-
+    
+   
+    prof_renderer=()=>{
+      console.log("In Prof Api")
+      fetch(ListProf, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({  })
+      })
+        .then(data => {
+          return data.json()
+        })
+        .then(data => {
+          if(data.message=="Data available"){
+            this.setState({proflist:data.records})
+          
+            
+            // console.log(data.records)                  
+             console.log(this.state.selected_prof)            
+          }
+          else {
+            Alert.alert(data)
+          }
+            
+        })
+        .catch((error)=>{
+          console.log("Api call error");
+          console.log(error.message);
+       });
+    }
 
 ShowAlert = (value) =>{
   this.setState({
@@ -42,10 +80,7 @@ ShowAlert = (value) =>{
 }
 
 
-componentDidMount(){      
-  this.UserListApi()
-  //this.state.user_id=this.props.navigation.getParam('user_id')      
-}
+
 
 UserListApi = () =>{
   console.log("In UserListApi")
@@ -99,6 +134,7 @@ UserListApi = () =>{
         if(data.msgclass=="text-success"){
           this.setState({list:data.cust_records})
           
+          
         }
         else {
           Alert.alert(data)
@@ -110,6 +146,51 @@ UserListApi = () =>{
      });
   
     }
+
+    SearchByProfApi = () =>{
+      console.log("SearchByProf")
+      
+      console.log(this.state.search_term)
+      fetch(ProfSearch, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ 
+          profession: this.state.prof_name
+        })
+      })
+        .then(data => {
+          return data.json()
+        })
+        .then(data => {
+          //console.log("UserList Response", data)
+          if(data.msgclass=="Data available"){
+            this.setState({list:data.cust_records})
+            
+            
+          }
+          else {
+            Alert.alert(data)
+          }    
+        })
+        .catch((error)=>{
+          console.log("Api call error");
+          console.log(error.message);
+       });
+    
+      }
+      onProfChange=async(value )=> {
+        
+        var temp=this.state.proflist.find((item)=>{
+          return item.id ===this.state.selected_prof
+        })
+        await this.setState({
+          prof_name: temp.name,selected_prof:value
+        });
+        console.log(this.state.prof_name)
+      }
   
 
   render() {
@@ -122,18 +203,18 @@ UserListApi = () =>{
           {this.state.SwitchOnValueHolder?(
             <Header>
              <Picker
-             style={{borderWidth: 1 ,borderColor:'white',color:'white'}}
-             mode="dropdown"
-             Icon={<Icon name="ios-arrow-down-outline" />}
-             selectedValue={this.state.selected}
-             onValueChange={this.onValueChange.bind(this)}
-           >
-             <Picker.Item label="Doctor" value="key0" />
-             <Picker.Item label="Engineer" value="key1" />
-             <Picker.Item label="CA" value="key2" />
-             <Picker.Item label="Lawyer" value="key3" />
-             <Picker.Item label="Other" value="key4" />
-           </Picker>
+              style={{borderWidth: 1 ,borderColor:'#fffff',color:'#fff'}}
+              mode="dropdown"
+              placeholder="Select"
+              Icon={<Icon name="ios-arrow-down" />}
+              selectedValue={this.state.selected_prof}
+              onValueChange={this.onProfChange.bind(this)}
+            >
+
+              {this.state.proflist.map(item => (
+                <Picker.Item key={item.id} label={item.name} value={item.id}></Picker.Item>
+               ))}
+            </Picker>
             <Switch
             onValueChange={(value) => this.ShowAlert(value)}
             style={{marginBottom: 10}}
@@ -177,7 +258,7 @@ UserListApi = () =>{
                       })
                       }} >
                         <Left>
-                            <Thumbnail source={{ uri: 'http://www.myiconfinder.com/uploads/iconsets/256-256-f86ca6f98affc4bfe9306d9693638920.png' }} />
+                            <Thumbnail source={{ uri:item.avatar  }} />
                         </Left>
                         <Body >
                             <Text>{item.name}</Text>

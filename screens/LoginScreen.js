@@ -36,9 +36,7 @@ export default class LoginScreen extends Component {
 
   _storeData = async (user_id, user_name,avatar,cvillage,prof) => {
     try {
-      console.log(user_id)
-      console.log(prof)
-      console.log(avatar)
+     
       await AsyncStorage.setItem("user_id", JSON.stringify(user_id))
       await AsyncStorage.setItem("user_name", user_name)
       await AsyncStorage.setItem("avatar", avatar)
