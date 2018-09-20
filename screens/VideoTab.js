@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Video from './VideoCard';
 import { StatusBar, AsyncStorage, View ,Button,ScrollView,RefreshControl,Alert } from 'react-native';
 import { Fab,Icon, Text } from 'native-base';
-import {AdminFeed} from '../assets/ApiUrl';
+import {ViewVideo} from '../assets/ApiUrl';
 import VideoCard from './VideoCard';
 
 
@@ -11,10 +11,7 @@ export default class VideoTab extends Component{
     super(props);
     this.state = {
       refreshing: false,
-     item:{
-       header:"Listen to this Song!",
-       VideoUrl:"https://www.youtube.com/embed/Y4fodpIwal8"
-     }
+     item:{ }
     };
   }
   componentDidMount(){
@@ -26,7 +23,7 @@ export default class VideoTab extends Component{
       await this.setState({user_id:value})
       console.log("id ",value)
       
-      
+      this.VideoFeedApi()
     //   let interval = 15000
     //   let startInterval = setInterval(() => {
     //   //console.log("start interval run..",this.state.refreshCount)
@@ -43,10 +40,10 @@ export default class VideoTab extends Component{
        console.log(error)
      }
   }
-  AdminFeedApi = () => {
-    console.log("In AdminFeedApi")
+  VideoFeedApi = () => {
+    console.log("In VideoFeedApi")
     this.setState({loading:true})
-    fetch(AdminFeed, {
+    fetch(ViewVideo, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -58,18 +55,11 @@ export default class VideoTab extends Component{
         return data.json()
       })
       .then(data => {
-        //console.log("AdminfeedApi Response", data)
 
-        if (data.message == "Get The data") {
+        if (data.message == "video view") {
           console.log("Success")
-          // console.log(data.imageData)
-          // console.log(data.imageData.filter((image)=>{return image.feedCount==="10" ;}))
-          data.records.map(item=>{
-            item.image=data.imageData.filter((image)=>{return image.feedCount==item.id ;})
-          })
-          //console.log(data.records)
-
-          this.setState({records:data.records,like_count:data.loveCount,comment_count:data.commentNo,flag:true})
+         
+          this.setState({item:data.records,flag:true})
         } else if (data.message) {
           Alert.alert(data.message)
         }
@@ -96,27 +86,19 @@ export default class VideoTab extends Component{
           refreshControl={<RefreshControl refreshing={this.state.refreshing}
           onRefresh={this._onRefresh}/>}>
         
-        {/* { this.state.flag && 
-        (this.state.records.reverse().map((item,index)=>
+        { this.state.flag && 
+        (this.state.item.reverse().map((item,index)=>
             
-             <FeedCard2 {...this.props} 
-             name={item.name} 
-             avatar={item.avatar}
-             date={item.date} 
-             caption={item.status}
-             array={item.image}
-             likes={this.state.like_count}
-             comments={this.state.comment_count}
-             feed_id={item.id}
-             user_id={this.state.user_id}
-             tab="admin"
+             <VideoCard  
+              header={item.status}
+              link={item.link}
              key={index}
-        /> 
+              /> 
         ))
-        } */}
-          <VideoCard  header={this.state.item.header} link={this.state.item.VideoUrl}/>
+        }
+          {/* <VideoCard  header={this.state.item.header} link={this.state.item.VideoUrl}/>
           <VideoCard header={this.state.item.header} link={this.state.item.VideoUrl}/>
-          <VideoCard header={this.state.item.header} link={this.state.item.VideoUrl}/>
+          <VideoCard header={this.state.item.header} link={this.state.item.VideoUrl}/> */}
 
         </ScrollView>
       

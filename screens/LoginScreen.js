@@ -34,14 +34,21 @@ export default class LoginScreen extends Component {
     loading: false
   }
 
-  _storeData = async (user_id, user_name,avatar,cvillage,prof) => {
+  _storeData = async (user_id, user_name,avatar,cvillage,prof,cpincode) => {
     try {
      
-      await AsyncStorage.setItem("user_id", JSON.stringify(user_id))
-      await AsyncStorage.setItem("user_name", user_name)
-      await AsyncStorage.setItem("avatar", avatar)
-      await AsyncStorage.setItem("cvillage", cvillage)
-      await AsyncStorage.setItem("prof", prof) 
+      // await AsyncStorage.setItem("user_id", JSON.stringify(user_id))
+      // await AsyncStorage.setItem("user_name", user_name)
+      // await AsyncStorage.setItem("avatar", avatar)
+      // await AsyncStorage.setItem("cvillage", cvillage)
+      // await AsyncStorage.setItem("prof", prof)
+      await AsyncStorage.multiSet([
+        ["user_id", JSON.stringify(user_id)],
+        ["user_name", user_name],["prof", prof],
+        ["cvillage", cvillage],["avatar", avatar],
+        ["cpincode",cpincode]
+      ])
+
     } catch (error) {
       // Error saving data
     }
@@ -73,7 +80,7 @@ export default class LoginScreen extends Component {
           // this.setState({user_id:data.records.user_id})
           // this.setState({user_name:data.records.name})
           this._storeData(data.records.user_id, data.records.name,data.records.avatar,
-            data.records.cvillage,data.records.professional)
+            data.records.cvillage,data.records.professional,data.records.current_pincode)
           this.setState({loading:false})
           this.props.navigation.navigate("Drawer")
         } else if (data.message) {

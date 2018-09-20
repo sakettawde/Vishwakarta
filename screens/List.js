@@ -10,19 +10,11 @@ export default class Contacts extends Component {
   constructor(){
      super();
      this.state ={
-       SwitchOnValueHolder :  false,
-       selected: undefined,
-       search_term:"",
-       list:[{}],
-       user_id:"",
-       prof_name:"",
-       proflist:[ ],
-       selected_prof:0
+      prof:""
       }
     }
     componentDidMount(){      
-      this.UserListApi()
-     
+      
     }
    
 
@@ -61,39 +53,7 @@ UserListApi = () =>{
 
   }
 
-//   SearchByDetailsApi = (text) =>{
-//     console.log("SearchByDetails")
-//     this.state.search_term=text
-//     console.log(this.state.search_term)
-//     fetch(UserSearch, {
-//       method: "POST",
-//       headers: {
-//         Accept: "application/json",
-//         "Content-Type": "application/json"
-//       },
-//       body: JSON.stringify({ 
-//         input: this.state.search_term
-//       })
-//     })
-//       .then(data => {
-//         return data.json()
-//       })
-//       .then(data => {
-//         //console.log("UserList Response", data)
-//         if(data.msgclass=="text-success"){
-//           this.setState({list:data.cust_records})
-          
-//         }
-//         else {
-//           Alert.alert(data)
-//         }    
-//       })
-//       .catch((error)=>{
-//         console.log("Api call error");
-//         console.log(error.message);
-//      });
-  
-//     }
+
   
 
   render() {

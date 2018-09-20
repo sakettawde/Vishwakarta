@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Icon, Content, Form, Item, Input, Label, Right, Button, Text } from 'native-base';
-import {AsyncStorage,View,Dimensions,Alert, ActivityIndicator} from 'react-native'
+import {  Form, Item, Input, Label, } from 'native-base';
+import {View,Alert, ActivityIndicator} from 'react-native'
 import { LinearGradient,Permissions} from 'expo';
 import {NextButton,ButtonText,ScreenTitle,FlexColumn} from '../utils/styles';
-
+import {AddVideo} from '../assets/ApiUrl';
 
 
 
@@ -17,20 +17,18 @@ export default class Newpost extends Component {
       
 
     
-
-    AddfeedApi = (link) => {
-      console.log("In AddfeedApi")
+ AddVideoApi = (link) => {
+      console.log("In AddVideoApi")
       
-      fetch(link, {
+      fetch(AddVideo, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          status:this.state.caption,
-          userId:this.state.user_id,
-          imageData:this.state.url_array,
+          status:this.state.header,
+          link:link
 
         })
       })
@@ -38,9 +36,9 @@ export default class Newpost extends Component {
           return data.json()
         })
         .then(data => {
-          console.log("Addfeed Response", data)
+          console.log("AddVideo Response", data)
   
-          if (data.message == "Status Posted") {
+          if (data.message == "Video Added") {
             console.log("Success")
             this.props.navigation.navigate("Drawer")
           } else if (data.message) {
@@ -64,8 +62,11 @@ export default class Newpost extends Component {
     var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
         var match = this.state.url.match(regExp);
         if (match && match[2].length == 11) {
-        console.log(match[2]);
-        console.log("https://www.youtube.com/embed/"+match[2])
+        // console.log(match[2]);
+        console.log("https://www.youtube.com/embed/"+match[2]);
+        var temp="https://www.youtube.com/embed/"+match[2];
+        this.AddVideoApi(temp);
+
         } else {
         console("error")
         }

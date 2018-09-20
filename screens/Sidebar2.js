@@ -1,20 +1,25 @@
 import React from "react";
-import { Image,TouchableOpacity,StatusBar,AsyncStorage,View,Text } from "react-native";
+import { Image,TouchableOpacity,StatusBar,AsyncStorage,View,Text,Alert } from "react-native";
 import {FlexColumn,FlexRow} from "../utils/styles"
 import styled from "styled-components"
 import { Icon } from "native-base";
+import {ProfSearch,NearMe} from '../assets/ApiUrl';
 
 const routes = ["Wall", "Profile", "Contacts","Logout"];
 export default class SideBar extends React.Component {
 
   state={
     user_name:"",
-    avatar:"",
+    avatar:null,
     cvillage:"",
-    prof:""
+    prof:"",
+    prof_count:0,
+    cpincode:"",
+    near_me:0
   }
   componentDidMount(){
     this._retrieveData()
+    
   }
   _retrieveData = async () => {
     try {
@@ -22,14 +27,90 @@ export default class SideBar extends React.Component {
       const value2 = await AsyncStorage.getItem('avatar');
       const value3 = await AsyncStorage.getItem('cvillage');
       const value4 = await AsyncStorage.getItem('prof');
+      this.SearchByProfApi(value4)
+      const value5 = await AsyncStorage.getItem('cpincode');
+      console.log("Cpin ",value5)
+      this.NearMeApi(value5)
+
 
       // console.log(value2)
-      await this.setState({user_name:value,avatar:value2,cvillage:value3,prof:value4})
+      await this.setState({user_name:value,avatar:value2,cvillage:value3,prof:value4,cpincode:value5})
       console.log("name ",value)
      } catch (error) {
        console.log(error)
      }
   }
+
+
+  SearchByProfApi = (prof) =>{
+    console.log("SearchByProf")
+    
+    
+    fetch(ProfSearch, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ 
+        profession: prof
+      })
+    })
+      .then(data => {
+        return data.json()
+      })
+      .then(data => {
+        //console.log("UserList Response", data)
+        if(data.message=="Data available"){
+          this.setState({prof_count:data.pCount})
+          //console.log("data ",data)
+          
+        }
+        else {
+          Alert.alert(data)
+        }    
+      })
+      .catch((error)=>{
+        console.log("Api call error");
+        console.log(error.message);
+     });
+  
+    }
+    
+  NearMeApi = (value) =>{
+    console.log("NearMeApi")
+    
+    
+    fetch(NearMe, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ 
+        cpincode: value
+      })
+    })
+      .then(data => {
+        return data.json()
+      })
+      .then(data => {
+        //console.log("UserList Response", data)
+        if(data.message=="Data available"){
+          this.setState({near_me:data.near})
+        //  console.log("data ",data)
+          
+        }
+        else {
+          Alert.alert(data)
+        }    
+      })
+      .catch((error)=>{
+        console.log("Api call error");
+        console.log(error.message);
+     });
+  
+    }
   render() {
     return (
       <FlexColumn style={{marginTop: StatusBar.currentHeight,flex:1}}>
@@ -55,14 +136,14 @@ export default class SideBar extends React.Component {
               <View style={{flex: 1,}}>
                 <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
                 onPress={()=>{this.props.navigation.navigate('Contacts')}}>
-                  <NumberText>270</NumberText>
+                  <NumberText>{this.state.prof_count}</NumberText>
                   <NumberSubText>{this.state.prof}</NumberSubText>
                 </ColumnButton>
               </View>
               <View style={{flex: 1,}}>
                 <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
                 onPress={()=>{this.props.navigation.navigate('Contacts')}}>
-                  <NumberText>30</NumberText>
+                  <NumberText>{this.state.near_me}</NumberText>
                   <NumberSubText>Near Me</NumberSubText>
                 </ColumnButton>
               </View>

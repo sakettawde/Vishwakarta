@@ -15,7 +15,7 @@ export default class Contacts extends Component {
        search_term:"",
        list:[{}],
        user_id:"",
-       prof_name:"",
+       prof_name:"Businessman",
        proflist:[ ],
        selected_prof:1
       }
@@ -147,10 +147,9 @@ UserListApi = () =>{
   
     }
 
-    SearchByProfApi = () =>{
+    SearchByProfApi = (temp) =>{
       console.log("SearchByProf")
       
-      console.log(this.state.search_term)
       fetch(ProfSearch, {
         method: "POST",
         headers: {
@@ -158,7 +157,7 @@ UserListApi = () =>{
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ 
-          profession: this.state.prof_name
+          profession: temp
         })
       })
         .then(data => {
@@ -168,6 +167,7 @@ UserListApi = () =>{
           //console.log("UserList Response", data)
           if(data.msgclass=="Data available"){
             this.setState({list:data.cust_records})
+            console.log("search by prof")
             
             
           }
@@ -186,10 +186,12 @@ UserListApi = () =>{
         var temp=this.state.proflist.find((item)=>{
           return item.id ===this.state.selected_prof
         })
+        this.SearchByProfApi(temp.name)
         await this.setState({
           prof_name: temp.name,selected_prof:value
         });
         console.log(this.state.prof_name)
+
       }
   
 

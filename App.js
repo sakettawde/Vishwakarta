@@ -103,7 +103,7 @@ const AppDrawerNavigator = createDrawerNavigator({
 },
 {
   contentComponent: props => <Sidebar2 {...props} />,
-  initialRouteName:'Contacts',
+  initialRouteName:'Wall',
 }
 )
 

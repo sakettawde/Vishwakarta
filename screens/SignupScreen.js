@@ -18,7 +18,7 @@ export default class SignUp extends React.Component {
       isSelect1: true,
       isSelect2: false,
       selected_prof: 1,
-      prof_name:"Businessman",
+      prof_name:"",
       gotra_name:"",
       selected_gotra: 1,
       name:"",
