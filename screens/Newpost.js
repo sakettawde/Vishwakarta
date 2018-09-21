@@ -35,13 +35,13 @@ export default class Newpost extends Component {
     }
     _retrieveData = async () => {
       try {
-        
+        await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        await Permissions.askAsync(Permissions.CAMERA);
         console.log('Retriving AsyncStorge')
         const value = await AsyncStorage.getItem('user_id');
         const value2=await AsyncStorage.getItem('user_name');
         this.setState({user_id:value,user_name:value2})
-        await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        await Permissions.askAsync(Permissions.CAMERA);
+        
         
         console.log("id ",value)
         console.log("name ",value2)
@@ -80,6 +80,8 @@ export default class Newpost extends Component {
   
           if (data.message == "Status Posted") {
             console.log("Success")
+            this.setState({loading_image:false})
+
             this.props.navigation.navigate("Drawer")
           } else if (data.message) {
             Alert.alert(data.message)
@@ -100,6 +102,7 @@ export default class Newpost extends Component {
       Alert.alert("Please select data to upload")
       return
     }
+    this.setState({loading_image:true})
     console.log(this.state.tab)
     if(this.state.tab=='admin'){
       console.log("admin addfeed")

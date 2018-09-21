@@ -59,7 +59,7 @@ export default class VideoTab extends Component{
         if (data.message == "video view") {
           console.log("Success")
          
-          this.setState({item:data.records,flag:true})
+          this.setState({item:data.records.reverse(),flag:true})
         } else if (data.message) {
           Alert.alert(data.message)
         }
@@ -87,7 +87,7 @@ export default class VideoTab extends Component{
           onRefresh={this._onRefresh}/>}>
         
         { this.state.flag && 
-        (this.state.item.reverse().map((item,index)=>
+        (this.state.item.map((item,index)=>
             
              <VideoCard  
               header={item.status}

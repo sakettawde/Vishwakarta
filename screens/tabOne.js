@@ -71,7 +71,7 @@ export default class tabOne extends Component{
           })
           //console.log(data.records)
 
-          this.setState({records:data.records,like_count:data.loveCount,comment_count:data.commentNo,flag:true})
+          this.setState({records:data.records.reverse(),like_count:data.loveCount,comment_count:data.commentNo,flag:true})
         } else if (data.message) {
           Alert.alert(data.message)
         }
@@ -113,7 +113,7 @@ export default class tabOne extends Component{
           /> */}
 
         { this.state.flag && 
-        (this.state.records.reverse().map((item,index)=>
+        (this.state.records.map((item,index)=>
               // { let id=item.id
               //   console.log(this.state.imageData.filter((image)=>{
               //     console.log("feed",image.feedCount)
