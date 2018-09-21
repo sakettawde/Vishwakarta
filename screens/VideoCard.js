@@ -10,9 +10,9 @@ export default class VideoCard extends Component {
       
             <MyCard>
                  <LinearGradient
-                colors={["#7c98fd", "#4e43f9"]}
-                start={{ x: 0.0, y: 1.0 }}
-                end={{ x: 1.0, y: 0.0 }}
+                colors={["#0f4cad", "#0341a3"]}
+                start={{ x: 0.0, y: 0.0 }}
+                end={{ x: 1.0, y: 1.0 }}
                 style={{ borderRadius:10}}
               >
                 <FlexColumn>
@@ -23,8 +23,7 @@ export default class VideoCard extends Component {
                            {this.props.header}
                         </NameText>
                     </View>
-                    
-                
+                   
 
                 <View style= {{height:300,margin:3}} >
         

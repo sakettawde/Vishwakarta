@@ -29,8 +29,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 export default class LoginScreen extends Component {
   state = {
-    phno: "9999977777",
-    pwd: "yellow",
+    phno: "",
+    pwd: "",
     loading: false
   }
 
@@ -48,6 +48,9 @@ export default class LoginScreen extends Component {
         ["cvillage", cvillage],["avatar", avatar],
         ["cpincode",cpincode]
       ])
+      this.setState({loading:false})
+      this.props.navigation.navigate("Drawer")
+
 
     } catch (error) {
       // Error saving data
@@ -56,7 +59,6 @@ export default class LoginScreen extends Component {
 
   LoginApi = (phno, pwd) => {
     console.log("In LoginApi")
-    this.setState({loading:true})
     fetch(Signin, {
       method: "POST",
       headers: {
@@ -81,8 +83,6 @@ export default class LoginScreen extends Component {
           // this.setState({user_name:data.records.name})
           this._storeData(data.records.user_id, data.records.name,data.records.avatar,
             data.records.cvillage,data.records.professional,data.records.current_pincode)
-          this.setState({loading:false})
-          this.props.navigation.navigate("Drawer")
         } else if (data.message) {
           Alert.alert("Invalid Username or Password")
         }
@@ -95,6 +95,7 @@ export default class LoginScreen extends Component {
       return
     }
     console.log("In Login")
+    this.setState({loading:true})
     this.LoginApi(this.state.phno, this.state.pwd)
   }
 
@@ -151,6 +152,7 @@ export default class LoginScreen extends Component {
 
         <FlexColumn style={{alignItems:"center"}}>
           
+        {this.state.loading && <ActivityIndicator size="large" />}
 
           <LoginButton
             full

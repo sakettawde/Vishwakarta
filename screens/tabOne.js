@@ -32,7 +32,7 @@ export default class tabOne extends Component{
       let interval = 15000
       let startInterval = setInterval(() => {
       //console.log("start interval run..",this.state.refreshCount)
-      if (this.state.refreshCount < 12) {
+      if (this.state.refreshCount < 8) {
         this.AdminFeedApi()
         this.setState({ refreshCount: this.state.refreshCount + 1 })
       } else {

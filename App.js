@@ -24,7 +24,7 @@ import NewVideo from './screens/NewVideo';
 // import ContactUsersList from './screens/ContactUsersList';
 import Comments from './screens/Comments';
 import ChatPage from './screens/ChatPage';
-
+import List from './screens/List';
 
 import { Font, AppLoading } from "expo";
 import AddGotra from './screens/AddGotra';
@@ -175,6 +175,10 @@ const AppStackNavigator = createStackNavigator({
   }, 
   NewVideo:{
     screen:NewVideo,
+    //navigationOptions: { header: null }
+  },
+  List:{
+    screen:List,
     //navigationOptions: { header: null }
   },
 

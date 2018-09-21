@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "vishwakarta",
+    "name": "Vishwakarta",
     "description": "",
     "slug": "vishwakarta",
     "privacy": "public",
@@ -23,6 +23,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "package": "com.inevitable.Vishwakarta"
+    },
     "ios": {
       "supportsTablet": true
     }

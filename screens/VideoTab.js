@@ -72,7 +72,7 @@ export default class VideoTab extends Component{
 
   _onRefresh = () => {
     this.setState({refreshing: true});
-    //this.AdminFeedApi();
+    this.VideoFeedApi();
 
     this.setState({refreshing: false});
   }
@@ -91,7 +91,7 @@ export default class VideoTab extends Component{
             
              <VideoCard  
               header={item.status}
-              link={item.link}
+              link={item.link }
              key={index}
               /> 
         ))

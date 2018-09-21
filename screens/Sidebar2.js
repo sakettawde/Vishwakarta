@@ -13,9 +13,9 @@ export default class SideBar extends React.Component {
     avatar:null,
     cvillage:"",
     prof:"",
-    prof_count:0,
+    prof_count:1,
     cpincode:"",
-    near_me:0
+    near_me:1
   }
   componentDidMount(){
     this._retrieveData()
@@ -135,15 +135,19 @@ export default class SideBar extends React.Component {
             <FlexRow style={{flex:.8}}>
               <View style={{flex: 1,}}>
                 <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
-                onPress={()=>{this.props.navigation.navigate('Contacts')}}>
-                  <NumberText>{this.state.prof_count}</NumberText>
+                onPress={()=>{this.props.navigation.navigate('List',{
+                  info:"prof"
+                })}}>
+                  <NumberText>{this.state.prof_count-1}</NumberText>
                   <NumberSubText>{this.state.prof}</NumberSubText>
                 </ColumnButton>
               </View>
               <View style={{flex: 1,}}>
                 <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
-                onPress={()=>{this.props.navigation.navigate('Contacts')}}>
-                  <NumberText>{this.state.near_me}</NumberText>
+                onPress={()=>{this.props.navigation.navigate('List',{
+                  info:"near_me"
+                })}}>
+                  <NumberText>{this.state.near_me-1}</NumberText>
                   <NumberSubText>Near Me</NumberSubText>
                 </ColumnButton>
               </View>
@@ -172,9 +176,12 @@ export default class SideBar extends React.Component {
                   </ColumnButton>
                 </View>
                 <View style={{flex: 1,}}>
-                  <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}>
+                  <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
+                  onPress={()=>{this.props.navigation.navigate('List',{
+                    info:"chats"
+                  })}}>
                   <Icon active name="md-chatbubbles" />
-                    <Text>Messages</Text>
+                    <Text>My Chats</Text>
                   </ColumnButton>
                 </View>
             </FlexRow>

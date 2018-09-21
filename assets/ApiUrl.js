@@ -35,3 +35,5 @@ export const ViewMyComment="http://35.161.99.113:9000/webapi/feed/viewMyComment"
 export const AddMyComment="http://35.161.99.113:9000/webapi/feed/AddMyComment";
 export const AddVideo="http://35.161.99.113:9000/webapi/feed/addVideo";
 export const ViewVideo="http://35.161.99.113:9000/webapi/feed/viewVideo";
+export const AddChat="http://35.161.99.113:9000/webapi/vishwkartalogin/addChat";
+export const ViewChat="http://35.161.99.113:9000/webapi/vishwkartalogin/viewChat";

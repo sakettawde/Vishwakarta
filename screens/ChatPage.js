@@ -3,11 +3,18 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { base } from '../utils/base';
 import { AsyncStorage,View,KeyboardAvoidingView } from "react-native";
 import moment from 'moment'; 
+import {AddChat} from '../assets/ApiUrl';
 
 
 console.disableYellowBox = true;
 
 export default class ChatPage extends React.Component {
+  // static navigationOptions = {
+  //   title:this.props.navigation.getParam('user_name'),  
+  // };
+  static navigationOptions = ({ navigation }) => ({
+    title: (navigation.getParam('user_name')) || 'Chat!',
+  });
     state = {
       messages: [ ],
       convId: "",
@@ -19,13 +26,12 @@ export default class ChatPage extends React.Component {
 
     _retrieveData = async () => {
       try {
-        console.log('hi')
+        //console.log('hi')
         this.state.user_recv=this.props.navigation.getParam('user_id')
         this.state.recv_name=this.props.navigation.getParam('user_name')
         const value = await AsyncStorage.getItem('user_id');
-        this.setState({user_sender:value})
         const value2=await AsyncStorage.getItem('user_name');
-        this.setState({sender_name:value2})
+        this.setState({user_sender:value,sender_name:value2})
         console.log("id ",value)
         console.log("name ",value2)
         await this._setConvId()
@@ -34,10 +40,42 @@ export default class ChatPage extends React.Component {
          console.log(error)
        }
     }
+    AddChatApi = () => {
+      console.log("In AddChatApi")
+      fetch(AddChat, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          user1:this.state.user_sender,
+          user2:this.state.user_recv
+        })
+      })
+        .then(data => {
+          return data.json()
+        })
+        .then(data => {
+          //console.log("AdminfeedApi Response", data)
+  
+          if (data.message == "Chat Added") {
+            console.log("Success")
+          
+          } else if (data.message) {
+          
+            Alert.alert(data.message)
+          }
+        }).catch((error)=>{
+      console.log("Api call error");
+      console.log(error.message);
+   });
+  }
 
     _setConvId=()=>{
       let a=this.state.user_sender
       let b=this.state.user_recv
+      console.log("Getiing ConvId")
       if(a<b){
         console.log(a+"TO"+b)
         this.setState({convId:a+"TO"+b})
@@ -64,7 +102,10 @@ export default class ChatPage extends React.Component {
                 limitToFirst: 20
               },
             then(chatData){
-             // console.log(chatData)
+              if(chatData.length == 0){
+                console.log("Calling AddChatApi Here")
+                this.AddChatApi()
+              }
               const toReturn = chatData.map(item=>{
                 let newItem = item
                 newItem.createdAt = moment(item.timestamp).toDate()  
@@ -123,7 +164,7 @@ export default class ChatPage extends React.Component {
       
       //console.log("Date testing")
      // console.log(moment.format())
-      //console.log(this.state)
+      // console.log(this.state)
       // console.log(now.getMonth())
       // console.log(now.getDate())
       // console.log(now.getHours())

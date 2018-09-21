@@ -35,11 +35,14 @@ export default class Newpost extends Component {
     }
     _retrieveData = async () => {
       try {
+        
         console.log('Retriving AsyncStorge')
         const value = await AsyncStorage.getItem('user_id');
-        this.setState({user_id:value})
         const value2=await AsyncStorage.getItem('user_name');
-        this.setState({user_name:value2})
+        this.setState({user_id:value,user_name:value2})
+        await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        await Permissions.askAsync(Permissions.CAMERA);
+        
         console.log("id ",value)
         console.log("name ",value2)
         
