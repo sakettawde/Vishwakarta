@@ -25,6 +25,8 @@ import { LinearGradient } from "expo"
 import { Signin } from "../assets/ApiUrl"
 import styled from "styled-components"
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { StackActions, NavigationActions } from 'react-navigation';
+
 
 
 export default class LoginScreen extends Component {
@@ -49,8 +51,12 @@ export default class LoginScreen extends Component {
         ["cpincode",cpincode]
       ])
       this.setState({loading:false})
-      this.props.navigation.navigate("Drawer")
-
+     // this.props.navigation.navigate("Drawer")
+     const resetAction = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
+    });
+    this.props.navigation.dispatch(resetAction);
 
     } catch (error) {
       // Error saving data

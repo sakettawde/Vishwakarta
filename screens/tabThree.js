@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import FeedCard2 from './FeedCard2';
-import {  AsyncStorage, View ,Button,ScrollView,RefreshControl,Alert } from 'react-native';
+import {  AsyncStorage, View ,FlatList,Button,ScrollView,RefreshControl,Alert,ActivityIndicator } from 'react-native';
 import { Fab,Icon, Text } from 'native-base';
 import {TempleFeed} from '../assets/ApiUrl';
 
@@ -16,7 +16,9 @@ export default class tabOne extends Component{
       user_id:"",
       like_count:0,
       comment_count:0,
-      refreshCount:0
+      refreshCount:0,
+      loading:true
+
     };
   }
   componentDidMount(){
@@ -30,16 +32,18 @@ export default class tabOne extends Component{
       console.log("id ",value)
       this.templeFeedApi();
       
-      let interval = 15000
-      let startInterval = setInterval(() => {
-      //console.log("start interval run..",this.state.refreshCount)
-      if (this.state.refreshCount < 8) {
-        this.templeFeedApi()
-        this.setState({ refreshCount: this.state.refreshCount + 1 })
-      } else {
-        clearInterval(startInterval)
-      }
-    }, interval)
+    //   let interval = 15000
+    //   let refreshCount=0
+    //   let startInterval = setInterval(() => {
+    //   //console.log("start interval run..",this.state.refreshCount)
+    //   if (refreshCount < 8) {
+    //     this.templeFeedApi()
+    //     //  this.setState({ refreshCount: this.state.refreshCount + 1 })
+    //     refreshCount=refreshCount+1
+    //   } else {
+    //     clearInterval(startInterval)
+    //   }
+    // }, interval)
 
 
      } catch (error) {
@@ -67,12 +71,13 @@ export default class tabOne extends Component{
           console.log("Success")
           // console.log(data.imageData)
           // console.log(data.imageData.filter((image)=>{return image.feedCount==="10" ;}))
+          data.records=data.records.slice(-20)
           data.records.map(item=>{
             item.image=data.imageData.filter((image)=>{return image.feedCount==item.id ;})
           })
           //console.log(data.records)
 
-          this.setState({records:data.records.reverse(),like_count:data.loveCount,comment_count:data.commentNo,flag:true})
+          this.setState({records:data.records.reverse(),flag:true,loading:false})
         } else if (data.message) {
           Alert.alert(data.message)
         }
@@ -93,33 +98,18 @@ export default class tabOne extends Component{
     return(
       
       <View style={{flex:1}}>
+                    {this.state.loading && <ActivityIndicator size="large" />}
+
     
-      <ScrollView style={{paddingVertical: 10}}
+      {/* <ScrollView style={{paddingVertical: 10}}
           pinchGestureEnabled={true}
           refreshControl={<RefreshControl refreshing={this.state.refreshing}
           onRefresh={this._onRefresh}/>}>
-          {/* {this.state.records.map((item,index)=>
-            <FeedCard2 {...this.props}/>)} */}
         
-        {/* <FeedCard2 {...this.props} 
-          name="Name Prop" 
-          avatar='https://facebook.github.io/react/logo-og.png'
-          date="April 15, 2016" 
-          caption=" This is Prop. Modal navigation drawers block interaction with the rest of an app’s content with a scrim.
-          They are elevated above most of the app’s UI and don’t affect the screen’s layout grid."
-          array={['https://wallpaper-house.com/data/out/2/wallpaper2you_20995.jpg','https://wallpaper-house.com/data/out/2/wallpaper2you_20996.jpg']}
-          likes={200}
-          comments={250}
-          feed_id={25}
-          /> */}
 
         { this.state.flag && 
         (this.state.records.map((item,index)=>
-              // { let id=item.id
-              //   console.log(this.state.imageData.filter((image)=>{
-              //     console.log("feed",image.feedCount)
-              //     console.log("id",id)
-              //     return image.feedCount==item.id ;}));}
+            
              <FeedCard2 {...this.props} 
              name={item.name} 
              avatar={item.avatar}
@@ -135,10 +125,34 @@ export default class tabOne extends Component{
         /> 
         ))
         }
-        </ScrollView>
+        </ScrollView> */}
+       { this.state.flag &&
+         <FlatList style={{paddingVertical: 10}}
+         refreshControl={<RefreshControl refreshing={this.state.refreshing}
+                        onRefresh={this._onRefresh}/>}
+          ItemSeparatorComponent={() => { return (<View style={{height:1}}/>)}}
+          keyExtractor={(item)=>{
+            return item.id;
+          }}              
+          data={this.state.records}
+          renderItem={({item})=>
+                 
+                 <FeedCard2 {...this.props} 
+                 name={item.name} 
+                 avatar={item.avatar}
+                 date={item.date} 
+                 caption={item.status}
+                 array={item.image}
+                 likes={item.likeCount}
+                 comments={item.commentCount}
+                 feed_id={item.id}
+                 user_id={this.state.user_id}
+                 tab="temple"
+          />            
+            }         
+          />}
       
-      
-      <View style={{flex:0}}>
+     {!this.state.loading && <View style={{flex:0}}>
       <Fab
               active={true}
               //direction="up"
@@ -151,7 +165,7 @@ export default class tabOne extends Component{
               <Icon name="md-add"/>
             </Fab>
           </View>
-
+}
 
       
       </View>

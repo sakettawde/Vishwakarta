@@ -4,6 +4,8 @@ import {FlexColumn,FlexRow} from "../utils/styles"
 import styled from "styled-components"
 import { Icon } from "native-base";
 import {ProfSearch,NearMe} from '../assets/ApiUrl';
+import { StackActions, NavigationActions } from 'react-navigation';
+
 
 const routes = ["Wall", "Profile", "Contacts","Logout"];
 export default class SideBar extends React.Component {
@@ -111,6 +113,13 @@ export default class SideBar extends React.Component {
      });
   
     }
+    handleLogout=()=>{
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'Login' })],
+      });
+      this.props.navigation.dispatch(resetAction);
+    }
   render() {
     return (
       <FlexColumn style={{marginTop: StatusBar.currentHeight,flex:1}}>
@@ -188,7 +197,7 @@ export default class SideBar extends React.Component {
             <FlexRow style={{flex:1}}>
             <View style={{flex: 1,}}>
                   <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
-                  onPress={()=>{this.props.navigation.navigate('Contacts')}}>
+                  onPress={()=>{this.props.navigation.navigate('MentorStudent')}}>
                   <Icon active name="md-school" />
                     <Text>Mentor</Text>
                   </ColumnButton>
@@ -219,7 +228,7 @@ export default class SideBar extends React.Component {
             <FlexRow style={{flex:1}}>
             <View style={{flex: 1,}}>
                   <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
-                  onPress={()=>{this.props.navigation.navigate('Logout')}}>
+                  onPress={()=>this.handleLogout()}>
                   <Icon active name="md-log-out" />
                     <Text>Logout</Text>
                   </ColumnButton>

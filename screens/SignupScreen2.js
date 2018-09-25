@@ -433,7 +433,7 @@ selectedCurrentPincode=(item)=>{
     const ref = firebase
         .storage()
         .ref()
-        .child("images/" + uuid.v4());
+        .child("profilePic/" + uuid.v4());
 
     const snapshot = await ref.put(blob);
     return snapshot.downloadURL;

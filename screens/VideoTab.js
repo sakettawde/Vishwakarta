@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Video from './VideoCard';
-import { StatusBar, AsyncStorage, View ,Button,ScrollView,RefreshControl,Alert } from 'react-native';
+import { StatusBar, AsyncStorage, FlatList,View ,Button,ScrollView,RefreshControl,Alert,ActivityIndicator } from 'react-native';
 import { Fab,Icon, Text } from 'native-base';
 import {ViewVideo} from '../assets/ApiUrl';
 import VideoCard from './VideoCard';
@@ -11,7 +11,8 @@ export default class VideoTab extends Component{
     super(props);
     this.state = {
       refreshing: false,
-     item:{ }
+     item:{ },
+     loading:true
     };
   }
   componentDidMount(){
@@ -80,8 +81,9 @@ export default class VideoTab extends Component{
     return(
       
       <View style={{flex:1}}>
+      {this.state.loading && <ActivityIndicator size="large" />}
     
-      <ScrollView style={{paddingVertical: 10}}
+      {/* <ScrollView style={{paddingVertical: 10}}
           pinchGestureEnabled={true}
           refreshControl={<RefreshControl refreshing={this.state.refreshing}
           onRefresh={this._onRefresh}/>}>
@@ -96,14 +98,26 @@ export default class VideoTab extends Component{
               /> 
         ))
         }
-          {/* <VideoCard  header={this.state.item.header} link={this.state.item.VideoUrl}/>
-          <VideoCard header={this.state.item.header} link={this.state.item.VideoUrl}/>
-          <VideoCard header={this.state.item.header} link={this.state.item.VideoUrl}/> */}
-
-        </ScrollView>
+         
+        </ScrollView> */}
+      {this.state.flag &&  <FlatList
+        style={{paddingVertical: 10}}
+        pinchGestureEnabled={true}
+        refreshControl={<RefreshControl refreshing={this.state.refreshing}
+        onRefresh={this._onRefresh}/>}
+        ItemSeparatorComponent={() => { return (<View style={{height:1}}/> )}}              
+        data={this.state.item}
+          renderItem={({item})=>
+          
+                  <VideoCard  
+                  header={item.status}
+                  link={item.link }
+                  /> 
+            }         
+        />}
       
       
-      <View style={{flex:0}}>
+      {this.state.loading && <View style={{flex:0}}>
       <Fab
               active={true}
               //direction="up"
@@ -115,7 +129,7 @@ export default class VideoTab extends Component{
               })}>
               <Icon name="md-add"/>
             </Fab>
-          </View>
+          </View>}
 
 
       

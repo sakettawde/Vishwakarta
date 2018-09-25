@@ -22,10 +22,12 @@ export default class FeedCard2 extends Component {
         comments_count:this.props.comments,
         image_array:this.props.array,
         tab:this.props.tab,feedId:this.props.feed_id})
+      console.log(this.props.tab)
     }
 
     addLikeApi = (link) => {
       console.log("In AddLikeApi")
+      // console.log()
       this.setState({loading:true})
       fetch(link, {
         method: "POST",
@@ -35,7 +37,8 @@ export default class FeedCard2 extends Component {
         },
         body: JSON.stringify({
           feedId:this.props.feed_id,
-          userId:this.props.user_id
+          userId:this.props.user_id,
+          likeCount:this.state.like_count
         })
       })
         .then(data => {
@@ -46,7 +49,9 @@ export default class FeedCard2 extends Component {
   
           if (data.message == "Liked") {
             console.log("Success")
-            this.setState({like_count:data.likeCount})
+            //this.setState({like_count:data.likeCount})
+            //console.log("Count ",data.likeCount)
+
             
           } else if (data.message) {
             Alert.alert(data.message)
@@ -68,7 +73,8 @@ export default class FeedCard2 extends Component {
       },
       body: JSON.stringify({
         feedId:this.props.feed_id,
-        userId:this.props.user_id
+        userId:this.props.user_id,
+        likeCount:this.state.like_count
       })
     })
       .then(data => {
@@ -79,7 +85,8 @@ export default class FeedCard2 extends Component {
 
         if (data.message == "UnLiked") {
           console.log("Success")
-          this.setState({like_count:data.likeCount})
+          //this.setState({like_count:data.likeCount})
+          //console.log("Count ",data.likeCount)
           
         } else if (data.message) {
           Alert.alert(data.message)
@@ -91,9 +98,9 @@ export default class FeedCard2 extends Component {
 }  
 
 
-  toggleLike=()=>{
+  toggleLike=async()=>{
     if(this.state.like){
-      this.setState({like_count:this.state.like_count-1,like:!this.state.like})
+      await this.setState({like_count:parseInt(this.state.like_count)-1,like:!this.state.like})
       console.log("unlike")
       if(this.state.tab=='admin'){
         console.log("admin")
@@ -109,7 +116,7 @@ export default class FeedCard2 extends Component {
       }
     }
     else{
-      this.setState({like_count:this.state.like_count+1,like:!this.state.like})
+      await this.setState({like_count:parseInt(this.state.like_count)+1,like:!this.state.like})
       if(this.state.tab=='admin'){
         console.log("admin")
         this.addLikeApi(AddLike)
@@ -188,7 +195,7 @@ export default class FeedCard2 extends Component {
                   userid:this.props.user_id
                 })}}>
                   <Icon name="md-chatboxes" />
-                  <Text>{this.state.comments_count} Comments</Text>
+                  <Text>{this.props.comments} Comments</Text>
                 </Button>
               </Right>
             </CardItem>

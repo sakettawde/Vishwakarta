@@ -219,7 +219,7 @@ export default class Contacts extends Component {
    
     
       return (
-        <Container style={{marginTop: StatusBar.currentHeight}}>  
+        <Container >  
           <Content>
 
           <ScrollView>

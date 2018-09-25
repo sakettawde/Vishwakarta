@@ -15,11 +15,13 @@ import Contacts from './screens/Contacts';
 import Newpassword from './screens/Newpassword';
 import MyProfile from './screens/MyProfile';
 import Newpost from './screens/Newpost';
-import Sidebar from './screens/Sidebar';
+// import Sidebar from './screens/Sidebar';
 import Sidebar2 from './screens/Sidebar2';
 import HelpPage from './screens/HelpPage';
 import AreaHead from './screens/AreaHead';
 import NewVideo from './screens/NewVideo';
+import MentorStudent from './screens/MentorStudent';
+import MentorTime from './screens/MentorTime';
 
 // import ContactUsersList from './screens/ContactUsersList';
 import Comments from './screens/Comments';
@@ -181,7 +183,14 @@ const AppStackNavigator = createStackNavigator({
     screen:List,
     //navigationOptions: { header: null }
   },
-
+  MentorStudent:{
+    screen:MentorStudent,
+    navigationOptions: { header: null }
+  },
+  MentorTime:{ 
+    screen:MentorTime,
+    //navigationOptions: { header: null }
+  },
 },{
   initialRouteName:'Login',
 

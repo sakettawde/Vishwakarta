@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Icon, Content, Form, Item, Input, Label, Right, Button, Text } from 'native-base';
 import {AsyncStorage,View,Image,Dimensions,Alert, ActivityIndicator} from 'react-native'
-import { ImagePicker ,LinearGradient,Permissions} from 'expo';
+import { ImagePicker ,LinearGradient,Permissions,ImageManipulator } from 'expo';
 import {NextButton,ButtonText,ScreenTitle,FlexColumn} from '../utils/styles';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
@@ -211,6 +211,7 @@ export default class Newpost extends Component {
         allowsEditing: true,
         aspect: [4, 3],
     });
+    console.log(pickerResult.uri);
 
     this._handleImagePicked(pickerResult);
 };
@@ -218,22 +219,27 @@ export default class Newpost extends Component {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
+      quality: 0.1,
     });
    console.log(result.uri);
+
    this.setState({ image: result.uri });
     this._handleImagePicked(result); 
       
-
   };
   _handleImagePicked = async pickerResult => {
     try {
        
 
         if (!pickerResult.cancelled) {
-          let location="images/feed/"+this.state.user_id+"_"+moment().format();
+          this.setState({loading_image:true});
+          let location="feed/images/"+this.state.user_id+"_"+moment().format();
             this.state.image_array.push(pickerResult.uri);
-            this.setState({loading_image:true});
-            uploadUrl = await uploadImageAsync(pickerResult.uri,location);
+
+            const compress_image=await ImageManipulator.manipulate(pickerResult.uri,[{ resize: {  height: 200 } }],{compress:1})
+            console.log(compress_image)
+
+            uploadUrl = await uploadImageAsync(compress_image.uri,location);
             this.state.url_array.push(uploadUrl);
             console.log("url array ",this.state.url_array);
             this.setState({ imageurl: uploadUrl , loading_image:false });

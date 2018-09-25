@@ -33,7 +33,6 @@ export default class Contacts extends Component {
     
    
     prof_renderer=()=>{
-      console.log("In Prof Api")
       fetch(ListProf, {
         method: "POST",
         headers: {
@@ -49,8 +48,6 @@ export default class Contacts extends Component {
           if(data.message=="Data available"){
             this.setState({proflist:data.records})
           
-            
-            // console.log(data.records)                  
              console.log(this.state.selected_prof)            
           }
           else {
@@ -147,8 +144,9 @@ UserListApi = () =>{
   
     }
 
-    SearchByProfApi = (temp) =>{
+    SearchByProfApi = (prof) =>{
       console.log("SearchByProf")
+      
       
       fetch(ProfSearch, {
         method: "POST",
@@ -157,7 +155,7 @@ UserListApi = () =>{
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ 
-          profession: temp
+          profession: prof
         })
       })
         .then(data => {
@@ -165,10 +163,9 @@ UserListApi = () =>{
         })
         .then(data => {
           //console.log("UserList Response", data)
-          if(data.msgclass=="Data available"){
-            this.setState({list:data.cust_records})
-            console.log("search by prof")
-            
+          if(data.message=="Data available"){
+            this.setState({list:data.records})
+            //console.log("data ",data)
             
           }
           else {
@@ -181,16 +178,17 @@ UserListApi = () =>{
        });
     
       }
+
       onProfChange=async(value )=> {
         
         var temp=this.state.proflist.find((item)=>{
-          return item.id ===this.state.selected_prof
+          return item.id ==value
         })
         this.SearchByProfApi(temp.name)
         await this.setState({
           prof_name: temp.name,selected_prof:value
         });
-        console.log(this.state.prof_name)
+        console.log(temp.name)
 
       }
   
