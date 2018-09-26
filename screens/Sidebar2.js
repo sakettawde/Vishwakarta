@@ -113,7 +113,8 @@ export default class SideBar extends React.Component {
      });
   
     }
-    handleLogout=()=>{
+    handleLogout=async()=>{
+      await AsyncStorage.clear()
       const resetAction = StackActions.reset({
         index: 0,
         actions: [NavigationActions.navigate({ routeName: 'Login' })],

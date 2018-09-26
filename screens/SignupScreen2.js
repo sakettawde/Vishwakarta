@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet,  View, ScrollView,Alert ,Dimensions, TouchableOpacity,Image,ActivityIndicator } from 'react-native';
-import {Container,  Content, Form, Item, Input, Label , Button, Text, Left, Right, Picker,Icon, List, ListItem} from 'native-base';
-import { ImagePicker ,LinearGradient,Permissions} from 'expo';
+import {Container,  Content, Form, Item, Input, Label , Button, Text, Left, Right, Picker,Icon, List, ListItem, Radio} from 'native-base';
+import { ImagePicker ,LinearGradient,Permissions,ImageManipulator} from 'expo';
 import {NextButton,ButtonText,ScreenTitle,FlexColumn} from '../utils/styles';
 import ActionSheet from 'react-native-actionsheet';
 import uuid from 'uuid';
@@ -50,7 +50,7 @@ export default class SignupScreen2 extends React.Component{
     showcurrent:false,
     currentdata:false,
     pincodeData:[],
-    
+    isTemple:false,    
 
   };
 
@@ -77,10 +77,14 @@ export default class SignupScreen2 extends React.Component{
     if(this.state.imageurl){
       temp=this.state.imageurl
     }
+    let role='user'
+    if(this.state.isTemple){
+      role='temple'
+    }
 
     console.log(this.info_array);
     console.log(temp);
-     this.SignupApi(temp);
+     this.SignupApi(temp,role);
     
   }
   showActionSheet = () => {
@@ -91,7 +95,7 @@ export default class SignupScreen2 extends React.Component{
   
  
 
-  SignupApi = (avatar) =>{
+  SignupApi = (avatar,role) =>{
 
     if(this.state.home_pin.length < 5){
       Alert.alert("Enter Valid Pincode")
@@ -127,7 +131,8 @@ export default class SignupScreen2 extends React.Component{
         ctaluka:this.state.ctaluka,
         cdistrict:this.state.cdistrict,
         cstate:this.state.cstate,
-        avatar:avatar      
+        avatar:avatar,
+        role:role      
       })
     })
       .then(data => {
@@ -215,6 +220,9 @@ selectedCurrentPincode=(item)=>{
   this.setState({cvillage:item.Name,ctaluka:item.Taluk,
   cdistrict:item.District, cstate:item.State,
   showcurrent:false, currentdata:true})
+}
+_onPressHandle=()=>{
+  this.setState({isTemple:!this.state.isTemple})
 }
 
     render() {
@@ -318,6 +326,26 @@ selectedCurrentPincode=(item)=>{
         multiline={true}/> 
           </Item>
           }
+          <Item>
+              <View style={{flexDirection:'row',flex:1,justifyContent:"space-between",padding:10}}>
+                  <View style={{flexDirection:'row',flex:2}}>
+                  <Text>Do you represent any Temple?</Text>
+                  </View>
+                  
+                  <View style={{flexDirection:'row',flex:1}}>
+                  <View style={{flexDirection:'row',flex:1}}>
+                  <Radio selected={this.state.isTemple} onPress={this._onPressHandle}/>
+                  <Text>Yes</Text>
+                  </View>
+                  <View style={{flexDirection:'row',flex:1}}>
+                  <Radio selected={!this.state.isTemple} onPress={this._onPressHandle}/>
+                  <Text>No</Text>
+                  </View>
+                  </View>
+                 
+              </View>
+              
+            </Item>
 
             <Item stackedLabel Last>
               <Label>Profile Picture</Label>
@@ -328,16 +356,23 @@ selectedCurrentPincode=(item)=>{
             <Text>Upload</Text>
           </Button>
               </Right>
-              {this.state.imageurl && <Text>Uploaded</Text>}
+              
               
             </Item>
 
 
+            {/* {this.state.imageurl && 
             <Item>
-              <View><Image source={{uri: this.state.imageurl}} 
-                  style={{flex:1 ,height:300, width: Dimensions.get('window').width}}/>
+              <View style={{justifyContent:"center",alignItems:"center"}}>
+                <Image source={{uri: this.state.imageurl}} 
+                  style={{marginBottom:15, marginTop:15,height:100,width:100 ,borderRadius:50,alignSelf:"center"}}/>
                   </View>
-            </Item>
+            </Item>} */}
+             {this.state.imageurl && 
+            
+              <Image source={{uri: this.state.imageurl}} 
+                  style={{marginBottom:15, marginTop:15,height:100,width:100 ,borderRadius:50,alignSelf:"center"}}/>
+            }
           </Form>
           
           
@@ -391,7 +426,7 @@ selectedCurrentPincode=(item)=>{
       _takePhoto = async () => {
         let pickerResult = await ImagePicker.launchCameraAsync({
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [1, 1],
         });
 
         this._handleImagePicked(pickerResult);
@@ -399,7 +434,7 @@ selectedCurrentPincode=(item)=>{
       _pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
           allowsEditing: true,
-          aspect: [4, 3],
+          aspect: [1, 1],
         });
        console.log(result.uri);
         this._handleImagePicked(result);   
@@ -411,7 +446,10 @@ selectedCurrentPincode=(item)=>{
   
             if (!pickerResult.cancelled) {
               this.setState({ image_loading: true  });
-                uploadUrl = await uploadImageAsync(pickerResult.uri);
+              const compress_image=await ImageManipulator.manipulate(pickerResult.uri,[{ resize: {  height: 160 } }],{compress:0,format:'png'})
+              console.log(compress_image)
+  
+                uploadUrl = await uploadImageAsync(compress_image.uri);
                 console.log(uploadUrl)
                 this.setState({ imageurl: uploadUrl , image_loading:false });
             }

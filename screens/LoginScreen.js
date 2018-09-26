@@ -31,25 +31,40 @@ import { StackActions, NavigationActions } from 'react-navigation';
 
 export default class LoginScreen extends Component {
   state = {
-    phno: "",
-    pwd: "",
-    loading: false
+    phno: "8484902449",
+    pwd: "yellow",
+    loading: false,
+    load_page:false
   }
 
-  _storeData = async (user_id, user_name,avatar,cvillage,prof,cpincode) => {
+  componentDidMount=async()=>{
+    const value = await AsyncStorage.getItem('user_id');
+    if(value){
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
+      });
+
+      this.props.navigation.dispatch(resetAction);
+      }
+      else{
+        this.setState({load_page:true})
+      }
+    
+  }
+
+  _storeData = async (record) => {
     try {
      
-      // await AsyncStorage.setItem("user_id", JSON.stringify(user_id))
-      // await AsyncStorage.setItem("user_name", user_name)
-      // await AsyncStorage.setItem("avatar", avatar)
-      // await AsyncStorage.setItem("cvillage", cvillage)
-      // await AsyncStorage.setItem("prof", prof)
+      
       await AsyncStorage.multiSet([
-        ["user_id", JSON.stringify(user_id)],
-        ["user_name", user_name],["prof", prof],
-        ["cvillage", cvillage],["avatar", avatar],
-        ["cpincode",cpincode]
+        ["user_id", JSON.stringify(record.user_id)],
+        ["user_name", record.name],["prof", record.professional],
+        ["cvillage", record.cvillage],["avatar", record.avatar],
+        ["cpincode",record.current_pincode],
+        ["role",record.role],["mentor",record.mentor]
       ])
+      
       this.setState({loading:false})
      // this.props.navigation.navigate("Drawer")
      const resetAction = StackActions.reset({
@@ -87,8 +102,7 @@ export default class LoginScreen extends Component {
           this.setState({ records: data.records })
           // this.setState({user_id:data.records.user_id})
           // this.setState({user_name:data.records.name})
-          this._storeData(data.records.user_id, data.records.name,data.records.avatar,
-            data.records.cvillage,data.records.professional,data.records.current_pincode)
+          this._storeData(data.records)
         } else if (data.message) {
           Alert.alert("Invalid Username or Password")
         }
@@ -106,6 +120,7 @@ export default class LoginScreen extends Component {
   }
 
   render() {
+    if(this.state.load_page){
     return (
       <LinearGradient
                 colors={["#7c98fd", "#4e43f9"]}
@@ -190,7 +205,15 @@ export default class LoginScreen extends Component {
         <Spacer/>
         </FlexColumn>
         </LinearGradient>
-    )
+    )}
+    else{
+      return( <LinearGradient
+        colors={["#3F51B5", "#3F51B6"]}
+        start={{ x: 0.0, y: 0.0 }}
+        end={{ x: 0.0, y: 1.0 }}
+        style={{ width: "100%", height: "100%",marginTop: StatusBar.currentHeight}}
+      />)
+    }
   }
 }
 

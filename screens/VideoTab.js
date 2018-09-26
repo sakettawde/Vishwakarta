@@ -60,7 +60,7 @@ export default class VideoTab extends Component{
         if (data.message == "video view") {
           console.log("Success")
          
-          this.setState({item:data.records.reverse(),flag:true})
+          this.setState({item:data.records.reverse(),flag:true,loading:false})
         } else if (data.message) {
           Alert.alert(data.message)
         }

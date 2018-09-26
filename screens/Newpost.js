@@ -82,6 +82,7 @@ export default class Newpost extends Component {
             console.log("Success")
             this.setState({loading_image:false})
 
+            this.props.navigation.state.params.updateFeed() 
             this.props.navigation.navigate("Drawer")
           } else if (data.message) {
             Alert.alert(data.message)
@@ -163,7 +164,7 @@ export default class Newpost extends Component {
         {this.state.imageurl &&
               <Swiper style={{height:200, width:Dimensions.get('window').width}} loop={false} >
               
-            {this.state.image_array.map((item,index)=>
+            {this.state.url_array.map((item,index)=>
             <View style={{flex: 1,justifyContent: 'center', alignItems: 'center',height:200}} key={index}>
             <Image source={{uri: item}} 
             style={{flex:1 ,height: 200, width: Dimensions.get('window').width}}/>
@@ -219,7 +220,7 @@ export default class Newpost extends Component {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.1,
+      
     });
    console.log(result.uri);
 
@@ -236,7 +237,7 @@ export default class Newpost extends Component {
           let location="feed/images/"+this.state.user_id+"_"+moment().format();
             this.state.image_array.push(pickerResult.uri);
 
-            const compress_image=await ImageManipulator.manipulate(pickerResult.uri,[{ resize: {  height: 200 } }],{compress:1})
+            const compress_image=await ImageManipulator.manipulate(pickerResult.uri,[{ resize: {  height: 300 } }],{compress:0,format:'png'})
             console.log(compress_image)
 
             uploadUrl = await uploadImageAsync(compress_image.uri,location);

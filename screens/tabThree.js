@@ -32,18 +32,18 @@ export default class tabOne extends Component{
       console.log("id ",value)
       this.templeFeedApi();
       
-    //   let interval = 15000
-    //   let refreshCount=0
-    //   let startInterval = setInterval(() => {
-    //   //console.log("start interval run..",this.state.refreshCount)
-    //   if (refreshCount < 8) {
-    //     this.templeFeedApi()
-    //     //  this.setState({ refreshCount: this.state.refreshCount + 1 })
-    //     refreshCount=refreshCount+1
-    //   } else {
-    //     clearInterval(startInterval)
-    //   }
-    // }, interval)
+      let interval = 15000
+      let refreshCount=0
+      let startInterval = setInterval(() => {
+      //console.log("start interval run..",this.state.refreshCount)
+      if (refreshCount < 8) {
+        this.templeFeedApi()
+        //  this.setState({ refreshCount: this.state.refreshCount + 1 })
+        refreshCount=refreshCount+1
+      } else {
+        clearInterval(startInterval)
+      }
+    }, interval)
 
 
      } catch (error) {
@@ -100,7 +100,8 @@ export default class tabOne extends Component{
       <View style={{flex:1}}>
                     {this.state.loading && <ActivityIndicator size="large" />}
 
-    
+       {this.state.flag && this.state.records.length==0 && 
+          <Text style={{textAlign:"center"}}>Your Feed is empty,add new post!</Text>}
       {/* <ScrollView style={{paddingVertical: 10}}
           pinchGestureEnabled={true}
           refreshControl={<RefreshControl refreshing={this.state.refreshing}
@@ -160,7 +161,8 @@ export default class tabOne extends Component{
               style={{ backgroundColor: '#5067FF' }}
               position="bottomRight"
               onPress={() => this.props.navigation.navigate('Newpost',{
-                tab:"temple"
+                tab:"temple",
+                updateFeed:this.AdminFeedApi
               })}>
               <Icon name="md-add"/>
             </Fab>

@@ -38,7 +38,10 @@ export default class App extends React.Component {
 
     constructor(props) {
     super(props);
-    this.state = { loading: true };
+    this.state = { 
+      loading: true,
+      initial_screen:"Login"
+    };
     //this.onBackPress = this.onBackPress.bind(this)
   }
 
@@ -52,19 +55,13 @@ export default class App extends React.Component {
   }
 
 
-  // componentDidMount () {
-  //   BackHandler.addEventListener('hardwareBackPress', this.onBackPress)
+  // componentDidMount=async()=>{
+  //   const value = await AsyncStorage.getItem('user_id');
+  //   if(value){
+
+  //   }    
   // }
 
-  // componentWillUnmount () {
-  //   BackHandler.removeEventListener('hardwareBackPress', this.onBackPress)
-  // }
-
-  // onBackPress () {
-  //   const { dispatch, navigation } = this.props
-  //   dispatch(NavigationActions.back())
-  //   //return navigation !== this.props.navigation
-  // }
 
   render() { 
     if (this.state.loading) {

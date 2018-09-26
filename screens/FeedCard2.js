@@ -22,7 +22,7 @@ export default class FeedCard2 extends Component {
         comments_count:this.props.comments,
         image_array:this.props.array,
         tab:this.props.tab,feedId:this.props.feed_id})
-      console.log(this.props.tab)
+      
     }
 
     addLikeApi = (link) => {

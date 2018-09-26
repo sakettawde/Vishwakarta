@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Header, Item, Input, Icon, Button, Text ,
-Content , List , ListItem , Left , Body , Right , Thumbnail, } from 'native-base';
-import {Alert,ScrollView,View} from 'react-native';
-import {NextButton,ButtonText,ScreenTitle,FlexColumn} from '../utils/styles';
-import {NearMe } from "../assets/ApiUrl";
+Content , List , ListItem , Left , Body , Right , Thumbnail,Toast } from 'native-base';
+import {Alert,ScrollView,View,ActivityIndicator} from 'react-native';
+import {ViewMentor } from "../assets/ApiUrl";
 import styled from 'styled-components';
 import { FlexRow } from '../utils/styles';
 import {LinearGradient} from 'expo';
@@ -15,37 +14,38 @@ export default class Mentor extends Component {
      super();
      this.state ={
       list:{},
+      flag:false
       }
     }
 
     componentDidMount(){
+      this.viewMentorApi()
     }
     
     
   
       
-    NearMeApi = (value) =>{
-      console.log("NearMeApi")
+    viewMentorApi = (value) =>{
+      console.log("ViewMentorApi")
       
       
-      fetch(NearMe, {
+      fetch(ViewMentor, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ 
-          cpincode: value
-        })
+        body: JSON.stringify({      })
       })
         .then(data => {
           return data.json()
         })
         .then(data => {
           //console.log("UserList Response", data)
-          if(data.message=="Data available"){
-            this.setState({list:data.records})
-          //  console.log("data ",data)
+          if(data.message=="mentors"){
+            this.setState({list:data.records,flag:true})
+            //console.log(data.records)
+            console.log("data set")
             
           }
           else {
@@ -61,38 +61,13 @@ export default class Mentor extends Component {
 
     
 
-
-
-
-// UserListApi = () =>{
-//   console.log("In UserListApi")
-//   fetch(UserList, {
-//     method: "POST",
-//     headers: {
-//       Accept: "application/json",
-//       "Content-Type": "application/json"
-//     },
-//     body: JSON.stringify({ })
-//   })
-//     .then(data => {
-//       return data.json()
-//     })
-//     .then(data => {
-//       //console.log("UserList Response", data)
-//       if(data.message=="text message."){
-//         this.setState({list:data.records})
-        
-//       }
-//       else {
-//         Alert.alert(data)
-//       }    
-//     })
-//     .catch((error)=>{
-//       console.log("Api call error");
-//       console.log(error.message);
-//    });
-
-//   }
+showToast=()=>{
+  Toast.show({
+    text: "Request Sent",
+    buttonText: "Okay",
+    duration: 2000
+  })
+}
 
 
   
@@ -102,83 +77,55 @@ export default class Mentor extends Component {
    
     
       return (
-        <FlexColumn style={{flex:1}}>
-          <View style={{flex:1}}>
+        <Container>
+          <Content>
+  
           <ScrollView >
             <List>
-                    {/* {this.state.list && this.state.list.length > 0 &&
-                    this.state.list.map((item,index)=>{
-                      return this.state.user_id!=item.user_id?
-                        <ListItem key={index} avatar 
-                        onPress={()=>{ this.props.navigation.navigate('UserProfile',{
-                          user_id:item.user_id,
-                         // current_id:this.state.user_id
-                      })
-                      }} >
-                        <Left>
-                            <Thumbnail source={{ uri:item.avatar  }} />
-                        </Left>
-                        <Body >
-                            <Text>{item.name}</Text>
-                            <Text note>{item.professional}</Text>
-                            <Text note>{item.mobile_no}</Text>
-                        </Body>
-                    </ListItem>
-                    :<View/>
-                    })} */}
+            
+              {this.state.list && this.state.list.length > 0 ? 
+              this.state.list.map((item,index)=>{
 
-             <ListItem avatar >
-                        <Left>
-                            <Thumbnail source={{ uri:'http://www.myiconfinder.com/uploads/iconsets/256-256-f86ca6f98affc4bfe9306d9693638920.png'}} />
-                        </Left>
-                        <Body >
-                            <Text>Firstname Lastname</Text>
-                            <Text note>Profession</Text>
-                            <Text note>8888888888</Text>
-                            <FlexRow style={{justifyContent: 'space-around',marginTop:5}}>
-                            
-                            <SaveButton onPress={()=>{this.props.navigation.navigate('MentorTime',{
-                                info:"call"
-                            })}}><SaveText>Call</SaveText></SaveButton>
-                            <SaveButton onPress={()=>{this.props.navigation.navigate('MentorTime',{
-                                info:"visit"
-                            })}}>
-                            <SaveText>Visit</SaveText></SaveButton>
-                            <View></View>
-                            </FlexRow>
-                        </Body>
-                        {/* <Right>
-                            <SaveButton onPress={()=>{this.props.navigation.navigate('MentorTime')}}><SaveText>Call</SaveText></SaveButton>
-                            <SaveButton onPress={()=>{this.props.navigation.navigate('MentorTime')}}
-                            style={{marginTop: 3,}}><SaveText>Visit</SaveText></SaveButton>
-                        </Right> */}
-                    </ListItem>
+                return(
+                <ListItem avatar key={index}>
+                <Left>
+                    <Thumbnail source={{ uri:item.avatar}} />
+                </Left>
+                <Body >
+                    <Text>{item.name}</Text>
+                    <Text note>{item.professional}</Text>
+                    <Text note>{item.mobile_no}</Text>
+                    <FlexRow style={{justifyContent: 'space-around',marginTop:5}}>
+                    
+                    <SaveButton onPress={()=>{this.props.navigation.navigate('MentorTime',{
+                        info:"call",
+                        mid:item.user_id,
+                        toast:this.showToast
+                    })}}><SaveText>Call</SaveText></SaveButton>
+                    <SaveButton onPress={()=>{this.props.navigation.navigate('MentorTime',{
+                        info:"visit",
+                        mid:item.user_id,
+                        toast:this.showToast
+                    })}}>
+                    <SaveText>Visit</SaveText></SaveButton>
+                    <View></View>
+                    </FlexRow>
+                </Body>
+              </ListItem>)
+              }):(<View style={{flexDirection:'column'}}>
+              <Text>Searching Mentor...</Text>
+              <ActivityIndicator size='large'/>
+              </View>)}
+                           
                                     
               
             </List>
             </ScrollView>
-            </View>
-            <View>
 
-            <NextButton 
-            
-            style={{position: 'absolute',                                          
-            bottom: 0,alignSelf: 'center',marginBottom: 10, }} 
-             
-            >
-            <LinearGradient
-                  colors={["#3F51B5", "#3F51B6"]}
-                  start={{ x: 0.0, y: 1.0 }}
-                  end={{ x: 1.0, y: 0.0 }}
-                  style={{ width: "100%", height: "100%",borderRadius:10,paddingLeft: 5,paddingRight: 5,}}
-                >
-  
-              <ButtonText>Offer Mentorship</ButtonText>
-            </LinearGradient>
-          </NextButton>
-          </View>
-        </FlexColumn>
-        
+       
+       
+          </Content>
+          </Container>
       );
   
     

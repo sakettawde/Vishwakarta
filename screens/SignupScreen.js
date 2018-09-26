@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar,  View ,Alert } from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Label , Button ,DatePicker, Text, Left, Right 
-, Radio, Picker,Icon} from 'native-base';
+, Radio, Picker,Icon, Row} from 'native-base';
 //import Dialog from "react-native-dialog";
 import { ListGotra ,ListProf} from "../assets/ApiUrl";
 
@@ -262,25 +262,24 @@ export default class SignUp extends React.Component {
             
             <Item>
               <View style={{flexDirection:'row',justifyContent:"space-evenly",padding:10}}>
-                <View style={{flex:5,flexDirection:"row"}}><Left>
-                  
-                  <Radio selected={this.state.isSelect1} onPress={this._onPressHandle}/>
-                
-                </Left>
-                <Right>
-                  <Text>Business</Text>
-                </Right>
+                <View style={{flex:5,flexDirection:"row"}}>
+                  <View style={{flex:1}}>
+                    <Radio selected={this.state.isSelect1} onPress={this._onPressHandle}/>
+                    </View>
+                  <View style={{flex:3,flexDirection:'row'}}>
+                   <Text>Business</Text>
+                   </View>
                 </View>
                 <View style={{flex:1}}></View>
                 <View style={{flex:5,flexDirection:"row"}}>
-                  <Left>
-                    
-                    <Radio selected={this.state.isSelect2} onPress={this._onPressHandle}/>
                   
-                  </Left>
-                  <Right>
+                    <View style={{flex:1}}>
+                    <Radio selected={this.state.isSelect2} onPress={this._onPressHandle}/>
+                    </View>
+                    <View style={{flex:3,flexDirection:'row'}}>
                    <Text>Employed</Text>
-                  </Right>
+                   </View>
+                  
                 </View>
               </View>
               

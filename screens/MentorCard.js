@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Image ,Dimensions ,View,StyleSheet} from 'react-native';
+import { Image ,Dimensions ,View,StyleSheet,Alert} from 'react-native';
 import { CardItem, Thumbnail, Text, Button, Left, Right , Body  } from 'native-base';
 import styled from "styled-components";
-import {AddLike,UnLike,AddTempleLike,UnTempleLike,AddMyLike,UnMyLike} from '../assets/ApiUrl';
+import {UpdateTraining} from '../assets/ApiUrl';
 import { FlexColumn } from './VideoCard';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Octicon from 'react-native-vector-icons/Octicons';
@@ -11,52 +11,53 @@ import Octicon from 'react-native-vector-icons/Octicons';
 export default class MentorCard extends Component {
 
     state={
-      like:false,
-      like_count:0,
-      comments_count:0,
-      image_array:{},
-      tab:"",
-      feedId:""
+      action:"",
+      status:"approved",
+      trainId:""      
     }
 
   
     componentDidMount(){
+      if(this.props.action=='call'){
+        this.setState({action:"CALL"})
+      }
+      else{
+        this.setState({action:"VISIT"})
+      }
     }
 
-//   unLikeApi = (link) => {
-//     console.log("In unLikeApi")
-//     this.setState({loading:true})
-//     fetch(link, {
-//       method: "POST",
-//       headers: {
-//         Accept: "application/json",
-//         "Content-Type": "application/json"
-//       },
-//       body: JSON.stringify({
-//         feedId:this.props.feed_id,
-//         userId:this.props.user_id,
-//         likeCount:parseInt(this.state.like_count)-1
-//       })
-//     })
-//       .then(data => {
-//         return data.json()
-//       })
-//       .then(data => {
-//         console.log("UnLike Response", data)
+  updateTrainingApi = (value) => {
+    console.log("In updateTraining")
+    this.setState({loading:true})
+    fetch(UpdateTraining, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        trainId:this.props.train_id,
+        status:value
+      })
+    })
+      .then(data => {
+        return data.json()
+      })
+      .then(data => {
+        console.log("updateTraining Response", data)
 
-//         if (data.message == "UnLiked") {
-//           console.log("Success")
-//           //this.setState({like_count:data.likeCount})
-//           //console.log("Count ",data.likeCount)
+        if (data.message == "Training Updated") {
+          console.log("Success")
+          this.props.update()
           
-//         } else if (data.message) {
-//           Alert.alert(data.message)
-//         }
-//       }).catch((error)=>{
-//     console.log("Api call error");
-//     console.log(error.message);
-//  });
-// }  
+        } else if (data.message) {
+          Alert.alert(data.message)
+        }
+      }).catch((error)=>{
+    console.log("Api call error");
+    console.log(error.message);
+ });
+}  
 
 
     
@@ -64,13 +65,13 @@ export default class MentorCard extends Component {
     return (
         <View>
         
-          <Card style={{backgroundColor:'#00AA8A'}}>
+          {this.props.status=='approved' && <Card style={{backgroundColor:'#00AA8A'}}>
             <CardItem >
               <Left>
-                <Thumbnail source={{uri: 'http://www.myiconfinder.com/uploads/iconsets/256-256-f86ca6f98affc4bfe9306d9693638920.png'}} />
+                <Thumbnail source={{uri:this.props.avatar}} />
                 <Body>
-                  <Text>Name</Text>
-                  <Text note>Profession</Text>
+                  <Text>{this.props.name}</Text>
+                  <Text note>{this.props.prof}</Text>
                 </Body>
               </Left>
               <Right>
@@ -83,32 +84,33 @@ export default class MentorCard extends Component {
               </CardItem>
 
             
-            <FlexColumn style={{justifyContent:"center",alignItems: 'center',}}>  
+            <FlexColumn style={{justifyContent:"center",alignItems: 'center',}}> 
             <NameText>
-                   Date:- 1st Oct 2018
+                 {this.state.action}
+            </NameText> 
+            <NameText>
+                   Date:- {this.props.date}
             </NameText>
             <NameText>
-                   Time:- 8:00 pm
+                   Time:- {this.props.time}
             </NameText>
             </FlexColumn>
-            
-
-            
-
-
             <CardItem>
-               
-
             </CardItem>
-          </Card>
+          </Card>}
 
-           <Card style={{backgroundColor:'yellow'}}>
+
+
+
+
+
+           {this.props.status=='pending' &&  <Card style={{backgroundColor:'yellow'}}>
            <CardItem >
              <Left>
-               <Thumbnail source={{uri: 'http://www.myiconfinder.com/uploads/iconsets/256-256-f86ca6f98affc4bfe9306d9693638920.png'}} />
-               <Body>
-                 <Text>Name</Text>
-                 <Text note>Profession</Text>
+             <Thumbnail source={{uri:this.props.avatar}} />
+                <Body>
+                  <Text>{this.props.name}</Text>
+                  <Text note>{this.props.prof}</Text>
                </Body>
              </Left>
              <Right>
@@ -121,13 +123,16 @@ export default class MentorCard extends Component {
              </CardItem>
 
            
-           <FlexColumn style={{justifyContent:"center",alignItems: 'center',}}>  
+           <FlexColumn style={{justifyContent:"center",alignItems: 'center',}}>
            <NameText>
-                  Date:- 1st Oct 2018
-           </NameText>
-           <NameText>
-                  Time:- 8:00 pm
-           </NameText>
+                 {this.state.action}
+          </NameText>  
+          <NameText>
+                   Date:- {this.props.date}
+            </NameText>
+            <NameText>
+                   Time:- {this.props.time}
+            </NameText>
            </FlexColumn>
            
 
@@ -135,9 +140,11 @@ export default class MentorCard extends Component {
 
 
            <CardItem>
+               {this.props.isMentor && 
                <View style={{flexDirection: 'row',}}>
            
-                <Button transparent textStyle={{color: '#87838B'}} style={{borderWidth: 1,flex:1}}>
+                <Button transparent textStyle={{color: '#87838B'}} style={{borderWidth: 1,flex:1}}
+                onPress={()=>this.updateTrainingApi('cancel')}>
                  
                   <Text style={{textAlign:"center"}}>Cancel</Text>
                 </Button>
@@ -145,19 +152,25 @@ export default class MentorCard extends Component {
              
 
               
-                <Button transparent textStyle={{color: '#87838B'}} style={{borderWidth: 1,flex:1}}>
+                <Button transparent textStyle={{color: '#87838B'}} style={{borderWidth: 1,flex:1}}
+                onPress={()=>this.updateTrainingApi('approved')}>
                   <Text>Approve</Text>
                 </Button>
-                </View>
+                </View>}
            </CardItem>
          </Card>
+         
+        }
 
-          <Card style={{backgroundColor:'#ff1a1a'}}>
+
+
+         {this.props.status=='cancel' &&  <Card style={{backgroundColor:'#ff1a1a'}}>
           <CardItem >
             <Left>
-              <Thumbnail source={{uri: 'http://www.myiconfinder.com/uploads/iconsets/256-256-f86ca6f98affc4bfe9306d9693638920.png'}} />
-              <Body>
-                <Text>Name</Text>
+            <Thumbnail source={{uri:this.props.avatar}} />
+                <Body>
+                  <Text>{this.props.name}</Text>
+                  <Text note>{this.props.prof}</Text>
                 <Text note>Profession</Text>
               </Body>
             </Left>
@@ -171,13 +184,16 @@ export default class MentorCard extends Component {
             </CardItem>
 
           
-          <FlexColumn style={{justifyContent:"center",alignItems: 'center',}}>  
+          <FlexColumn style={{justifyContent:"center",alignItems: 'center',}}>
           <NameText>
-                 Date:- 1st Oct 2018
-          </NameText>
+                 {this.state.action}
+          </NameText>  
           <NameText>
-                 Time:- 8:00 pm
-          </NameText>
+                   Date:- {this.props.date}
+            </NameText>
+            <NameText>
+                   Time:- {this.props.time}
+            </NameText>
           </FlexColumn>
           
 
@@ -188,7 +204,7 @@ export default class MentorCard extends Component {
              
 
           </CardItem>
-        </Card>
+        </Card>}
 
         </View>
     );
