@@ -52,7 +52,7 @@ export default class MyRequests extends Component{
         if (data.message == "request") {
           console.log("Success")
           
-          this.setState({list:data.records,loading:false})
+          this.setState({list:data.records.reverse(),loading:false})
         } else if (data.message) {
           Alert.alert(data.message)
         }
@@ -89,7 +89,9 @@ export default class MyRequests extends Component{
             key={index}
             name={item.name}
             prof={item.professional}
+            mob={item.mobile_no}
             avatar={item.avatar}
+            amount={item.amount}
             isMentor={false}
             />
          )

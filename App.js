@@ -93,7 +93,11 @@ const AppDrawerNavigator = createDrawerNavigator({
   screen: Contacts,
   navigationOptions: { header: null }
   }, 
-
+  MentorStudent:{
+    screen:MentorStudent,
+    navigationOptions: { header: null }
+  },
+ 
   Logout:{
     screen: LoginScreen,
   navigationOptions: { header: null }
@@ -164,32 +168,30 @@ const AppStackNavigator = createStackNavigator({
       screen:Comments,
       //navigationOptions: { header: null }
     },
-    HelpPage:{
-      screen: HelpPage,
-      // navigationOptions: { header: null }
-      },
-   AreaHead:{
-      screen: AreaHead,
-        // navigationOptions: { header: null }
-  }, 
+   
   NewVideo:{
     screen:NewVideo,
     //navigationOptions: { header: null }
   },
-  List:{
-    screen:List,
-    //navigationOptions: { header: null }
-  },
-  MentorStudent:{
-    screen:MentorStudent,
-    navigationOptions: { header: null }
-  },
+  HelpPage:{
+    screen: HelpPage,
+    // navigationOptions: { header: null }
+    },
+ AreaHead:{
+    screen: AreaHead,
+      // navigationOptions: { header: null }
+}, 
+List:{
+  screen:List,
+  //navigationOptions: { header: null }
+},
+ 
   MentorTime:{ 
     screen:MentorTime,
     //navigationOptions: { header: null }
   },
 },{
-  initialRouteName:'Login',
+  initialRouteName:'SignupScreen',
 
 })
 

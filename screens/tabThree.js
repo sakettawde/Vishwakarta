@@ -158,7 +158,7 @@ export default class tabOne extends Component{
               active={true}
               //direction="up"
               containerStyle={{ }}
-              style={{ backgroundColor: '#5067FF' }}
+              style={{ backgroundColor: '#00AA8A' }}
               position="bottomRight"
               onPress={() => this.props.navigation.navigate('Newpost',{
                 tab:"temple",

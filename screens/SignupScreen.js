@@ -1,11 +1,12 @@
 import React from 'react';
-import { StatusBar,  View ,Alert } from 'react-native';
+import { StatusBar,  View ,Alert ,ScrollView} from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Label , Button ,DatePicker, Text, Left, Right 
 , Radio, Picker,Icon, Row} from 'native-base';
 //import Dialog from "react-native-dialog";
 import { ListGotra ,ListProf} from "../assets/ApiUrl";
-
-import {NextButton,ButtonText ,FlexColumn,ScreenTitle} from "../utils/styles";
+import styled from 'styled-components';
+import {LoginButton,ButtonText2 ,FlexColumn,ScreenTitle,FlexRow
+      ,StyledTextInput,TextField,TextLabel} from "../utils/styles";
 import { LinearGradient } from "expo";
 
 
@@ -197,8 +198,8 @@ export default class SignUp extends React.Component {
       .then(data => {
         if(data.message=="Data available"){
           this.setState({proflist:data.records,selected_prof:this.state.proflist[this.state.proflist.length-1].id})
-          var temp=this.state.proflist.find((item)=>{
-            return item.id ===this.state.selected_prof
+          var temp=this.data.records.find((item)=>{
+            return item.id == "1"
           })
           this.setState({
             prof_name: temp.name
@@ -220,12 +221,51 @@ export default class SignUp extends React.Component {
  
   render() {
     return (
+      <LinearGradient
+      colors={["#00aa8a", "#00b392"]}
+      start={{ x: 0.0, y: 0.0 }}
+      end={{ x: 0.0, y: 1.0 }}
+      style={{ width: "100%", height: "100%",marginTop: StatusBar.currentHeight}}
+    >
+    <ScrollView style={{marginBottom:20}}>
       <FlexColumn style={{flex:1,margin:10,marginTop: StatusBar.currentHeight}}>
         <ScreenTitle>SignUp</ScreenTitle>
 
         <FlexColumn>
           <Form>
-            <Item stackedLabel>
+          <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+            <FlexRow style={{alignItems:"center",}}>
+              <TextLabel>Name</TextLabel>
+              <StyledTextInput
+              selectionColor="#3f51b5"
+              underlineColorAndroid="transparent"
+              autoCapitalize="words" onChangeText={text=>{this.setState({name:text})}}
+              />
+            </FlexRow>
+          </TextField>
+          <TextField style={{alignSelf: 'center',marginTop: 12}}>
+            <FlexRow style={{alignItems:"center",}}>
+              <TextLabel>Mobile</TextLabel>
+              <StyledTextInput
+              selectionColor="#3f51b5"
+              underlineColorAndroid="transparent"
+              onChangeText={text=>{this.setState({mobile_num:text})}}
+                keyboardType="numeric"
+                maxLength={10}
+              />
+            </FlexRow>
+          </TextField>
+          <TextField style={{alignSelf: 'center',marginTop: 12}}>
+            <FlexRow style={{alignItems:"center"}}>
+              <TextLabel>Password</TextLabel>
+              <StyledTextInput
+              selectionColor="#3f51b5"
+              underlineColorAndroid="transparent"
+              secureTextEntry={true} onChangeText={text=>{this.setState({password:text})}}
+              />
+            </FlexRow>
+          </TextField>
+            {/* <Item stackedLabel>
               <Label>Name</Label>
               <Input autoCapitalize="words" onChangeText={text=>{this.setState({name:text})}}/>
             </Item>
@@ -237,8 +277,8 @@ export default class SignUp extends React.Component {
             <Item stackedLabel>
               <Label>Password</Label>
               <Input  secureTextEntry={true} onChangeText={text=>{this.setState({password:text})}}/>
-            </Item>
-            <Item stackedLabel>
+            </Item> */}
+            {/* <Item stackedLabel>
                 <Label>BirthDate</Label>
               
                 <DatePicker
@@ -257,10 +297,29 @@ export default class SignUp extends React.Component {
                   
                   />
                   
-            </Item>
-
+            </Item> */}
+             <TextField style={{alignSelf: 'center',marginTop: 12}}>
+            <FlexRow style={{alignItems:"center",}}>
+              <TextLabel>BirthDate</TextLabel>
+              <DatePicker
+                  defaultDate={new Date(1996, 1, 1)}
+                  minimumDate={new Date(1975, 1, 1)}
+                  maximumDate={new Date(2018, 12, 31)}
+                  locale={"en"}
+                  timeZoneOffsetInMinutes={undefined}
+                  modalTransparent={false}
+                  animationType={"fade"}
+                  androidMode={"default"}
+                  placeHolderText="Select date"
+                  placeHolderTextStyle={{ color: "#fff" }}
+                  textStyle={{ color: "#fff" }}
+                  onDateChange={text=>this.setState({chosenDate:text})}           
+                  />
+                {/* <Text >{this.state.chosenDate.toString().substr(4, 12)}</Text> */}
+            </FlexRow>
+          </TextField>
             
-            <Item>
+            {/* <Item>
               <View style={{flexDirection:'row',justifyContent:"space-evenly",padding:10}}>
                 <View style={{flex:5,flexDirection:"row"}}>
                   <View style={{flex:1}}>
@@ -283,11 +342,36 @@ export default class SignUp extends React.Component {
                 </View>
               </View>
               
-            </Item>
+            </Item> */}
+            <TextField style={{alignSelf: 'center',marginTop: 12}}>
+            <FlexRow style={{alignItems:"center",}}>
+                  <View style={{flex:5,flexDirection:"row"}}>
+                  <View style={{flex:1}}>
+                    <Radio selected={this.state.isSelect1} onPress={this._onPressHandle}
+                    selectedColor='#007a5d'/>
+                    </View>
+                  <View style={{flex:3,flexDirection:'row'}}>
+                   <Text style={{color:'#fff'}}>Business</Text>
+                   </View>
+                </View>
+                <View style={{flex:1}}></View>
+                <View style={{flex:5,flexDirection:"row"}}>
+                  
+                    <View style={{flex:1}}>
+                    <Radio selected={this.state.isSelect2} onPress={this._onPressHandle}
+                    selectedColor='#007a5d'/>
+                    </View>
+                    <View style={{flex:3,flexDirection:'row'}}>
+                   <Text style={{color:'#fff'}}>Employed</Text>
+                   </View>
+                </View>
+            </FlexRow>
+           
+          </TextField>
             
 
 
-            <Item>
+            {/* <Item>
             <Text>Profession</Text>
             <Picker
               style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}
@@ -307,10 +391,35 @@ export default class SignUp extends React.Component {
             <Icon name='md-add' />
             <Text>Other</Text>
           </Button>
-          </Item>
+          </Item> */}
+          <TextField style={{alignSelf: 'center',marginTop: 12}}>
+            <FlexRow style={{alignItems:"center",flex:1}}>
+              
+              
+              <Picker
+              mode="dropdown"
+              placeholder="Select"
+              placeholderStyle={{ color: "#fff" }}
+
+              Icon={<Icon name="ios-arrow-down-outline" />}
+              selectedValue={this.state.selected_prof}
+              onValueChange={this.onProfChange.bind(this)}
+            >
+
+              {this.state.proflist.map(item => (
+                <Picker.Item key={item.id} label={item.name} value={item.id}></Picker.Item>
+               ))}
+            </Picker>
+            <Button icon rounded light small onPress={()=>this.addProfHandler()} style={{marginTop:5}}>
+            <Icon name='md-add' />
+           </Button>
+            </FlexRow>
+
+            
+          </TextField>
 
 
-            <Item>
+            {/* <Item>
             <Text>Gotra</Text>
             <Picker
               style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}
@@ -331,7 +440,32 @@ export default class SignUp extends React.Component {
             <Icon name='md-add' />
             <Text>Other</Text>
           </Button>
-          </Item>
+          </Item> */}
+
+           <TextField style={{alignSelf: 'center',marginTop: 12}}>
+            <FlexRow style={{alignItems:"center",flex:1}}>
+              
+              
+            <Picker
+              style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}
+              mode="dropdown"
+              Icon={<Icon name="ios-arrow-down-outline" />}
+              selectedValue={this.state.selected_gotra}
+              onValueChange={this.onGotraChange.bind(this)}
+            >
+
+              
+              {this.state.gotralist.map(item => (
+                <Picker.Item key={item.id} label={item.gotra} value={item.id}></Picker.Item>
+               ))}
+            </Picker>
+            <Button icon rounded light small onPress={()=>this.addGotraHandler()} style={{marginTop:5}}>
+            <Icon name='md-add' />
+           </Button>
+            </FlexRow>
+
+            
+          </TextField>
           
             
             
@@ -340,27 +474,23 @@ export default class SignUp extends React.Component {
 
           
 
-          <NextButton 
+          <LoginButton 
           onPress={this.fillinfo}
-          style={{marginTop: 10,}}  
+          style={{marginTop: 10,marginBottom:20}}  
           >
-          <LinearGradient
-                colors={["#7c98fd", "#4e43f9"]}
-                start={{ x: 0.0, y: 1.0 }}
-                end={{ x: 1.0, y: 0.0 }}
-                style={{ width: "100%", height: "100%",borderRadius:10}}
-              >
+         
 
-            <ButtonText>Next</ButtonText>
-          </LinearGradient>
-        </NextButton>
+            <ButtonText2>Next</ButtonText2>
+          
+        </LoginButton>
 
 
         </FlexColumn>
         
       </FlexColumn>
+      </ScrollView>
     
-      
+      </LinearGradient>
     );
   }
 }

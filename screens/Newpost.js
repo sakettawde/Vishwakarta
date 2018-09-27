@@ -150,7 +150,7 @@ export default class Newpost extends Component {
           disabled={this.state.loading_image} 
           >
           <LinearGradient
-                colors={["#7c98fd", "#4e43f9"]}
+                 colors={["#00aa8a", "#00b392"]}
                 start={{ x: 0.0, y: 1.0 }}
                 end={{ x: 1.0, y: 0.0 }}
                 style={{ width: "100%", height: "100%",borderRadius:10}}
@@ -164,7 +164,7 @@ export default class Newpost extends Component {
         {this.state.imageurl &&
               <Swiper style={{height:200, width:Dimensions.get('window').width}} loop={false} >
               
-            {this.state.url_array.map((item,index)=>
+            {this.state.image_array.map((item,index)=>
             <View style={{flex: 1,justifyContent: 'center', alignItems: 'center',height:200}} key={index}>
             <Image source={{uri: item}} 
             style={{flex:1 ,height: 200, width: Dimensions.get('window').width}}/>

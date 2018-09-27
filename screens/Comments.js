@@ -185,20 +185,6 @@ export default class Comments extends Component {
             </Item>
           </Form>
 
-        {/* <NextButton 
-          onPress={() => this.onPostHandler()}
-          style={{marginTop: 10}}  
-          >
-          <LinearGradient
-                colors={["#7c98fd", "#4e43f9"]}
-                start={{ x: 0.0, y: 1.0 }}
-                end={{ x: 1.0, y: 0.0 }}
-                style={{ width: "100%", height: "100%",borderRadius:10}}
-              >
-
-            <ButtonText>Post</ButtonText>
-          </LinearGradient>
-        </NextButton> */}
         </KeyboardAwareScrollView>
 
         </View>

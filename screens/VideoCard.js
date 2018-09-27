@@ -10,7 +10,7 @@ export default class VideoCard extends Component {
       
             <MyCard>
                  <LinearGradient
-                colors={["#0f4cad", "#0341a3"]}
+                colors={["#008068", "#00997d"]}
                 start={{ x: 0.0, y: 0.0 }}
                 end={{ x: 1.0, y: 1.0 }}
                 style={{ borderRadius:10}}

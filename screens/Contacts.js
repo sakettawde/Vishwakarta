@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Header, Item, Input, Icon, Button, Text ,
-Content , List , ListItem , Left , Body , Right , Thumbnail, Picker } from 'native-base';
+Content , List , ListItem , Left , Body , Right , Thumbnail, Picker,StyleProvider } from 'native-base';
 import {Switch ,Alert,ScrollView,StatusBar} from 'react-native';
 import { UserList, UserSearch,ListProf,ProfSearch } from "../assets/ApiUrl";
+import getTheme from '../native-base-theme/components';
+import material from '../native-base-theme/variables/material';
 
 
 export default class Contacts extends Component {
@@ -198,6 +200,7 @@ UserListApi = () =>{
    
     
       return (
+        <StyleProvider style={getTheme(material)}>
         <Container style={{marginTop: StatusBar.currentHeight}}>
           
           {this.state.SwitchOnValueHolder?(
@@ -254,6 +257,7 @@ UserListApi = () =>{
                         <ListItem key={index} avatar 
                         onPress={()=>{ this.props.navigation.navigate('UserProfile',{
                           user_id:item.user_id,
+                          user_name:item.name
                          // current_id:this.state.user_id
                       })
                       }} >
@@ -271,7 +275,7 @@ UserListApi = () =>{
             </List>
             </ScrollView>
           </Content>
-        </Container>
+        </Container></StyleProvider>
       );
   
     

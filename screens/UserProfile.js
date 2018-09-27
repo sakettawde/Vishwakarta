@@ -4,11 +4,17 @@ import {
   View,
   Image,Alert
 } from 'react-native';
-import {Text , Label , Left ,Right ,Container, Header, Content, List, ListItem,Title, Input, Button } from 'native-base';
+import {Text , Label , Left ,Right ,Container, Header, 
+  Content, List, ListItem,Title, Input, Button,StyleProvider } from 'native-base';
 import { Userinfo } from "../assets/ApiUrl";
+import getTheme from '../native-base-theme/components';
+import material from '../native-base-theme/variables/material';
 
 
 export default class UserProfile extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: (navigation.getParam('user_name')) ,
+  });
   constructor(){
     super();
     this.state = {
@@ -65,6 +71,8 @@ UserInfoApi = () =>{
   render() {
     
     return (
+      <StyleProvider style={getTheme(material)}>
+
       <Container >
         {/* <Header /> */}
         <Content>
@@ -141,7 +149,7 @@ UserInfoApi = () =>{
           
  
         </Content>
-      </Container>
+      </Container></StyleProvider>
     )
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet,  View, ScrollView,Alert ,Dimensions, TouchableOpacity,Image,ActivityIndicator } from 'react-native';
-import {Container,  Content, Form, Item, Input, Label , Button, Text, Left, Right, Picker,Icon, List, ListItem, Radio} from 'native-base';
+import { StyleSheet,  View, ScrollView,Alert ,FlatList, TouchableOpacity,Image,ActivityIndicator } from 'react-native';
+import {Container,  Content, Form, Item, Input, Label , Button, Text, Left, Right, Picker,Icon, List, ListItem, Radio, Card, CardItem} from 'native-base';
 import { ImagePicker ,LinearGradient,Permissions,ImageManipulator} from 'expo';
 import {NextButton,ButtonText,ScreenTitle,FlexColumn} from '../utils/styles';
 import ActionSheet from 'react-native-actionsheet';
@@ -12,6 +12,7 @@ import * as firebase from 'firebase';
 
 
 import { Signup , PincodeUrl } from "../assets/ApiUrl";
+import Body from '../native-base-theme/components/Body';
 
 // let config = firebase.initializeApp({
 //   apiKey: "AIzaSyCm0jK5vNR0ReGioasbburhDboFMqoVvM0",
@@ -255,26 +256,25 @@ _onPressHandle=()=>{
 
           {this.state.showhome && this.state.pincodeData && this.state.pincodeData.length > 0 ?(
 
-            <ScrollView >
-            <List>
-              <ListItem itemHeader style={{flexDirection:"row",justifyContent:"space-evenly"}}  >
-                  <Text>Name</Text>
-                  <Text>Taluka</Text>
-                  <Text>District</Text>
-                  <Text>State</Text>
-              </ListItem>
+                  <FlatList style={{paddingVertical: 10}}
+                  keyExtractor={(item)=>{
+                  return item.Name;
+                  }}              
+                  data={this.state.pincodeData}
 
-              {this.state.pincodeData.map((item,index)=>(
-                      <ListItem key={index} style={{flexDirection:"row",justifyContent:"space-evenly"}} >
-                      
-                      <TouchableOpacity onPress={()=>this.selectedHomePincode(item)}><Text>{item.Name}</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={()=>this.selectedHomePincode(item)}><Text>{item.Taluk}</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={()=>this.selectedHomePincode(item)}><Text>{item.District}</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={()=>this.selectedHomePincode(item)}><Text>{item.State}</Text></TouchableOpacity>
-                      </ListItem>
-              ))}
-            </List>
-            </ScrollView>
+                  renderItem={({item})=>
+
+                  <Card style={{marginRight:5,marginLeft:5,marginTop:3}} >
+                  <CardItem button onPress={()=>this.selectedHomePincode(item)}>
+                  <Icon active name="md-locate" />
+                  <View style={{flexDirection:'column'}}>
+                  <Text>{item.Name}</Text>
+                  <Text note>{item.Taluk} , {item.District}</Text>
+                  <Text note>{item.State}</Text>
+                  </View>
+                  </CardItem>
+                  </Card>
+                  }/>
           ):(<View></View>)}     
            
           {this.state.homedata && 
@@ -294,7 +294,7 @@ _onPressHandle=()=>{
                   keyboardType = 'numeric' maxLength={6}/>
             </Item>
 
-                {this.state.showcurrent && this.state.pincodeData && this.state.pincodeData.length > 0 ?(
+        {/* {this.state.showcurrent && this.state.pincodeData && this.state.pincodeData.length > 0 ?(
 
             <ScrollView >
             <List>
@@ -316,7 +316,30 @@ _onPressHandle=()=>{
               ))}
             </List>
             </ScrollView>
-             ):(<View></View>)}
+             ):(<View></View>)} */}
+
+             {this.state.showcurrent && this.state.pincodeData && this.state.pincodeData.length > 0 ?(
+               <FlatList style={{paddingVertical: 10}}
+                  keyExtractor={(item)=>{
+                  return item.Name;
+                }}              
+                data={this.state.pincodeData}
+                
+                renderItem={({item})=>
+               
+               <Card style={{marginRight:5,marginLeft:5,marginTop:3}} >
+               <CardItem button onPress={()=>this.selectedCurrentPincode(item)}>
+                 <Icon active name="md-locate" />
+                 <View style={{flexDirection:'column'}}>
+                 <Text>{item.Name}</Text>
+                 <Text note>{item.Taluk} , {item.District}</Text>
+                 <Text note>{item.State}</Text>
+                 </View>
+                </CardItem>
+              </Card>
+                
+              }/>
+             ):(<View/>)}
 
              {this.state.currentdata && 
           <Item stackedLabel>
@@ -384,7 +407,7 @@ _onPressHandle=()=>{
           disabled={this.state.image_loading}
           >
           <LinearGradient
-                colors={["#7c98fd", "#4e43f9"]}
+                 colors={["#00aa8a", "#00b392"]}
                 start={{ x: 0.0, y: 1.0 }}
                 end={{ x: 1.0, y: 0.0 }}
                 style={{ width: "100%", height: "100%",borderRadius:10}}

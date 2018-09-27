@@ -62,7 +62,7 @@ export default class LoginScreen extends Component {
         ["user_name", record.name],["prof", record.professional],
         ["cvillage", record.cvillage],["avatar", record.avatar],
         ["cpincode",record.current_pincode],
-        ["role",record.role],["mentor",record.mentor]
+        ["role",record.role],["mentor",record.mentor],["mobile_no",record.mobile_no]
       ])
       
       this.setState({loading:false})
@@ -123,7 +123,7 @@ export default class LoginScreen extends Component {
     if(this.state.load_page){
     return (
       <LinearGradient
-                colors={["#7c98fd", "#4e43f9"]}
+                colors={["#00aa8a", "#00b392"]}
                 start={{ x: 0.0, y: 0.0 }}
                 end={{ x: 0.0, y: 1.0 }}
                 style={{ width: "100%", height: "100%",marginTop: StatusBar.currentHeight}}
@@ -208,7 +208,7 @@ export default class LoginScreen extends Component {
     )}
     else{
       return( <LinearGradient
-        colors={["#3F51B5", "#3F51B6"]}
+        colors={["#00AA8A", "#00AA8B"]}
         start={{ x: 0.0, y: 0.0 }}
         end={{ x: 0.0, y: 1.0 }}
         style={{ width: "100%", height: "100%",marginTop: StatusBar.currentHeight}}
@@ -228,7 +228,7 @@ const ButtonText = styled.Text`
 font-size: 18px;
   font-weight: 300;
   text-align: center;
-  color: #4e43f9;
+  color: #00AA8A;
 `
 
 const LoginButton = styled.TouchableOpacity`
@@ -257,7 +257,7 @@ const TextLabel = styled.Text`
 const TextField = styled.View`
   border-radius: 5px;
   width:80%;
-  background-color: rgba(124, 152, 253, 0.87);
+  background-color: #00e6bb;
   padding: 20px;
 `
 

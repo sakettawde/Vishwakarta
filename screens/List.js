@@ -230,6 +230,7 @@ export default class Contacts extends Component {
                         <ListItem key={index} avatar 
                         onPress={()=>{ this.props.navigation.navigate('UserProfile',{
                           user_id:item.user_id,
+                          user_name:item.name
                          // current_id:this.state.user_id
                       })
                       }} >

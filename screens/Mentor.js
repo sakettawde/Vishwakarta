@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Header, Item, Input, Icon, Button, Text ,
 Content , List , ListItem , Left , Body , Right , Thumbnail,Toast } from 'native-base';
-import {Alert,ScrollView,View,ActivityIndicator} from 'react-native';
+import {Alert,ScrollView,View,ActivityIndicator,AsyncStorage} from 'react-native';
 import {ViewMentor } from "../assets/ApiUrl";
 import styled from 'styled-components';
 import { FlexRow } from '../utils/styles';
@@ -14,15 +14,27 @@ export default class Mentor extends Component {
      super();
      this.state ={
       list:{},
-      flag:false
+      flag:false,
+      user_id:''
       }
     }
 
     componentDidMount(){
+      this._retrieveData()
       this.viewMentorApi()
     }
     
-    
+    _retrieveData = async () => {
+      try {
+        const value1=await AsyncStorage.getItem('user_id');
+        await this.setState({user_id:value1});  
+        console.log( "id",value1);
+      
+       } catch (error) {
+         console.log(error)
+       }
+    }
+  
   
       
     viewMentorApi = (value) =>{
@@ -61,13 +73,13 @@ export default class Mentor extends Component {
 
     
 
-showToast=()=>{
-  Toast.show({
-    text: "Request Sent",
-    buttonText: "Okay",
-    duration: 2000
-  })
-}
+// showToast=()=>{
+//   Toast.show({
+//     text: "Request Sent",
+//     buttonText: "Okay",
+//     duration: 2000
+//   })
+// }
 
 
   
@@ -86,7 +98,7 @@ showToast=()=>{
               {this.state.list && this.state.list.length > 0 ? 
               this.state.list.map((item,index)=>{
 
-                return(
+                return this.state.user_id!=item.user_id?
                 <ListItem avatar key={index}>
                 <Left>
                     <Thumbnail source={{ uri:item.avatar}} />
@@ -100,18 +112,21 @@ showToast=()=>{
                     <SaveButton onPress={()=>{this.props.navigation.navigate('MentorTime',{
                         info:"call",
                         mid:item.user_id,
-                        toast:this.showToast
+                        name:item.name,
+                        mob:item.mobile_no
+                        
                     })}}><SaveText>Call</SaveText></SaveButton>
                     <SaveButton onPress={()=>{this.props.navigation.navigate('MentorTime',{
                         info:"visit",
                         mid:item.user_id,
-                        toast:this.showToast
-                    })}}>
+                        name:item.name,
+                        mob:item.mobile_no
+                        })}}>
                     <SaveText>Visit</SaveText></SaveButton>
                     <View></View>
                     </FlexRow>
                 </Body>
-              </ListItem>)
+              </ListItem> :<View/>
               }):(<View style={{flexDirection:'column'}}>
               <Text>Searching Mentor...</Text>
               <ActivityIndicator size='large'/>

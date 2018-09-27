@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image ,Dimensions ,View,StyleSheet,Alert} from 'react-native';
+import { Image ,Dimensions ,View,StyleSheet,Alert,AsyncStorage} from 'react-native';
 import { CardItem, Thumbnail, Text, Button, Left, Right , Body  } from 'native-base';
 import styled from "styled-components";
 import {UpdateTraining} from '../assets/ApiUrl';
@@ -13,11 +13,16 @@ export default class MentorCard extends Component {
     state={
       action:"",
       status:"approved",
-      trainId:""      
+      trainId:"",
+      name:""      
     }
 
   
     componentDidMount(){
+      if(this.props.status=='pending'){
+        this._retrieveData()
+      }
+
       if(this.props.action=='call'){
         this.setState({action:"CALL"})
       }
@@ -25,10 +30,20 @@ export default class MentorCard extends Component {
         this.setState({action:"VISIT"})
       }
     }
+    _retrieveData = async () => {
+      try {
+        const value1=await AsyncStorage.getItem('user_name');
+        await this.setState({name:value1});
+
+      
+       } catch (error) {
+         console.log(error)
+       }
+    }
 
   updateTrainingApi = (value) => {
     console.log("In updateTraining")
-    this.setState({loading:true})
+    this.setState({loading:true,status:value})
     fetch(UpdateTraining, {
       method: "POST",
       headers: {
@@ -48,6 +63,7 @@ export default class MentorCard extends Component {
 
         if (data.message == "Training Updated") {
           console.log("Success")
+          this.sendMessage()
           this.props.update()
           
         } else if (data.message) {
@@ -59,6 +75,41 @@ export default class MentorCard extends Component {
  });
 }  
 
+sendMessage = () => {
+
+ 
+  let Inquirymsg = "Hi "+this.props.name+","+this.state.name+" has "+this.state.status+
+                " the "+this.props.action+" with you at 8pm on 4th of July"
+
+  console.log(Inquirymsg)
+  let authkey = "226898AmIKM4WBH5b502d68"
+  let sender = "MSGIND"
+  let route = "4"
+  let number = this.props.mob
+  let urlInquiry='http://control.msg91.com/api/sendhttp.php?authkey='+authkey+'&mobiles='+number+'&message='+Inquirymsg+'&sender='+sender+'&route='+route+'&country=91';
+
+
+  fetch(urlInquiry, { mode: "no-cors" }).then(response => {
+    console.log(response)
+  })
+}
+// sendMessageCancelled = () => {
+
+ 
+//   let Inquirymsg = "Hi name,someone has cancelled the call/meeting with you @8pm on 4th of July"
+
+
+//   let authkey = "226898AmIKM4WBH5b502d68"
+//   let sender = "MSGIND"
+//   let route = "4"
+//   let number = this.state.mobile_num
+//   let urlInquiry='http://control.msg91.com/api/sendhttp.php?authkey='+authkey+'&mobiles='+number+'&message='+Inquirymsg+'&sender='+sender+'&route='+route+'&country=91';
+
+
+//   fetch(urlInquiry, { mode: "no-cors" }).then(response => {
+//     console.log(response)
+//   })
+// }
 
     
   render() {
@@ -72,6 +123,7 @@ export default class MentorCard extends Component {
                 <Body>
                   <Text>{this.props.name}</Text>
                   <Text note>{this.props.prof}</Text>
+                  <Text note>{this.props.mob}</Text>
                 </Body>
               </Left>
               <Right>
@@ -94,6 +146,12 @@ export default class MentorCard extends Component {
             <NameText>
                    Time:- {this.props.time}
             </NameText>
+            {this.props.amount && this.props.amount > '0'? <NameText>
+                   Amount Requested:- {this.props.amount}
+            </NameText>:<View></View>
+          }
+           
+            
             </FlexColumn>
             <CardItem>
             </CardItem>
@@ -111,6 +169,7 @@ export default class MentorCard extends Component {
                 <Body>
                   <Text>{this.props.name}</Text>
                   <Text note>{this.props.prof}</Text>
+                  <Text note>{this.props.mob}</Text>
                </Body>
              </Left>
              <Right>
@@ -133,6 +192,11 @@ export default class MentorCard extends Component {
             <NameText>
                    Time:- {this.props.time}
             </NameText>
+            {this.props.amount && this.props.amount > '0'?<NameText>
+                   Amount Requested:- {this.props.amount}
+            </NameText>:<View></View>
+          }
+            
            </FlexColumn>
            
 
@@ -171,7 +235,7 @@ export default class MentorCard extends Component {
                 <Body>
                   <Text>{this.props.name}</Text>
                   <Text note>{this.props.prof}</Text>
-                <Text note>Profession</Text>
+                  <Text note>{this.props.mob}</Text>
               </Body>
             </Left>
             <Right>
@@ -194,6 +258,10 @@ export default class MentorCard extends Component {
             <NameText>
                    Time:- {this.props.time}
             </NameText>
+            {this.props.amount && this.props.amount > '0'?<NameText>
+                   Amount Requested:- {this.props.amount}
+            </NameText>:<View></View>
+          }
           </FlexColumn>
           
 

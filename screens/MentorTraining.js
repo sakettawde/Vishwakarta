@@ -32,7 +32,7 @@ export default class MyRequests extends Component{
       await this.setState({mentor:value,user_id:value1});
       this.ViewTrainingApi()
 
-      console.log("mentor ",value);
+      console.log("mentor ",value," id",value1);
     
      } catch (error) {
        console.log(error)
@@ -99,7 +99,7 @@ export default class MyRequests extends Component{
             if (data.message == "trainings") {
               console.log("Success")
               
-              this.setState({list:data.records,loading:false})
+              this.setState({list:data.records.reverse(),loading:false})
             } else if (data.message) {
               Alert.alert(data.message)
             }
@@ -108,7 +108,7 @@ export default class MyRequests extends Component{
         console.log(error.message);
      });
     }  
-
+    
 
   
   render(){
@@ -149,7 +149,7 @@ export default class MyRequests extends Component{
             
             {this.state.list && this.state.list.length>0?
                  this.state.list.map((item,index)=>{
-                     return(
+                     return (
                         <MentorCard 
                         status={item.status}
                         action={item.action}
@@ -158,12 +158,14 @@ export default class MyRequests extends Component{
                         key={index}
                         name={item.name}
                         prof={item.professional}
+                        mob={item.mobile_no}
                         avatar={item.avatar}
+                    
                         isMentor={true}
                         train_id={item.id}
                         update={this.ViewTrainingApi}
-                        />
-                     )
+                        />)
+                       
                  }):(
                 <View style={{flex: 1,}}>
                 <Text style={{textAlign:'center'}}>Congratulations!You are a Mentor! </Text>

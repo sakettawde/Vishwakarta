@@ -117,12 +117,12 @@ export default class VideoTab extends Component{
         />}
       
       
-      {this.state.loading && <View style={{flex:0}}>
+      {!this.state.loading && <View style={{flex:0}}>
       <Fab
               active={true}
               //direction="up"
               containerStyle={{ }}
-              style={{ backgroundColor: '#5067FF' }}
+              style={{ backgroundColor: '#00AA8A' }}
               position="bottomRight"
               onPress={() => this.props.navigation.navigate('NewVideo',{
                 user_id:this.state.user_id

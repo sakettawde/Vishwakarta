@@ -9,12 +9,16 @@ import {AddTraining} from '../assets/ApiUrl';
 export default class MentorTime extends React.Component {
   state={
    sid:"",
+   name:"",
    date: new Date(),
    time:"",
    info:"",
    show:false,
    mid:"",
-   request_amount:false
+   request_amount:false,
+   amount:0,
+   mentor_name:"",
+   mentor_mob:""
   }
 
 
@@ -25,19 +29,27 @@ export default class MentorTime extends React.Component {
     
     const mid=this.props.navigation.getParam('mid','no_info');
     console.log("mid ",mid);
+
+    let val1=this.props.navigation.getParam('name');
     
+    let val2=this.props.navigation.getParam('mob');
+    console.log("val1 ",val1," val2",val2);
+    
+
+
     if(temp=='visit'){
-        this.setState({show:true,info:temp,mid:mid});
+        this.setState({show:true,info:temp,mid:mid,mentor_name:val1,mentor_mob:val2});
     }
     else{
-      this.setState({info:temp,mid:mid});
+      this.setState({info:temp,mid:mid,mentor_name:val1,mentor_mob:val2});
     }
   }
   _retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('user_id');
-      console.log("user ",value);
-      this.setState({sid:value});
+      const value2 = await AsyncStorage.getItem('user_name');
+      console.log("userid ",value," name",value2);
+      this.setState({sid:value,name:value2});
      } catch (error) {
        console.log(error)
      }
@@ -55,7 +67,8 @@ export default class MentorTime extends React.Component {
         sid:this.state.sid,
         date:this.state.date.toString().substr(4,12),
         time:this.state.time,
-        action:this.state.info
+        action:this.state.info,
+        amount:this.state.amount
 
       })
     })
@@ -65,8 +78,8 @@ export default class MentorTime extends React.Component {
       .then(data => {
         console.log("AddTraining Response", data)
         if(data.message=="Training Requested"){
-           this.props.navigation.state.params.updateGotra() 
-          //this.props.navigation.state.params.toast()  
+             
+          this.sendMessageRequest()
           this.props.navigation.navigate('MentorStudent')
                   
         }
@@ -80,6 +93,24 @@ export default class MentorTime extends React.Component {
         console.log(error.message);
      });
   
+    }
+    sendMessageRequest = () => {
+  
+     
+      let Inquirymsg = "Hi "+this.state.mentor_name+","+this.state.name+" has requested an "+
+              this.state.info+" with you at "+this.state.time+" on "+this.state.date.toString().substr(4,12)
+    
+      console.log(Inquirymsg)
+      let authkey = "226898AmIKM4WBH5b502d68"
+      let sender = "MSGIND"
+      let route = "4"
+      let number = this.state.mentor_mob
+      let urlInquiry='http://control.msg91.com/api/sendhttp.php?authkey='+authkey+'&mobiles='+number+'&message='+Inquirymsg+'&sender='+sender+'&route='+route+'&country=91';
+    
+    
+      fetch(urlInquiry, { mode: "no-cors" }).then(response => {
+        console.log("Message Sent")
+      })
     }
 
 
@@ -184,7 +215,7 @@ export default class MentorTime extends React.Component {
           onPress={()=>this.addTrainingApi()}
           >
           <LinearGradient
-                colors={["#7c98fd", "#4e43f9"]}
+               colors={["#00aa8a", "#00b392"]}
                 start={{ x: 0.0, y: 1.0 }}
                 end={{ x: 1.0, y: 0.0 }}
                 style={{ width: "100%", height: "100%",borderRadius:10}}

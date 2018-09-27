@@ -22,20 +22,10 @@ export default class OtpScreen extends React.Component {
     random = Math.floor(Math.random() * (max - min + 1)) + min
     console.log(random)
 
-    // let authkey = "133779ATT6JFXy0k5850e783"
-    // let sender = "SHMGMT"
-    // let route = "4"
-    //let number = this.state.mobile_no
+   
     let Inquirymsg = "Hey there, here is ur otp :" + random
 
-    // let url =
-    //   "http://bhashsms.com/api/sendmsg.php?" +
-    //   "user=TEAM_MHOURZ&pass=MECHATRON&text=" +
-    //   message +
-    //   "&sender=MHOURZ&phone=" +
-    //   number +
-    //   "&priority=ndnd&stype=normal"
-    //console.log("url", url)
+
     let authkey = "226898AmIKM4WBH5b502d68"
     let sender = "MSGIND"
     let route = "4"
@@ -131,7 +121,7 @@ export default class OtpScreen extends React.Component {
           style={{marginTop: 10,}}  
           >
           <LinearGradient
-                colors={["#7c98fd", "#4e43f9"]}
+                 colors={["#00aa8a", "#00b392"]}
                 start={{ x: 0.0, y: 1.0 }}
                 end={{ x: 1.0, y: 0.0 }}
                 style={{ width: "100%", height: "100%",borderRadius:10}}

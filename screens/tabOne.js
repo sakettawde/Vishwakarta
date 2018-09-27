@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FeedCard2 from './FeedCard2';
 import { StatusBar, AsyncStorage, View ,FlatList,ScrollView,RefreshControl,Alert,ActivityIndicator } from 'react-native';
-import { Fab,Icon, Text } from 'native-base';
+import { Fab,Icon, Text ,StyleProvider} from 'native-base';
 import {AdminFeed} from '../assets/ApiUrl';
 
 
@@ -165,7 +165,7 @@ export default class tabOne extends Component{
                 active={true}
                 //direction="up"
                 containerStyle={{ }}
-                style={{ backgroundColor: '#5067FF' }}
+                style={{ backgroundColor: '#00AA8A' }}
                 position="bottomRight"
                 onPress={() => this.props.navigation.navigate('Newpost',{
                   tab:"admin",
