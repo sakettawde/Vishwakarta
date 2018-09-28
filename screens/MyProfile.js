@@ -6,12 +6,18 @@ import {
   Image,Alert,TouchableOpacity,ImageBackground
 } from 'react-native';
 import {Text , Label , Left ,Right ,Container, Header, Content, List, ListItem,Title, Input, Button 
-      , DatePicker,Picker,Icon} from 'native-base';
+      , DatePicker,Picker,Icon,StyleProvider, Card, CardItem} from 'native-base';
 import { Userinfo ,ListGotra ,ListProf ,PincodeUrl,EditUrl} from "../assets/ApiUrl";
+import getTheme from '../native-base-theme/components';
+import material from '../native-base-theme/variables/material';
 import styled from 'styled-components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 
 export default class ProfileSettings extends React.Component {
+  static navigationOptions = {
+    title: 'My Profile',
+  }
   constructor(){
     super();
     this.state = {
@@ -81,13 +87,16 @@ UserInfoApi = () =>{
     .then(data => {
       console.log("UserInfo Response", data)
       if(data.message=="Data available"){
-        this.setState({records:data.records})
+        this.setState({records:data.records[0]})
+       // console.log(data.records[0])
 
         this.setState({
-          name:data.records[0].name,
+        name:data.records[0].name,
         mobile_num:data.records[0].mobile_no,
         password:data.records[0].password,
         chosenDate:data.records[0].dob,
+        prof_name:data.records[0].professional,
+        gotra_name:data.records[0].gotra,
         home_pin:data.records[0].home_pincode,
         current_pin:data.records[0].current_pincode,
         cvillage:data.records[0].cvillage,
@@ -132,15 +141,14 @@ UserInfoApi = () =>{
         if(data.message=="Data available"){
           this.setState({gotralist:data.records})
           var temp=this.state.gotralist.find((item)=>{
-            return item.gotra ===this.state.records[0].gotra
+            return item.gotra ===this.state.records.gotra
           })
           //console.log(temp)
           this.setState({
-            selected_gotra: temp.id
-          });
-          this.setState({
+            selected_gotra: temp.id,
             gotra_name: temp.gotra
           });
+        
           //console.log(this.state.records)
           //console.log(data.records)                  
           console.log(this.state.selected_gotra)            
@@ -172,7 +180,7 @@ UserInfoApi = () =>{
         if(data.message=="Data available"){
           this.setState({proflist:data.records})
           var temp=this.state.proflist.find((item)=>{
-            return item.name ===this.state.records[0].professional
+            return item.name ===this.state.records.professional
           })
           this.setState({
             selected_prof: temp.id
@@ -343,20 +351,17 @@ home_handler=(text)=>{
 selectedHomePincode=(item)=>{
   //console.log('in home onPress')
   //console.log(item)
-  this.setState({hvillage:item.Name})
-  this.setState({htaluka:item.Taluk})
-  this.setState({hdistrict:item.District})
-  this.setState({hstate:item.State})
-  this.setState({showhome:false})
+  this.setState({hvillage:item.Name,htaluka:item.Taluk,hdistrict:item.District,hstate:item.State,showhome:false})
 }
 
 current_handler=(text)=>{
-  this.setState({current_pin:text})
+  
  // console.log(text)
   if(text.length < 6){
-    this.setState({pincodeData:[]})
+    console.log(text)
   }
   else{
+    
   this.pincodeApi(text)
   this.setState({showcurrent:true})
   }
@@ -373,27 +378,42 @@ selectedCurrentPincode=(item)=>{
 
 
   render() {
+    let info=this.state.records
+
+    const {
+      mobile_num,
+      name,
+      password,
+      chosenDate,
+      prof_name,
+      gotra_name,
+      current_pin,cdistrict,cstate,ctaluka,cvillage,
+      home_pin,hvillage,htaluka,hdistrict,hstate
+      
+    } = this.state
     
     return (
-      <Container style={{marginTop:StatusBar.currentHeight}}>
+      <StyleProvider style={getTheme(material)}>
+      <Container>
         {/* <Header /> */}
         <Content>
-          <ImageBackground source={{uri:"https://images.pexels.com/photos/443383/pexels-photo-443383.jpeg?auto=compress&cs=tinysrgb&h=350" }} 
-          style={{height: 144, alignSelf: "stretch"}}>
+         
             
-            <Image  source={{uri: "https://res.cloudinary.com/jerrick/image/upload/f_auto,fl_progressive,q_auto,c_fit,w_1100/t3onxzmjhmfbbah9ahzi"}}
-            style={{marginTop:104,height:80,width:80 ,borderRadius:40,alignSelf:"center"}}/> 
+            <Image  source={{uri: info.avatar}}
+            style={{marginTop:15,height:80,width:80 ,borderRadius:40,alignSelf:"center"}}/> 
 
-          </ImageBackground>
+          
+          <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>
 
-          <TitleText style={{alignSelf:"center",marginTop:64}}>{this.state.name}</TitleText>
-          <List>
+          <View style={{flexDirection:'column',marginBottom:10,marginLeft:10
+                    ,marginRight: 10,elevation:5,backgroundColor:"#F8F8F8",
+                    paddingTop:40,marginTop:-40}}>
 
             <ListItem>
             <Left style={{flex:1}}>
               <Text>Name</Text>
             </Left>
-              <Input value={this.state.name} editable={this.state.value} 
+              <Input value={name} editable={this.state.value} 
                     onChangeText={(text)=>{this.setState({name : text})}}/>
             </ListItem>
 
@@ -401,7 +421,7 @@ selectedCurrentPincode=(item)=>{
             <Left style={{flex:1}}>
               <Text>Contact</Text>
             </Left>
-              <Input value={this.state.mobile_num} editable={this.state.value}
+              <Input value={mobile_num} editable={this.state.value}
                       onChangeText={(text)=>{this.setState({mobile_num : text})}}
                       keyboardType="numeric" maxLength={10}/>
             </ListItem>
@@ -411,7 +431,7 @@ selectedCurrentPincode=(item)=>{
               <Left>
               <Text>Password</Text>
             </Left>
-              <Input value={this.state.password} 
+              <Input value={password} 
                       onChangeText={(text)=>{this.setState({password : text})}}
                       secureTextEntry={true}/>
             </ListItem>
@@ -431,15 +451,15 @@ selectedCurrentPincode=(item)=>{
                modalTransparent={false}
                animationType={"fade"}
                androidMode={"default"}
-               placeHolderText={this.state.records[0].dob.toString().substr(4, 12)}
+               placeHolderText={info.dob}
                textStyle={{ color: "green" }}
-               placeHolderTextStyle={{ color: "#d3d3d3" }}
+               placeHolderTextStyle={{ color: "#000" }}
                onDateChange={text=>this.setState({chosenDate:text})}
                
                />
                
             ):(
-              <Input placeholder={this.state.records[0].dob} editable={false}/>
+              <Input value={chosenDate.toString()} editable={false}/>
             )}
               
              
@@ -464,7 +484,7 @@ selectedCurrentPincode=(item)=>{
             </Picker>
 
             ):(
-              <Input placeholder={this.state.records[0].professional} editable={false}/>
+              <Input placeholder={prof_name} editable={false}/>
             )}
               
             </ListItem>
@@ -489,81 +509,84 @@ selectedCurrentPincode=(item)=>{
            </Picker>
 
             ):(
-              <Input placeholder={this.state.records[0].gotra} editable={false}/>
+              <Input placeholder={gotra_name} editable={false}/>
             )}
             </ListItem>
-
+            <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>
             <ListItem>
             <Left style={{flex:1}}>
               <Text>Current Pincode</Text>
             </Left>
-            <Input value={this.state.records[0].current_pincode} editable={this.state.value}
+            <Input value={current_pin} editable={this.state.value}
                 onChangeText={(text)=>this.current_handler(text)}
                 keyboardType = 'numeric' maxLength={6}/>
             </ListItem>
+            </KeyboardAwareScrollView>
             {this.state.showcurrent && this.state.pincodeData && this.state.pincodeData.length > 0 ?(
 
-                <ScrollView >
-                <List>
-                  <ListItem itemHeader style={{flexDirection:"row",justifyContent:"space-evenly"}}  >
-                      <Text>Name</Text>
-                      <Text>Taluka</Text>
-                      <Text>District</Text>
-                      <Text>State</Text>
-                  </ListItem>
+               
+                 <FlatList style={{paddingVertical: 10,paddingBottom:20,height:300}}
+                 scrollEnabled={true}
+                 keyExtractor={(item)=>{
+                 return item.Name;
+                 }}              
+                 data={this.state.pincodeData}
 
-                  {this.state.pincodeData.map((item,index)=>(
-                          <ListItem key={index} style={{flexDirection:"row",justifyContent:"space-evenly"}} >
-                          
-                            <TouchableOpacity onPress={()=>this.selectedCurrentPincode(item)}><Text>{item.Name}</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={()=>this.selectedCurrentPincode(item)}><Text>{item.Taluk}</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={()=>this.selectedCurrentPincode(item)}><Text>{item.District}</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={()=>this.selectedCurrentPincode(item)}><Text>{item.State}</Text></TouchableOpacity>
-                          </ListItem>
-                  ))}
-                </List>
-                </ScrollView> 
+                 renderItem={({item})=>
+
+                 <Card style={{marginRight:5,marginLeft:5,marginTop:3}} >
+                 <CardItem button onPress={()=>this.selectedHomePincode(item)}>
+                 <Icon active name="md-locate" />
+                 <View style={{flexDirection:'column'}}>
+                 <Text>{item.Name}</Text>
+                 <Text note>{item.Taluk} , {item.District}</Text>
+                 <Text note>{item.State}</Text>
+                 </View>
+                 </CardItem>
+                 </Card>
+                 }/>
                 ):(<View></View>)}
             
             <ListItem>
             <Left style={{flex:1}}>
               <Text>Current Address</Text>
             </Left>
-            <Input placeholder={this.state.cvillage+", "+this.state.ctaluka
-               +", "+this.state.cdistrict+", "+this.state.cstate} editable={false}/>
+            <Input placeholder={cvillage+", "+ctaluka
+               +", "+cdistrict+", "+cstate} editable={false}/>
             </ListItem>
               
-
+           
             <ListItem>
             <Left style={{flex:1}}>
               <Text>Home Pincode</Text>
             </Left>
-              <Input value={this.state.records[0].home_pincode} editable={this.state.value}
+              <Input value={home_pin} editable={info.value}
                   onChangeText={(text)=>this.home_handler(text)}
                   keyboardType = 'numeric' maxLength={6}/>
             </ListItem> 
+            
             {this.state.showhome && this.state.pincodeData && this.state.pincodeData.length > 0 ?(
 
-                <ScrollView >
-                <List>
-                  <ListItem itemHeader style={{flexDirection:"row",justifyContent:"space-evenly"}}  >
-                      <Text>Name</Text>
-                      <Text>Taluka</Text>
-                      <Text>District</Text>
-                      <Text>State</Text>
-                  </ListItem>
+                  <FlatList style={{paddingVertical: 10,paddingBottom:20,height:300}}
+                  scrollEnabled={true}
+                  keyExtractor={(item)=>{
+                  return item.Name;
+                  }}              
+                  data={this.state.pincodeData}
 
-                  {this.state.pincodeData.map((item,index)=>(
-                          <ListItem key={index} style={{flexDirection:"row",justifyContent:"space-evenly"}} >
-                          
-                          <TouchableOpacity onPress={()=>this.selectedHomePincode(item)}><Text>{item.Name}</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={()=>this.selectedHomePincode(item)}><Text>{item.Taluk}</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={()=>this.selectedHomePincode(item)}><Text>{item.District}</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={()=>this.selectedHomePincode(item)}><Text>{item.State}</Text></TouchableOpacity>
-                          </ListItem>
-                  ))}
-                </List>
-                </ScrollView>
+                  renderItem={({item})=>
+
+                  <Card style={{marginRight:5,marginLeft:5,marginTop:3}} >
+                  <CardItem button onPress={()=>this.selectedHomePincode(item)}>
+                  <Icon active name="md-locate" />
+                  <View style={{flexDirection:'column'}}>
+                  <Text>{item.Name}</Text>
+                  <Text note>{item.Taluk} , {item.District}</Text>
+                  <Text note>{item.State}</Text>
+                  </View>
+                  </CardItem>
+                  </Card>
+                  }/>
                 ):(<View></View>)}
 
             <ListItem>
@@ -571,27 +594,32 @@ selectedCurrentPincode=(item)=>{
             <Left style={{flex:1}}>
               <Text>Home Address</Text>
             </Left>
-            <Input placeholder={this.state.hvillage+", "+this.state.htaluka
-               +", "+this.state.hdistrict+", "+this.state.hstate} editable={false}/>
+            <Input placeholder={hvillage+", "+htaluka
+               +", "+hdistrict+", "+hstate} editable={false}/>
             </ListItem>
            
-          </List>
-        <View style={{flexDirection:'row'}}>
-         <Left>
-          <SaveButton onPress={this.handleEditClick.bind(this)}><SaveText>Edit</SaveText></SaveButton>
-          </Left>
-          <Right>
-          <SaveButton onPress={this.handleSaveClick.bind(this)} editable={this.state.value} >
-              <SaveText>Save</SaveText>
-            </SaveButton>
-            </Right>
+          </View>
+        <View style={{flexDirection:'row',flex:1}}>
+         <View style={{flex:1}}>
+          <Button rounded onPress={this.handleEditClick.bind(this)}
+          style={{alignSelf:"center",width:'80%'}}>
+          <Text style={{textAlign:'center'}}>Edit</Text>
+          </Button>
+          </View>
+          <View style={{flex:1}}>
+          <Button rounded onPress={this.handleSaveClick.bind(this)} editable={this.state.value} 
+                style={{alignSelf:"center",width:'80%'}}>
+              <Text style={{textAlign:'center'}}>Save</Text>
+            </Button>
+            </View>
        </View>
        <View style={{marginTop:10}}></View>
 
-          
+          </KeyboardAwareScrollView>
  
         </Content>
       </Container>
+      </StyleProvider>
     )
   }
 }

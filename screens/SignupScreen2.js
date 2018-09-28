@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet,  View, ScrollView,Alert ,FlatList, TouchableOpacity,Image,ActivityIndicator } from 'react-native';
 import {Container,  Content, Form, Item, Input, Label , Button, Text, Left, Right, Picker,Icon, List, ListItem, Radio, Card, CardItem} from 'native-base';
 import { ImagePicker ,LinearGradient,Permissions,ImageManipulator} from 'expo';
-import {NextButton,ButtonText,ScreenTitle,FlexColumn} from '../utils/styles';
+import {LoginButton,ButtonText2 ,FlexColumn,ScreenTitle,FlexRow
+  ,StyledTextInput,TextField,TextLabel} from "../utils/styles";
 import ActionSheet from 'react-native-actionsheet';
 import uuid from 'uuid';
 import * as firebase from 'firebase';
@@ -51,7 +52,8 @@ export default class SignupScreen2 extends React.Component{
     showcurrent:false,
     currentdata:false,
     pincodeData:[],
-    isTemple:false,    
+    isTemple:false,
+    enableScrollViewScroll:true,    
 
   };
 
@@ -192,7 +194,7 @@ home_handler=(text)=>{
   }
   else{
   this.pincodeApi(text)
-  this.setState({showhome:true})
+  this.setState({showhome:true,enableScrollViewScroll:false})
   }
 }
 
@@ -200,7 +202,7 @@ selectedHomePincode=(item)=>{
   //console.log('in home onPress')
   //console.log(item)
   this.setState({hvillage:item.Name,htaluka:item.Taluk,hdistrict:item.District,
-  hstate:item.State,showhome:false,
+  hstate:item.State,showhome:false,enableScrollViewScroll:true,
   homedata:true})
 }
 
@@ -212,14 +214,14 @@ current_handler=(text)=>{
   }
   else{
   this.pincodeApi(text)
-  this.setState({showcurrent:true})
+  this.setState({showcurrent:true,enableScrollViewScroll:false})
   }
 }
 selectedCurrentPincode=(item)=>{
   //console.log('in onPress')
   //console.log(item)
   this.setState({cvillage:item.Name,ctaluka:item.Taluk,
-  cdistrict:item.District, cstate:item.State,
+  cdistrict:item.District, cstate:item.State,enableScrollViewScroll:true,
   showcurrent:false, currentdata:true})
 }
 _onPressHandle=()=>{
@@ -244,19 +246,36 @@ _onPressHandle=()=>{
         
 
         return (
-          <Container>
-            {/* <Header ><Text>SignUp </Text></Header> */}
-            <Content>
-              <Form>
-              <Item stackedLabel>
-              <Label>Home Location Pincode</Label>
-              <Input onChangeText={(text)=>this.home_handler(text)}
-                    keyboardType = 'numeric' maxLength={6} />
-            </Item>
+          
+         
+            <LinearGradient
+          colors={["#00aa8a", "#00b392"]}
+          start={{ x: 0.0, y: 0.0 }}
+          end={{ x: 0.0, y: 1.0 }}
+          style={{ width: "100%", height: "100%"}}
+        >
+        <ScrollView scrollEnabled={this.state.enableScrollViewScroll}>
+        
+            <FlexColumn style={{paddingBottom: 20,}}>
+              
+             
+            <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+            <FlexRow style={{alignItems:"center",}}>
+              <TextLabel>Home Pincode</TextLabel>
+              <StyledTextInput
+              selectionColor="#3f51b5"
+              underlineColorAndroid="transparent"
+              onChangeText={(text)=>this.home_handler(text)}
+                    keyboardType = 'numeric' maxLength={6}
+              />
+            </FlexRow>
+            </TextField> 
 
           {this.state.showhome && this.state.pincodeData && this.state.pincodeData.length > 0 ?(
+           
 
-                  <FlatList style={{paddingVertical: 10}}
+                  <FlatList style={{paddingVertical: 10,paddingBottom:20,height:300}}
+                  scrollEnabled={true}
                   keyExtractor={(item)=>{
                   return item.Name;
                   }}              
@@ -275,51 +294,40 @@ _onPressHandle=()=>{
                   </CardItem>
                   </Card>
                   }/>
+                
           ):(<View></View>)}     
            
+         
           {this.state.homedata && 
-          <Item stackedLabel>
-          <Label>Home Address</Label>
-          <Input editable={false} placeholder={this.state.hvillage+", "+this.state.htaluka
-               +", "+this.state.hdistrict+", "+this.state.hstate}
-        multiline={true}/> 
-          </Item>
+          <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+            <FlexRow style={{alignItems:"center",}}>
+              <TextLabel>Home Address</TextLabel>
+              <View style={{flexDirection:'column'}}>
+                  <Text style={{color:'#fff'}}>{this.state.hvillage}</Text>
+                  <Text note style={{color:'#fff'}}>{this.state.htaluka} , {this.state.hdistrict}</Text>
+                  <Text note style={{color:'#fff'}}>{this.state.hstate}</Text>
+                  </View>
+              </FlexRow></TextField>
           }
 
 
+    
+            <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+            <FlexRow style={{alignItems:"center",}}>
+              <TextLabel>Current Pincode</TextLabel>
+              <StyledTextInput
+              selectionColor="#3f51b5"
+              underlineColorAndroid="transparent"
+              onChangeText={(text)=>this.current_handler(text)}
+                    keyboardType = 'numeric' maxLength={6}
+              />
+            </FlexRow>
+            </TextField> 
 
-           <Item stackedLabel >
-              <Label>Current Location Pincode</Label>
-              <Input onChangeText={(text)=>this.current_handler(text)}
-                  keyboardType = 'numeric' maxLength={6}/>
-            </Item>
-
-        {/* {this.state.showcurrent && this.state.pincodeData && this.state.pincodeData.length > 0 ?(
-
-            <ScrollView >
-            <List>
-              <ListItem itemHeader style={{flexDirection:"row",justifyContent:"space-evenly"}}  >
-                  <Text>Name</Text>
-                  <Text>Taluka</Text>
-                  <Text>District</Text>
-                  <Text>State</Text>
-              </ListItem>
-
-              {this.state.pincodeData.map((item,index)=>(
-                      <ListItem key={index} style={{flexDirection:"row",justifyContent:"space-evenly"}} >
-                      
-                        <TouchableOpacity onPress={()=>this.selectedCurrentPincode(item)}><Text>{item.Name}</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={()=>this.selectedCurrentPincode(item)}><Text>{item.Taluk}</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={()=>this.selectedCurrentPincode(item)}><Text>{item.District}</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={()=>this.selectedCurrentPincode(item)}><Text>{item.State}</Text></TouchableOpacity>
-                      </ListItem>
-              ))}
-            </List>
-            </ScrollView>
-             ):(<View></View>)} */}
+       
 
              {this.state.showcurrent && this.state.pincodeData && this.state.pincodeData.length > 0 ?(
-               <FlatList style={{paddingVertical: 10}}
+               <FlatList style={{paddingVertical: 10,paddingBottom:20,height:300}}
                   keyExtractor={(item)=>{
                   return item.Name;
                 }}              
@@ -341,81 +349,70 @@ _onPressHandle=()=>{
               }/>
              ):(<View/>)}
 
-             {this.state.currentdata && 
-          <Item stackedLabel>
-          <Label>Current Address</Label>
-          <Input editable={false} placeholder={this.state.cvillage+", "+this.state.ctaluka
-               +", "+this.state.cdistrict+", "+this.state.cstate}
-        multiline={true}/> 
-          </Item>
+            
+           {this.state.currentdata && 
+          <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+            <FlexRow style={{alignItems:"center",}}>
+              <TextLabel>Current Address</TextLabel>
+              <View style={{flexDirection:'column'}}>
+                  <Text style={{color:'#fff'}}>{this.state.cvillage}</Text>
+                  <Text note style={{color:'#fff'}}>{this.state.ctaluka} , {this.state.cdistrict}</Text>
+                  <Text note style={{color:'#fff'}}>{this.state.cstate}</Text>
+                  </View>
+              </FlexRow></TextField>
           }
-          <Item>
-              <View style={{flexDirection:'row',flex:1,justifyContent:"space-between",padding:10}}>
+          <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+          <View style={{flexDirection:'row',flex:1,justifyContent:"space-between",padding:10}}>
                   <View style={{flexDirection:'row',flex:2}}>
-                  <Text>Do you represent any Temple?</Text>
+                  <Text style={{color:'#fff'}}>Do you represent any Temple?</Text>
                   </View>
                   
-                  <View style={{flexDirection:'row',flex:1}}>
-                  <View style={{flexDirection:'row',flex:1}}>
-                  <Radio selected={this.state.isTemple} onPress={this._onPressHandle}/>
-                  <Text>Yes</Text>
+                  <View style={{flexDirection:'column',flex:1}}>
+                  <View style={{flexDirection:'row',flex:1,justifyContent:"space-between"}}>
+                  <Radio selected={this.state.isTemple} onPress={this._onPressHandle} selectedColor='#007a5d'/>
+                  <Text style={{color:'#fff'}}>Yes</Text>
                   </View>
-                  <View style={{flexDirection:'row',flex:1}}>
-                  <Radio selected={!this.state.isTemple} onPress={this._onPressHandle}/>
-                  <Text>No</Text>
+                  <View style={{flexDirection:'row',flex:1,justifyContent:"space-between"}}>
+                  <Radio selected={!this.state.isTemple} onPress={this._onPressHandle} selectedColor='#007a5d'/>
+                  <Text style={{color:'#fff'}}>No</Text>
                   </View>
                   </View>
                  
               </View>
-              
-            </Item>
+            </TextField>
+ 
 
-            <Item stackedLabel Last>
-              <Label>Profile Picture</Label>
-              
-              <Right>
+             <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+            <FlexRow style={{alignItems:"center",}}>
+              <TextLabel>Profile Picture</TextLabel>
               <Button iconLeft light onPress={()=>this.showActionSheet()}>
-            <Icon name='md-add' />
-            <Text>Upload</Text>
-          </Button>
-              </Right>
-              
-              
-            </Item>
+                <Icon name='md-add' />
+                <Text>Upload</Text>
+              </Button>
+            </FlexRow>
+            </TextField>   
 
-
-            {/* {this.state.imageurl && 
-            <Item>
-              <View style={{justifyContent:"center",alignItems:"center"}}>
-                <Image source={{uri: this.state.imageurl}} 
-                  style={{marginBottom:15, marginTop:15,height:100,width:100 ,borderRadius:50,alignSelf:"center"}}/>
-                  </View>
-            </Item>} */}
              {this.state.imageurl && 
             
               <Image source={{uri: this.state.imageurl}} 
                   style={{marginBottom:15, marginTop:15,height:100,width:100 ,borderRadius:50,alignSelf:"center"}}/>
             }
-          </Form>
+         
           
           
           
           {this.state.image_loading && <ActivityIndicator size="large"/>}
-            <NextButton 
+        
+        <LoginButton 
           onPress={()=>this.check_func()}
-          style={{marginTop: 10,marginBottom: 10,}}  
-          disabled={this.state.image_loading}
+          style={{marginTop: 10,marginBottom:20}} 
+          disabled={this.state.image_loading} 
           >
-          <LinearGradient
-                 colors={["#00aa8a", "#00b392"]}
-                start={{ x: 0.0, y: 1.0 }}
-                end={{ x: 1.0, y: 0.0 }}
-                style={{ width: "100%", height: "100%",borderRadius:10}}
-              >
+         
 
-            <ButtonText>SignUp</ButtonText>
-          </LinearGradient>
-        </NextButton>
+            <ButtonText2>SignUp</ButtonText2>
+          
+        </LoginButton>
         <View
         style={{
           alignContent: 'center',
@@ -431,10 +428,12 @@ _onPressHandle=()=>{
           onPress={index => this.handleImageSource(index)}
         />
       </View>
-            </Content>
-          </Container>
+      
+            </FlexColumn>
+            </ScrollView>    
+        </LinearGradient>
         
-          
+       
         );
       }
       handleImageSource=(index)=>{

@@ -9,6 +9,9 @@ import {Text , Label , Left ,Right ,Container, Header,
 import { Userinfo } from "../assets/ApiUrl";
 import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
+import styled from 'styled-components';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 
 export default class UserProfile extends React.Component {
@@ -25,14 +28,13 @@ export default class UserProfile extends React.Component {
     }
 } 
 componentDidMount(){
-  this.state.user_id=this.props.navigation.getParam('user_id')  
-  //this.state.current_id=this.props.navigation.getParam('current_id')
-  console.log(this.state.user_id)
-
-  this.UserInfoApi()
+  const temp=this.props.navigation.getParam('user_id')  
+    console.log(temp)
+  this.setState({user_id:temp})
+  this.UserInfoApi(temp)
 }
 
-UserInfoApi = () =>{
+UserInfoApi = (val) =>{
   console.log("In UserInfoApi")
   fetch(Userinfo, {
     method: "POST",
@@ -41,7 +43,7 @@ UserInfoApi = () =>{
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      user_id:this.state.user_id
+      user_id:val
     })
   })
     .then(data => {
@@ -75,75 +77,74 @@ UserInfoApi = () =>{
 
       <Container >
         {/* <Header /> */}
-        <Content>
+        <Content style={ { zIndex: 0 }}>
           <Image source={{uri:this.state.records[0].avatar }} 
-          style={{marginTop:15,height:80,width:80 ,borderRadius:40,alignSelf:"center"}}/>
+          style={{marginTop:15,height:80,width:80 ,borderRadius:40,alignSelf:"center",
+                elevation:8}}/>
          
          
          
-          <Button onPress={()=>{
+         
+
+
+          <CardView>
+            
+            <BoxView style={{marginTop:12}}>
+              <TagText>Name</TagText>
+              <ValueText>{this.state.records[0].name}</ValueText>
+            </BoxView>
+
+            <BoxView style={{marginTop:12}}>
+              <TagText>Contact</TagText>
+              <ValueText>{this.state.records[0].mobile_no}</ValueText>
+            </BoxView>
+
+            <BoxView style={{marginTop:12}}>
+              <TagText>BirthDate</TagText>
+              <ValueText>{this.state.records[0].dob}</ValueText>
+            </BoxView>
+
+            <BoxView style={{marginTop:12}}>
+              <TagText>Profession</TagText>
+              <ValueText>{this.state.records[0].professional}</ValueText>
+            </BoxView>
+
+            <BoxView style={{marginTop:12}}>
+              <TagText>Gotra</TagText>
+              <ValueText>{this.state.records[0].gotra}</ValueText>
+            </BoxView>
+
+            <BoxView style={{marginTop:12}}>
+              <TagText>Current Pincode</TagText>
+              <ValueText>{this.state.records[0].current_pincode}</ValueText>
+            </BoxView>
+
+            <BoxView style={{marginTop:12}}>
+              <TagText>Home Pincode</TagText>
+              <ValueText>{this.state.records[0].home_pincode}</ValueText>
+            </BoxView>         
+            
+
+          </CardView>
+          
+
+         {/* <Button onPress={()=>{
             this.props.navigation.navigate('ChatPage',{
               user_id:this.state.user_id,
               user_name:this.state.records[0].name
             })}
-          }><Text>Chat</Text></Button>
+          }><Text>Chat</Text></Button> */}
 
-
-
-          <List>
-
-            <ListItem>
-            <Left style={{flex:1}}>
-              <Text>Name</Text>
-            </Left>
-              <Input placeholder={this.state.records[0].name} editable={this.state.value} 
-                    onChangeText={(text)=>{this.setState({name : text})}}/>
-            </ListItem>
-
-             <ListItem>
-            <Left style={{flex:1}}>
-              <Text>Contact</Text>
-            </Left>
-              <Input placeholder={this.state.records[0].mobile_no} editable={this.state.value}
-                      onChangeText={(text)=>{this.setState({mobile_num : text})}}/>
-            </ListItem>
-
-            <ListItem>
-            <Left style={{flex:1}}>
-              <Text>BirthDate</Text>
-            </Left>
-              <Input placeholder={this.state.records[0].dob} editable={this.state.value}/>
-            </ListItem>
-
-            <ListItem>
-            <Left style={{flex:1}}>
-              <Text>Profession</Text>
-            </Left>
-              <Input placeholder={this.state.records[0].professional} editable={this.state.value}/>
-            </ListItem>
-
-            <ListItem>
-            <Left style={{flex:1}}>
-              <Text>Gotra</Text>
-            </Left>
-              <Input placeholder={this.state.records[0].gotra} editable={this.state.value}/>
-            </ListItem>
-
-            <ListItem>
-            <Left style={{flex:1}}>
-              <Text>Current Pincode</Text>
-            </Left>
-              <Input placeholder={this.state.records[0].current_pincode} editable={this.state.value}/>
-            </ListItem>
-
-            <ListItem>
-            <Left style={{flex:1}}>
-              <Text>Home Pincode</Text>
-            </Left>
-              <Input placeholder={this.state.records[0].home_pincode} editable={this.state.value}/>
-            </ListItem> 
-           
-          </List>
+          <Button icon large rounded light style={{elevation:6,marginTop:-40,alignSelf:"flex-end",
+                padding:2,marginRight:20}}
+                onPress={()=>{
+                  this.props.navigation.navigate('ChatPage',{
+                    user_id:this.state.user_id,
+                    user_name:this.state.records[0].name
+                  })}}
+                  >
+          <MaterialIcon size={50} name="message-text-outline" />
+          </Button>
 
 
           
@@ -153,3 +154,39 @@ UserInfoApi = () =>{
     )
   }
 }
+const BoxView = styled.View`
+    border-radius: 10px;
+    width:90%;
+    background-color: #F0F0F0;
+    padding: 20px;
+    align-self:center;
+    flex-direction:row;
+  
+  `
+
+  const TagText = styled.Text`
+  font-size: 18px;
+  font-weight: 100;
+  text-align: center;
+  color:  #101010;
+  flex:1;
+`
+const ValueText = styled.Text`
+  font-size: 18px;
+  font-weight: 100;
+  text-align: center;
+  color:  #101010;
+  flex:2;
+`
+const CardView=styled.View`
+display:flex;
+flexDirection:column;
+margin-bottom:10px;
+elevation:4;
+background-color: #F8F8F8;
+margin-left:14px;
+margin-right:14px;
+margin-top:-40px;
+padding-top:40px;
+padding-bottom:10px;
+`

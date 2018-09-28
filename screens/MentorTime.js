@@ -1,12 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, Switch ,View,Alert,TimePickerAndroid,AsyncStorage} from 'react-native';
 import {  Form, Item ,Input, Label, Left, Right, DatePicker, Button } from 'native-base';
-import {NextButton,ButtonText ,FlexColumn, FlexRow} from "../utils/styles";
-import {LinearGradient} from 'expo';
+import {LoginButton,ButtonText2 ,FlexColumn,ScreenTitle,FlexRow
+  ,StyledTextInput,TextField,TextLabel} from "../utils/styles";
+  import {LinearGradient} from 'expo';
+  import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {AddTraining} from '../assets/ApiUrl';
 
 
 export default class MentorTime extends React.Component {
+  static navigationOptions = {
+    title: 'Select Date and Time',
+  }
+
   state={
    sid:"",
    name:"",
@@ -150,19 +156,21 @@ export default class MentorTime extends React.Component {
     
 
     return (
+      <LinearGradient
+          colors={["#00aa8a", "#00b392"]}
+          start={{ x: 0.0, y: 0.0 }}
+          end={{ x: 0.0, y: 1.0 }}
+          style={{ width: "100%", height: "100%"}}
+        >
       <FlexColumn >
-        {/* <Header ><Text style={styles.headline}>Add New Gotra</Text></Header> */}
-        
-          <Form>
-            <Item stackedLabel>
-              <Label>Select a Date</Label>
-              
-              {/* <Input value={this.state.date.toString().substr(4, 12)} /> */}
-             
-              <DatePicker
+
+           <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+          <FlexRow style={{alignItems:"center",}}>
+            <TextLabel>Select a Date</TextLabel>
+            <DatePicker
                   defaultDate={new Date()}
                   minimumDate={new Date()}
-                  maximumDate={new Date(2018, 12, 31)}
+                  maximumDate={new Date(2019, 12, 31)}
                   locale={"en"}
                   timeZoneOffsetInMinutes={undefined}
                   modalTransparent={false}
@@ -170,17 +178,33 @@ export default class MentorTime extends React.Component {
                   androidMode={"default"}
                   placeHolderText="Select Date"
                   //textStyle={{ color: "green" }}
-                  placeHolderTextStyle={{ color: "#d3d3d3" }}
+                  placeHolderTextStyle={{ color: "#fff" }}
                   onDateChange={text=>{
                     this.setState({date:text})
                     console.log(text.toString().substr(4,12))
                   }}
                   
                   />
-             
-            </Item>
+          </FlexRow>
+          </TextField> 
+        
+          
 
-            <Item stackedLabel>
+          <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+          <FlexRow style={{alignItems:"center",}}>
+            <TextLabel>Select Time</TextLabel>
+            <Button light onPress={()=>this.pickTime()} style={{alignSelf:"center",width: 90
+              ,justifyContent:'center',alignItems:'center'}}>
+
+              {this.state.time?(<Text style={{textAlign:"center"}}>{this.state.time}</Text>)
+              :(<Text style={{textAlign:"center"}}>Select Time</Text>)}
+              
+              </Button>
+          </FlexRow>
+          </TextField> 
+  
+
+            {/* <Item stackedLabel>
               <Label>Select Time</Label>
               
               <Button light onPress={()=>this.pickTime()} style={{alignSelf:"center",width: 90
@@ -191,7 +215,7 @@ export default class MentorTime extends React.Component {
               
               </Button>
                
-            </Item>
+            </Item> */}
 
             {this.state.show && <FlexRow style={{justifyContent: 'space-around',margin:5}}>
             <View></View>
@@ -201,31 +225,48 @@ export default class MentorTime extends React.Component {
             <View></View>
             </FlexRow>}
 
-            {this.state.request_amount &&  <Item stackedLabel>
-              <Label>Enter Amount</Label>
-              <Input onChangeText={(text)=>{this.setState({amount:text})}} 
-                    keyboardType = 'numeric' maxLength={10}/>
-            </Item>
+            {this.state.request_amount &&  
+        <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>
+
+            <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+            
+              <FlexRow style={{alignItems:"center",}}>
+                <TextLabel>Enter Amount</TextLabel>
+                <StyledTextInput
+                selectionColor="#3f51b5"
+                underlineColorAndroid="transparent"
+                onChangeText={(text)=>{this.setState({amount:text})}} 
+                        keyboardType = 'numeric' maxLength={10}
+                />
+              </FlexRow>
+          </TextField>
+           <LoginButton 
+           onPress={()=>this.addTrainingApi()}
+          style={{marginTop: 10,marginBottom:20}}
+          >
+            <ButtonText2>Request</ButtonText2>
+        </LoginButton>
+        </KeyboardAwareScrollView>
+
         }
            
-          </Form>
+          
+     
 
-          <NextButton 
-          style={{marginTop: 10,}}  
-          onPress={()=>this.addTrainingApi()}
+
+        
+          
+          
+       {!this.state.request_amount && 
+       <LoginButton 
+           onPress={()=>this.addTrainingApi()}
+          style={{marginTop: 10,marginBottom:20}}
           >
-          <LinearGradient
-               colors={["#00aa8a", "#00b392"]}
-                start={{ x: 0.0, y: 1.0 }}
-                end={{ x: 1.0, y: 0.0 }}
-                style={{ width: "100%", height: "100%",borderRadius:10}}
-              >
-
-            <ButtonText>Add</ButtonText>
-          </LinearGradient>
-        </NextButton>
+            <ButtonText2>Request</ButtonText2>
+        </LoginButton>}
        
       </FlexColumn>
+      </LinearGradient>
 
     );
   }

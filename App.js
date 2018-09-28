@@ -85,10 +85,7 @@ const AppDrawerNavigator = createDrawerNavigator({
     navigationOptions: { header: null },
     //display: 'none',
   },
-  Profile : {
-    screen : MyProfile ,
-    navigationOptions: { header: null }
-  },
+  
   Contacts:{
   screen: Contacts,
   navigationOptions: { header: null }
@@ -118,18 +115,25 @@ const AppStackNavigator = createStackNavigator({
     screen : LoginScreen ,
     navigationOptions: { header: null }
    },
+   Profile : {
+    screen : MyProfile ,
+    //navigationOptions: { header: null }
+  },
     SignupScreen : {
      screen : SignupScreen ,
-     navigationOptions: { header: null }
+     //navigationOptions: { header: null }
    },
    SignupScreen2 : {
     screen : SignupScreen2 ,
-    //navigationOptions: { header: null }
+    navigationOptions: { 
+     // header: null 
+     color:"#007a5d"
+    }
   },  
  
    PasswordRv : {
      screen : PasswordRv ,
-     navigationOptions: { header: null }
+     //navigationOptions: {  header: null     }
    },
    UserProfile : {
      screen : UserProfile ,
@@ -143,11 +147,11 @@ const AppStackNavigator = createStackNavigator({
     },
     OtpScreen:{
       screen : OtpScreen,
-     navigationOptions: { header: null }
+     //navigationOptions: { header: null }
     },
     Newpassword:{
       screen : Newpassword,
-     navigationOptions: { header: null }
+     //navigationOptions: { header: null }
     },
     Newpost:{
       screen : Newpost,
@@ -191,7 +195,16 @@ List:{
     //navigationOptions: { header: null }
   },
 },{
-  initialRouteName:'SignupScreen',
+  initialRouteName:'Login',
+  navigationOptions: {
+    headerStyle: {
+      backgroundColor: '#007a5d',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  },
 
 })
 

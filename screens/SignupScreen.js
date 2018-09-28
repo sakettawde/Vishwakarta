@@ -11,6 +11,10 @@ import { LinearGradient } from "expo";
 
 
 export default class SignUp extends React.Component {
+
+  static navigationOptions = {
+    title: 'Signup',
+    };
   
   constructor(props) {
     super(props);
@@ -225,11 +229,10 @@ export default class SignUp extends React.Component {
       colors={["#00aa8a", "#00b392"]}
       start={{ x: 0.0, y: 0.0 }}
       end={{ x: 0.0, y: 1.0 }}
-      style={{ width: "100%", height: "100%",marginTop: StatusBar.currentHeight}}
+      style={{ width: "100%", height: "100%"}}
     >
     <ScrollView style={{marginBottom:20}}>
       <FlexColumn style={{flex:1,margin:10,marginTop: StatusBar.currentHeight}}>
-        <ScreenTitle>SignUp</ScreenTitle>
 
         <FlexColumn>
           <Form>
@@ -303,8 +306,8 @@ export default class SignUp extends React.Component {
               <TextLabel>BirthDate</TextLabel>
               <DatePicker
                   defaultDate={new Date(1996, 1, 1)}
-                  minimumDate={new Date(1975, 1, 1)}
-                  maximumDate={new Date(2018, 12, 31)}
+                  minimumDate={new Date(1960, 1, 1)}
+                  maximumDate={new Date()}
                   locale={"en"}
                   timeZoneOffsetInMinutes={undefined}
                   modalTransparent={false}
@@ -318,31 +321,7 @@ export default class SignUp extends React.Component {
                 {/* <Text >{this.state.chosenDate.toString().substr(4, 12)}</Text> */}
             </FlexRow>
           </TextField>
-            
-            {/* <Item>
-              <View style={{flexDirection:'row',justifyContent:"space-evenly",padding:10}}>
-                <View style={{flex:5,flexDirection:"row"}}>
-                  <View style={{flex:1}}>
-                    <Radio selected={this.state.isSelect1} onPress={this._onPressHandle}/>
-                    </View>
-                  <View style={{flex:3,flexDirection:'row'}}>
-                   <Text>Business</Text>
-                   </View>
-                </View>
-                <View style={{flex:1}}></View>
-                <View style={{flex:5,flexDirection:"row"}}>
-                  
-                    <View style={{flex:1}}>
-                    <Radio selected={this.state.isSelect2} onPress={this._onPressHandle}/>
-                    </View>
-                    <View style={{flex:3,flexDirection:'row'}}>
-                   <Text>Employed</Text>
-                   </View>
-                  
-                </View>
-              </View>
-              
-            </Item> */}
+          
             <TextField style={{alignSelf: 'center',marginTop: 12}}>
             <FlexRow style={{alignItems:"center",}}>
                   <View style={{flex:5,flexDirection:"row"}}>

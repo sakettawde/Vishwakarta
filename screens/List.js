@@ -3,6 +3,7 @@ import { Container, Header, Item, Input, Icon, Button, Text ,
 Content , List , ListItem , Left , Body , Right , Thumbnail, } from 'native-base';
 import {Alert,ScrollView,StatusBar,AsyncStorage,View} from 'react-native';
 import { ProfSearch,NearMe,ViewChat } from "../assets/ApiUrl";
+import {LinearGradient} from 'expo';
 
 
 export default class Contacts extends Component {
@@ -219,7 +220,8 @@ export default class Contacts extends Component {
    
     
       return (
-        <Container >  
+        <Container >
+           
           <Content>
 
           <ScrollView>
@@ -238,9 +240,9 @@ export default class Contacts extends Component {
                             <Thumbnail source={{ uri:item.avatar  }} />
                         </Left>
                         <Body >
-                            <Text>{item.name}</Text>
-                            <Text note>{item.professional}</Text>
-                            <Text note>{item.mobile_no}</Text>
+                            <Text >{item.name}</Text>
+                            <Text note >{item.professional}</Text>
+                            <Text note >{item.mobile_no}</Text>
                         </Body>
                     </ListItem>
                     :<View/>
@@ -261,9 +263,9 @@ export default class Contacts extends Component {
                             <Thumbnail source={{ uri:item.avatar  }} />
                         </Left>
                         <Body >
-                            <Text>{item.name}</Text>
-                            <Text note>{item.professional}</Text>
-                            <Text note>{item.mobile_no}</Text>
+                            <Text >{item.name}</Text>
+                            <Text note >{item.professional}</Text>
+                            <Text note >{item.mobile_no}</Text>
                         </Body>
                     </ListItem>
                     :<View/>

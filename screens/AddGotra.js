@@ -2,11 +2,16 @@ import React from 'react';
 import { StyleSheet, Text, StatusBar ,Alert} from 'react-native';
 import { Header, Form, Button, Container, Content,Item ,Input, Label } from 'native-base';
 import { AddGotraUrl } from "../assets/ApiUrl";
-import {NextButton,ButtonText ,FlexColumn} from "../utils/styles";
+import {LoginButton,ButtonText2 ,FlexColumn,ScreenTitle,FlexRow
+  ,StyledTextInput,TextField,TextLabel} from "../utils/styles";
 import {LinearGradient} from 'expo';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 
 export default class AddGotra extends React.Component {
+  static navigationOptions = {
+    title: 'Add New Gotra',
+  }
   state={
    gotra:""
   }
@@ -52,34 +57,41 @@ export default class AddGotra extends React.Component {
     
 
     return (
+      <LinearGradient
+      colors={["#00aa8a", "#00b392"]}
+      start={{ x: 0.0, y: 0.0 }}
+      end={{ x: 0.0, y: 1.0 }}
+      style={{ width: "100%", height: "100%"}}
+    >
       <FlexColumn style={{marginTop:StatusBar.currentHeight}}>
         {/* <Header ><Text style={styles.headline}>Add New Gotra</Text></Header> */}
+        <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>
+
+
+          <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+            <FlexRow style={{alignItems:"center",}}>
+              <TextLabel>Enter your Gotra</TextLabel>
+              <StyledTextInput
+              selectionColor="#3f51b5"
+              underlineColorAndroid="transparent"
+              onChangeText={(text)=>{this.setState({gotra:text})}}
+              />
+            </FlexRow>
+            </TextField> 
+
         
-          <Form>
-            <Item stackedLabel>
-              <Label>Enter your Gotra</Label>
-              <Input onChangeText={(text)=>{this.setState({gotra:text})}} />
-            </Item>
-            
-          </Form>
-
-          <NextButton 
-          onPress={()=>this.addGotraApi()}
-          style={{marginTop: 10,}}  
+         
+        <LoginButton 
+           onPress={()=>this.addGotraApi()}
+          style={{marginTop: 10,marginBottom:20}}
           >
-          <LinearGradient
-                colors={["#00aa8a", "#00b392"]}
-                start={{ x: 0.0, y: 1.0 }}
-                end={{ x: 1.0, y: 0.0 }}
-                style={{ width: "100%", height: "100%",borderRadius:10}}
-              >
-
-            <ButtonText>Add</ButtonText>
-          </LinearGradient>
-        </NextButton>
+            <ButtonText2>Add</ButtonText2>
+        </LoginButton>
+        </KeyboardAwareScrollView>
+        
        
       </FlexColumn>
-
+      </LinearGradient>
     );
   }
 }

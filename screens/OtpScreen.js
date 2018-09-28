@@ -2,11 +2,16 @@ import React from 'react';
 import { StyleSheet, Text, View ,Alert,StatusBar} from 'react-native';
 import { Header, Form, Item ,Input, Label } from 'native-base';
 import { UpdateOtp,CheckOtp } from "../assets/ApiUrl";
-import {NextButton,ButtonText ,FlexColumn,ScreenTitle} from "../utils/styles";
-import {LinearGradient} from 'expo';
+import {LoginButton,ButtonText2 ,FlexColumn,ScreenTitle,FlexRow
+  ,StyledTextInput,TextField,TextLabel} from "../utils/styles";
+  import {LinearGradient} from 'expo';
+  import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 
 export default class OtpScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Verify Otp',
+  }
   state={
     mobile_num:"",
     otp:""
@@ -102,36 +107,38 @@ export default class OtpScreen extends React.Component {
     
 
     return (
+      <LinearGradient
+      colors={["#00aa8a", "#00b392"]}
+      start={{ x: 0.0, y: 0.0 }}
+      end={{ x: 0.0, y: 1.0 }}
+      style={{ width: "100%", height: "100%"}}
+    >
       <FlexColumn style={{marginTop:StatusBar.currentHeight}}>
-        {/* <Header ><Text style={styles.headline}>Password Recovery</Text></Header> */}
-        <ScreenTitle>Password Recovery</ScreenTitle>
-          <Form>
-            <Item stackedLabel>
-              <Label>Enter OTP</Label>
-              <Input onChangeText={(text)=>{this.setState({otp:text})}}
-                  keyboardType = 'numeric' maxLength={4}
+
+      <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>
+       
+          <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+            <FlexRow style={{alignItems:"center",}}>
+              <TextLabel>Enter Otp</TextLabel>
+              <StyledTextInput
+              selectionColor="#3f51b5"
+              underlineColorAndroid="transparent"
+              onChangeText={(text)=>{this.setState({otp:text})}}
+              keyboardType = 'numeric' maxLength={4}
               />
-            </Item>
+            </FlexRow>
+            </TextField>
             
-            
-          </Form>
-
-          <NextButton 
-          onPress={()=>this.VerifyOtp()}
-          style={{marginTop: 10,}}  
+         
+         <LoginButton 
+            onPress={()=>this.VerifyOtp()}
+          style={{marginTop: 10,marginBottom:20}}
           >
-          <LinearGradient
-                 colors={["#00aa8a", "#00b392"]}
-                start={{ x: 0.0, y: 1.0 }}
-                end={{ x: 1.0, y: 0.0 }}
-                style={{ width: "100%", height: "100%",borderRadius:10}}
-              >
-
-            <ButtonText>Verify</ButtonText>
-          </LinearGradient>
-        </NextButton>
-        
+            <ButtonText2>Verify</ButtonText2>
+        </LoginButton>
+        </KeyboardAwareScrollView>
       </FlexColumn>
+      </LinearGradient>
 
     );
   }

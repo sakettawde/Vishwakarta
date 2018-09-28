@@ -2,11 +2,18 @@ import React from 'react';
 import { StyleSheet,  StatusBar ,Alert} from 'react-native';
 import { Header, Form,Item ,Input, Label } from 'native-base';
 import { AddProfUrl } from "../assets/ApiUrl";
-import {NextButton,ButtonText ,FlexColumn} from "../utils/styles";
+import {LoginButton,ButtonText2 ,FlexColumn,ScreenTitle,FlexRow
+  ,StyledTextInput,TextField,TextLabel} from "../utils/styles";
 import {LinearGradient} from 'expo';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
+
 
 
 export default class AddProf extends React.Component {
+  static navigationOptions = {
+    title: 'Add New Profession',
+  }
   state={
    prof:""
   }
@@ -52,33 +59,43 @@ export default class AddProf extends React.Component {
     
 
     return (
+      <LinearGradient
+      colors={["#00aa8a", "#00b392"]}
+      start={{ x: 0.0, y: 0.0 }}
+      end={{ x: 0.0, y: 1.0 }}
+      style={{ width: "100%", height: "100%"}}
+    >
       <FlexColumn style={{marginTop:StatusBar.currentHeight }}>
         {/* <Header ><Text style={styles.headline}>Add New Profession</Text></Header> */}
+
+          <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>
+
+
+            <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+              <FlexRow style={{alignItems:"center",}}>
+                <TextLabel>Enter your Profession</TextLabel>
+                <StyledTextInput
+                selectionColor="#3f51b5"
+                underlineColorAndroid="transparent"
+                onChangeText={(text)=>{this.setState({prof:text})}}
+                />
+              </FlexRow>
+              </TextField> 
+
+
+
+            <LoginButton 
+             onPress={()=>this.addProfApi()}
+            style={{marginTop: 10,marginBottom:20}}
+            >
+              <ButtonText2>Add</ButtonText2>
+            </LoginButton>
+            </KeyboardAwareScrollView>
         
-          <Form>
-            <Item stackedLabel>
-              <Label>Enter your Profession</Label>
-              <Input onChangeText={(text)=>{this.setState({prof:text})}} />
-            </Item>
-            
-          </Form>
-
-           <NextButton 
-          onPress={()=>this.addProfApi()}
-          style={{marginTop: 10,}}  
-          >
-          <LinearGradient
-                 colors={["#00aa8a", "#00b392"]}
-                start={{ x: 0.0, y: 1.0 }}
-                end={{ x: 1.0, y: 0.0 }}
-                style={{ width: "100%", height: "100%",borderRadius:10}}
-              >
-
-            <ButtonText>Add</ButtonText>
-          </LinearGradient>
-        </NextButton>
+          
         
       </FlexColumn>
+      </LinearGradient>
 
     );
   }

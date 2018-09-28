@@ -2,11 +2,16 @@ import React from 'react';
 import { StyleSheet, Text, View,Alert,StatusBar } from 'react-native';
 import { Header, Form, Button, Container, Content,Item ,Input, Label, CheckBox } from 'native-base';
 import { ChangePass } from "../assets/ApiUrl";
-import {NextButton,ButtonText ,FlexColumn,ScreenTitle} from "../utils/styles";
-import {LinearGradient} from 'expo';
+import {LoginButton,ButtonText2 ,FlexColumn,ScreenTitle,FlexRow
+  ,StyledTextInput,TextField,TextLabel} from "../utils/styles";
+  import {LinearGradient} from 'expo';
+  import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 
 export default class Newpassword extends React.Component {
+  static navigationOptions = {
+    title: 'Change Password',
+  }
   state={
     mobile_num:"",
     passwd:"",
@@ -63,37 +68,47 @@ export default class Newpassword extends React.Component {
 
   render() {
     return (
+      <LinearGradient
+      colors={["#00aa8a", "#00b392"]}
+      start={{ x: 0.0, y: 0.0 }}
+      end={{ x: 0.0, y: 1.0 }}
+      style={{ width: "100%", height: "100%"}}
+    >
       <FlexColumn style={{marginTop:StatusBar.currentHeight}}>
-        {/* <Header ><Text style={styles.headline}>Password Recovery</Text></Header> */}
-        <ScreenTitle>Password Recovery</ScreenTitle>
-          <Form>
-            <Item stackedLabel>
-              <Label>Enter New Password</Label>
-              <Input secureTextEntry={true} onChangeText={(text)=>{this.setState({passwd:text})}}/>
-            </Item>
-            <Item stackedLabel>
-              <Label>Confirm Password</Label>
-              <Input secureTextEntry={true} onChangeText={(text)=>{this.setState({confpass:text})}}/>
-            </Item>
-            
-          </Form>
-
-           <NextButton 
-          onPress={()=>this.check()}
-          style={{marginTop: 10,}}  
-          >
-          <LinearGradient
-                colors={["#00aa8a", "#00b392"]}
-                start={{ x: 0.0, y: 1.0 }}
-                end={{ x: 1.0, y: 0.0 }}
-                style={{ width: "100%", height: "100%",borderRadius:10}}
-              >
-
-            <ButtonText>Verify</ButtonText>
-          </LinearGradient>
-        </NextButton>
         
+      <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>  
+           <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+            <FlexRow style={{alignItems:"center",}}>
+              <TextLabel>Enter New Password</TextLabel>
+              <StyledTextInput
+              selectionColor="#3f51b5"
+              underlineColorAndroid="transparent"
+              secureTextEntry={true} onChangeText={(text)=>{this.setState({passwd:text})}}
+              />
+            </FlexRow>
+            </TextField>
+
+            <TextField style={{alignSelf: 'center',marginTop: 12,}}>
+            <FlexRow style={{alignItems:"center",}}>
+              <TextLabel>Confirm Password</TextLabel>
+              <StyledTextInput
+              selectionColor="#3f51b5"
+              underlineColorAndroid="transparent"
+              secureTextEntry={true} onChangeText={(text)=>{this.setState({confpass:text})}}
+              />
+            </FlexRow>
+            </TextField>
+           
+          
+        <LoginButton 
+            onPress={()=>this.check()}
+          style={{marginTop: 10,marginBottom:20}}
+          >
+            <ButtonText2>Change Password</ButtonText2>
+        </LoginButton>
+        </KeyboardAwareScrollView>
       </FlexColumn>
+      </LinearGradient>
 
     );
   }
