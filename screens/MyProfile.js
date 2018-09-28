@@ -22,7 +22,7 @@ export default class ProfileSettings extends React.Component {
     super();
     this.state = {
       value:  false,
-      user_id:"21",
+      user_id:"",
       name:"",
       mobile_num:"",
       chosenDate: new Date(),
@@ -56,7 +56,7 @@ _retrieveData = async () => {
     const value = await AsyncStorage.getItem('user_id');
     await this.setState({user_id:value})
     console.log("id ",value)
-    this.UserInfoApi()
+    this.UserInfoApi(value)
    } catch (error) {
      console.log(error)
    }
@@ -64,12 +64,11 @@ _retrieveData = async () => {
 }
 
 componentDidMount(){
-  // this._retrieveData()
- this.UserInfoApi() 
-
+ this._retrieveData()
+ 
 }
 
-UserInfoApi = () =>{
+UserInfoApi = (value) =>{
   console.log("In UserInfoApi")
   fetch(Userinfo, {
     method: "POST",
@@ -78,7 +77,7 @@ UserInfoApi = () =>{
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      user_id:this.state.user_id
+      user_id:value
     })
   })
     .then(data => {
@@ -602,13 +601,13 @@ selectedCurrentPincode=(item)=>{
         <View style={{flexDirection:'row',flex:1}}>
          <View style={{flex:1}}>
           <Button rounded onPress={this.handleEditClick.bind(this)}
-          style={{alignSelf:"center",width:'80%'}}>
+          style={{alignSelf:"center",width:'80%',justifyContent:'center',alignItems:'center'}}>
           <Text style={{textAlign:'center'}}>Edit</Text>
           </Button>
           </View>
           <View style={{flex:1}}>
           <Button rounded onPress={this.handleSaveClick.bind(this)} editable={this.state.value} 
-                style={{alignSelf:"center",width:'80%'}}>
+                style={{alignSelf:"center",width:'80%',justifyContent:'center',alignItems:'center'}}>
               <Text style={{textAlign:'center'}}>Save</Text>
             </Button>
             </View>
@@ -624,28 +623,3 @@ selectedCurrentPincode=(item)=>{
   }
 }
 
-const TitleText=styled.Text`
-width: 146px;
-  height: 22px;
-  font-size: 17px;
-  font-weight: 600;
-  text-align: center;
-  color: rgba(3, 15, 41, 0.9);`
-
-const SaveButton=styled.TouchableOpacity`
-width: 120px;
-  height: 40px;
-  border-radius: 25px;
-  border: solid 1px #030f29;
-  justify-content:center;
-  align-items:center;
-  elevation:-3;
-  `
-
-const SaveText=styled.Text`
-  width: 71px;
-  height: 20px;
-  font-size: 12px;
-  font-weight: normal;
-  text-align: center;
-  color: #030f29;`

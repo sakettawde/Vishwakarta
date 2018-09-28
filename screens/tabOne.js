@@ -35,7 +35,7 @@ export default class tabOne extends Component{
       let startInterval = setInterval(() => {
       
       if (refreshCount < 8) {
-        //this.AdminFeedApi()
+        this.AdminFeedApi()
         
         refreshCount=refreshCount+1
       } else {
