@@ -32,7 +32,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 export default class LoginScreen extends Component {
   state = {
     phno: "8484902449",
-    pwd: "yellow",
+    pwd: "qwerty",
     loading: false,
     load_page:false
   }

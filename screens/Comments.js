@@ -6,7 +6,7 @@ import {StyleSheet,
   TouchableOpacity,
   Image,
   TextInput,
-  FlatList,} from 'react-native';
+  FlatList,Alert} from 'react-native';
 import {FlexColumn} from "../utils/styles";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import moment from "moment";
@@ -72,7 +72,7 @@ export default class Comments extends Component {
               console.log("Success")
               // console.log(data.imageData)
               // console.log(data.imageData.filter((image)=>{return image.feedCount==="10" ;}))    
-              this.setState({data:data.records})
+              this.setState({data:data.records.reverse()})
             } else if (data.message) {
               Alert.alert(data.message)
             }
@@ -105,6 +105,7 @@ export default class Comments extends Component {
 
         if (data.message == "Commented") {
           console.log("Success")
+          this.setState({comment:''})
           this.CommentHandler()
         } else if (data.message) {
           Alert.alert(data.message)
@@ -115,6 +116,10 @@ export default class Comments extends Component {
  });}
      
       onPostHandler=()=>{
+        if(this.state.comment==''){
+          Alert.alert("Cannot post Empty comment")
+          return
+        }
         let temp=this.props.navigation.getParam('tab');
         if(temp=='admin'){
           this.AddComment(AddComment)
@@ -128,6 +133,7 @@ export default class Comments extends Component {
         
       }
   render() {
+    const {comment}=this.state
     return (
       <FlexColumn style={{flex:1}}>    
        
@@ -174,6 +180,7 @@ export default class Comments extends Component {
                 <View style={{flex:4}}>
                     <TextInput underlineColorAndroid='transparent' multiline={true}  clearButtonMode="always"
                     onChangeText={(text)=>{this.setState({comment:text})}} editable={true}
+                    value={comment}
                     style={{width:'100%',textAlign:"left",textAlignVertical:"top",fontSize:18,marginTop:3}}/>
                 </View>
                 <View style={{flex:1,alignSelf:"flex-end"}}>

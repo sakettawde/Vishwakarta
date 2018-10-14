@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Tab, Tabs , Text, Button, Left, Icon, Right,Fab,
-          StyleProvider} from 'native-base';
+          StyleProvider,
+          Title,
+          Body} from 'native-base';
 import {View,StatusBar} from 'react-native';
 import Tab1 from './tabOne';
 import Tab2 from './tabTwo';
@@ -17,21 +19,30 @@ export default class Feed extends Component {
     <StyleProvider style={getTheme(material)}>
   <Container style={{marginTop:StatusBar.currentHeight}}>
     <Header hastabs>
-      
-    <Button transparent onPress={() => this.props.navigation.openDrawer()}>
+    
+     
+    <Left>
+    <Button transparent  onPress={() => this.props.navigation.openDrawer()}>
               <Icon name='menu' />
-            </Button>
-            <Right />
+     </Button>
+     </Left>
+    
+     <Body>
+     <Title style={{color:'#fff',textAlign:"center"}}>Vishwakarta</Title>  
+     </Body>
+     <Right/>
+     {/* <View style={{flex:.2}}></View> */}
+    
      
     </Header>   
     <Tabs  locked={true}>
-      <Tab heading='ADMIN'>
+      <Tab heading='HOME'>
         <Tab1 {...this.props}/>
       </Tab>
-      <Tab heading='MY WALL'>
+      <Tab heading='MY AREA'>
         <Tab2  {...this.props}/>
       </Tab>
-      <Tab heading='TEMPLE'>
+      <Tab heading='MANDIR'>
         <Tab3  {...this.props}/>
       </Tab>
       <Tab heading='VIDEOS'>

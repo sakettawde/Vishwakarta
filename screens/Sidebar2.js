@@ -222,7 +222,7 @@ export default class SideBar extends React.Component {
                   <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
                   onPress={()=>{this.props.navigation.navigate('AreaHead')}}>
                   <Icon active name="md-medal" />
-                    <Text>Area Head</Text>
+                    <Text>Area Lead</Text>
                   </ColumnButton>
                 </View>
             </FlexRow>
