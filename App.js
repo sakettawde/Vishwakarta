@@ -31,6 +31,7 @@ import List from './screens/List';
 import { Font, AppLoading } from "expo";
 import AddGotra from './screens/AddGotra';
 import AddProf from './screens/AddProf';
+import AddEdu from './screens/AddEdu';
 
 
 
@@ -163,6 +164,10 @@ const AppStackNavigator = createStackNavigator({
     },
     AddProf:{
       screen : AddProf,
+     //navigationOptions: { header: null }
+    },
+    AddEdu:{
+      screen : AddEdu,
      //navigationOptions: { header: null }
     },
     ChatPage:{

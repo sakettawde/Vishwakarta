@@ -45,7 +45,7 @@ export default class Feed extends Component {
       <Tab heading='MANDIR'>
         <Tab3  {...this.props}/>
       </Tab>
-      <Tab heading='VIDEOS'>
+      <Tab heading='WATCH'>
         <Tab4  {...this.props}/>
       </Tab>
     </Tabs>

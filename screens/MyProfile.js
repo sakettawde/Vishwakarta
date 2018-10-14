@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {Text , Label , Left ,Right ,Container, Header, Content, List, ListItem,Title, Input, Button 
       , DatePicker,Picker,Icon,StyleProvider, Card, CardItem} from 'native-base';
-import { Userinfo ,ListGotra ,ListProf ,PincodeUrl,EditUrl} from "../assets/ApiUrl";
+import { Userinfo ,ListGotra ,ListProf ,PincodeUrl,EditUrl,ListEdu} from "../assets/ApiUrl";
 import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
 import styled from 'styled-components';
@@ -30,6 +30,8 @@ export default class ProfileSettings extends React.Component {
       prof_name:"",
       gotra_name:"",
       selected_gotra: 1,
+      selected_edu:1,
+      edu_name:"",
       showhome:false,
       homedata:false,
       home_pin: "",
@@ -45,6 +47,7 @@ export default class ProfileSettings extends React.Component {
       pincodeData:[],
       proflist:[],
       gotralist:[],
+      edulist:[],
       
       records:[{}]
 
@@ -106,7 +109,12 @@ UserInfoApi = (value) =>{
         hvillage:data.records[0].hvillage,
         htaluka:data.records[0].htaluka,
         hdistrict:data.records[0].hdistrict,
-        hstate:data.records[0].hstate})
+        hstate:data.records[0].hstate,
+        
+        edu_name:data.records[0].education
+
+      
+      })
 
         //console.log(this.state.records)
         //console.log(data.records)                  
@@ -201,6 +209,44 @@ UserInfoApi = (value) =>{
         console.log(error.message);
      });
   }
+  edu_renderer=()=>{
+    fetch(ListEdu, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({  })
+    })
+      .then(data => {
+        return data.json()
+      })
+      .then(data => {
+        if(data.message=="list displayed"){
+          // this.setState({})
+          console.log(data.records)
+          this.setState({edulist:data.records,selected_edu:data.records[data.records.length-1].id})
+          var temp=data.records.find((item)=>{
+            return item.id ===this.state.selected_edu
+          })
+          //console.log(temp)
+          this.setState({
+            edu_name: temp.name
+          });
+          //console.log(this.state.records)
+          //console.log(data.records)                  
+          //console.log(this.state.gotralist.length)            
+        }
+        else {
+          Alert.alert(data)
+        }
+          
+      })
+      .catch((error)=>{
+        console.log("Api call error");
+        console.log(error.message);
+     });
+  }
 
   SaveApi = () =>{
 
@@ -243,6 +289,7 @@ UserInfoApi = (value) =>{
         ctaluka:this.state.ctaluka,
         cdistrict:this.state.cdistrict,
         cstate:this.state.cstate,
+        education:this.state.edu_name
       })
     })
       .then(data => {
@@ -292,11 +339,24 @@ UserInfoApi = (value) =>{
     });
     //console.log(this.state.gotra_name)
   }
-
+  onEduChange=async(value)=>{
+    await this.setState({
+      selected_edu: value
+    });
+    console.log(value)
+    var temp=this.state.edulist.find((item)=>{
+      return item.id ==value
+    })
+    console.log(temp)
+    await this.setState({
+      edu_name: temp.name
+    });
+  }
 handleEditClick(e){
   this.setState({value:true})
   this.prof_renderer()
   this.gotra_renderer()
+  this.edu_renderer()
 }
 
 handleSaveClick=async()=>{
@@ -376,6 +436,7 @@ selectedCurrentPincode=(item)=>{
 }
 
 
+
   render() {
     let info=this.state.records
 
@@ -386,6 +447,7 @@ selectedCurrentPincode=(item)=>{
       chosenDate,
       prof_name,
       gotra_name,
+      edu_name,
       current_pin,cdistrict,cstate,ctaluka,cvillage,
       home_pin,hvillage,htaluka,hdistrict,hstate
       
@@ -464,53 +526,7 @@ selectedCurrentPincode=(item)=>{
              
             </ListItem>
 
-            <ListItem>
-            <Left style={{flex:1}}>
-              <Text>Profession</Text>
-            </Left>
-            {this.state.value?(
-              <Picker
-              style={{borderWidth: 1 ,borderColor:"#A9A9A9"}}
-              mode="dropdown"
-              Icon={<Icon name="ios-arrow-down-outline" />}
-              selectedValue={this.state.selected_prof}
-              onValueChange={this.onProfChange.bind(this)}
-            >
-
-              {this.state.proflist.map(item => (
-                <Picker.Item key={item.id} label={item.name} value={item.id}></Picker.Item>
-               ))}
-            </Picker>
-
-            ):(
-              <Input placeholder={prof_name} editable={false}/>
-            )}
-              
-            </ListItem>
-
-            <ListItem>
-            <Left style={{flex:1}}>
-              <Text>Gotra</Text>
-            </Left>
-            {this.state.value?(
-             <Picker
-             style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}
-             mode="dropdown"
-             Icon={<Icon name="ios-arrow-down-outline" />}
-             selectedValue={this.state.selected_gotra}
-             onValueChange={this.onGotraChange.bind(this)}
-           >
-
-             
-             {this.state.gotralist.map(item => (
-               <Picker.Item key={item.id} label={item.gotra} value={item.id}></Picker.Item>
-              ))}
-           </Picker>
-
-            ):(
-              <Input placeholder={gotra_name} editable={false}/>
-            )}
-            </ListItem>
+            
             <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>
             <ListItem>
             <Left style={{flex:1}}>
@@ -596,7 +612,77 @@ selectedCurrentPincode=(item)=>{
             <Input placeholder={hvillage+", "+htaluka
                +", "+hdistrict+", "+hstate} editable={false}/>
             </ListItem>
-           
+            <ListItem>
+            <Left style={{flex:1}}>
+              <Text>Profession</Text>
+            </Left>
+            {this.state.value?(
+              <Picker
+              style={{borderWidth: 1 ,borderColor:"#A9A9A9"}}
+              mode="dropdown"
+              Icon={<Icon name="ios-arrow-down-outline" />}
+              selectedValue={this.state.selected_prof}
+              onValueChange={this.onProfChange.bind(this)}
+            >
+
+              {this.state.proflist.map(item => (
+                <Picker.Item key={item.id} label={item.name} value={item.id}></Picker.Item>
+               ))}
+            </Picker>
+
+            ):(
+              <Input placeholder={prof_name} editable={false}/>
+            )}
+              
+            </ListItem>
+
+            <ListItem>
+            <Left style={{flex:1}}>
+              <Text>Gotra</Text>
+            </Left>
+            {this.state.value?(
+             <Picker
+             style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}
+             mode="dropdown"
+             Icon={<Icon name="ios-arrow-down-outline" />}
+             selectedValue={this.state.selected_gotra}
+             onValueChange={this.onGotraChange.bind(this)}
+           >
+
+             
+             {this.state.gotralist.map(item => (
+               <Picker.Item key={item.id} label={item.gotra} value={item.id}></Picker.Item>
+              ))}
+           </Picker>
+
+            ):(
+              <Input placeholder={gotra_name} editable={false}/>
+            )}
+            </ListItem>
+
+            <ListItem>
+            <Left style={{flex:1}}>
+              <Text>Education</Text>
+            </Left>
+            {this.state.value?(
+             <Picker
+             style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}
+             mode="dropdown"
+             Icon={<Icon name="ios-arrow-down-outline" />}
+             selectedValue={this.state.selected_edu}
+             onValueChange={this.onEduChange.bind(this)}
+           >
+
+             
+             {this.state.edulist.map(item => (
+               <Picker.Item key={item.id} label={item.name} value={item.id}></Picker.Item>
+              ))}
+           </Picker>
+
+            ):(
+              <Input placeholder={edu_name} editable={false}/>
+            )}
+            </ListItem>
           </View>
         <View style={{flexDirection:'row',flex:1}}>
          <View style={{flex:1}}>

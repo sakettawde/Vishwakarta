@@ -154,6 +154,7 @@ export default class tabOne extends Component{
                  comments={item.commentCount}
                  feed_id={item.id}
                  user_id={this.state.user_id}
+                
                  tab="admin"
           />            
             }         

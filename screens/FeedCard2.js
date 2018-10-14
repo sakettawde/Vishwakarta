@@ -4,6 +4,10 @@ import { CardItem, Thumbnail, Text, Button, Left, Right , Body ,Icon } from 'nat
 import Swiper from 'react-native-swiper';
 import styled from "styled-components";
 import {AddLike,UnLike,AddTempleLike,UnTempleLike,AddMyLike,UnMyLike} from '../assets/ApiUrl';
+import Octicon from 'react-native-vector-icons/Octicons';
+import ActionSheet from 'react-native-actionsheet';
+
+
 
 export default class FeedCard2 extends Component {
 
@@ -13,7 +17,8 @@ export default class FeedCard2 extends Component {
       comments_count:0,
       image_array:{},
       tab:"",
-      feedId:""
+      feedId:"",
+      report:false
     }
 
   
@@ -24,6 +29,9 @@ export default class FeedCard2 extends Component {
         tab:this.props.tab,feedId:this.props.feed_id})
       
     }
+    showActionSheet = () => {
+      this.ActionSheet.show();
+    };
 
     addLikeApi = (link) => {
       console.log("In AddLikeApi")
@@ -134,7 +142,15 @@ export default class FeedCard2 extends Component {
     }
     
   }
-    
+  handleClick=(index)=>{
+    if(index==1){
+      console.log('Delete')
+    }
+    if(index==0){
+      console.log('Check')
+    }
+    console.log(index)
+  }
   render() {
     return (
         
@@ -146,8 +162,20 @@ export default class FeedCard2 extends Component {
                   <Text>{this.props.name}</Text>
                   <Text note>{this.props.date}</Text>
                 </Body>
+                
               </Left>
-            
+             
+              <Right >
+                
+               <Icon name='md-more' size={20} style={{color:'#00aa8a',fontSize: 20,width:20,padding:2,}}
+               onPress={()=>this.showActionSheet()}>
+               </Icon>
+               
+
+              <Octicon size={20} name="verified" style={{color:'#00aa8a',padding:2,flex:0}} />
+
+               </Right>
+
               </CardItem>
 
             
@@ -186,8 +214,6 @@ export default class FeedCard2 extends Component {
                   
                   <Text>{this.state.like_count} Likes</Text>
                 </Button>
-              </Left>
-              <Right>
                 <Button transparent textStyle={{color: '#87838B'}}
                 onPress={()=>{this.props.navigation.navigate('Comments',{
                   tab:this.props.tab,
@@ -197,8 +223,22 @@ export default class FeedCard2 extends Component {
                   <Icon name="md-chatboxes" />
                   <Text>{this.props.comments} Comments</Text>
                 </Button>
-              </Right>
+
+                <Button transparent textStyle={{color: '#87838B'}} onPress={()=>{this.setState({report:!this.state.report})}}>
+                {this.state.report?(<Icon name="ios-flag"  style={{color:"#c4050f"}}/>):
+                (<Icon name="ios-flag-outline" />)}
+                  <Text>Report</Text>
+                </Button>
+              </Left>
+              
             </CardItem>
+            <ActionSheet
+          ref={o => (this.ActionSheet = o)}
+          options={['Delete Post', 'cancel']}
+          cancelButtonIndex={1}
+          // destructiveButtonIndex={1}
+          onPress={index => this.handleClick(index)}
+        />
           </Card>
     );
   }

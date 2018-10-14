@@ -36,7 +36,7 @@ export default class SignupScreen2 extends React.Component{
 
   state = {
     image_loading: false,
-    imageurl:null,
+    imageurl:undefined,
     home_pin: "",
     hvillage:"",
     htaluka:"",
@@ -53,7 +53,8 @@ export default class SignupScreen2 extends React.Component{
     currentdata:false,
     pincodeData:[],
     isTemple:false,
-    enableScrollViewScroll:true,    
+    enableScrollViewScroll:true,  
+    role:"",  
 
   };
 
@@ -61,6 +62,15 @@ export default class SignupScreen2 extends React.Component{
   async componentDidMount() {
     await Permissions.askAsync(Permissions.CAMERA_ROLL);
     await Permissions.askAsync(Permissions.CAMERA);
+    this.info_array.name = this.props.navigation.getParam('name', '');
+    this.info_array.mobile_num = this.props.navigation.getParam('mobile_num', '');
+    this.info_array.password = this.props.navigation.getParam('password', '');
+    this.info_array.birthdate = this.props.navigation.getParam('birthdate', '');
+    this.info_array.type=this.props.navigation.getParam('type','')
+    //console.log(this.info_array.type)
+    this.info_array.profession = this.props.navigation.getParam('profession', '');
+    this.info_array.gotra = this.props.navigation.getParam('gotra', '');
+    this.info_array.education = this.props.navigation.getParam('education', '');
 }
 
   info_array={
@@ -68,26 +78,36 @@ export default class SignupScreen2 extends React.Component{
     mobile_num:"",
     password:"",
     birthdate:"",
-    toggle:"",
+    type:"",
     profession:"",
-    gotra:""
+    gotra:"",
+    education:""
 }
 
 
   check_func=()=>{
     //console.log("Code here")
-    let temp='http://www.myiconfinder.com/uploads/iconsets/256-256-f86ca6f98affc4bfe9306d9693638920.png'
-    if(this.state.imageurl){
-      temp=this.state.imageurl
-    }
+    
     let role='user'
     if(this.state.isTemple){
       role='temple'
     }
+    this.setState({role:role})
+  
 
     console.log(this.info_array);
-    console.log(temp);
-     this.SignupApi(temp,role);
+    if(!this.state.imageurl){
+      Alert.alert('Profile Picture is mandatory!')
+      return
+    }
+    //console.log(temp);
+    this.props.navigation.navigate('OtpScreen',{
+      mobile_num:this.info_array.mobile_num,
+      Signupfield:'yes',
+      Signup:this.SignupApi
+    })
+
+  //this.SignupApi(temp,role);
     
   }
   showActionSheet = () => {
@@ -98,7 +118,7 @@ export default class SignupScreen2 extends React.Component{
   
  
 
-  SignupApi = (avatar,role) =>{
+  SignupApi = () =>{
 
     if(this.state.home_pin.length < 5){
       Alert.alert("Enter Valid Pincode")
@@ -134,8 +154,10 @@ export default class SignupScreen2 extends React.Component{
         ctaluka:this.state.ctaluka,
         cdistrict:this.state.cdistrict,
         cstate:this.state.cstate,
-        avatar:avatar,
-        role:role      
+        avatar:this.state.imageurl,
+        type:this.info_array.type,
+        role:this.state.role,
+        education:this.info_array.education      
       })
     })
       .then(data => {
@@ -229,20 +251,7 @@ _onPressHandle=()=>{
 }
 
     render() {
-        this.info_array.name = this.props.navigation.getParam('name', '');
-        this.info_array.mobile_num = this.props.navigation.getParam('mobile_num', '');
-        this.info_array.password = this.props.navigation.getParam('password', '');
-        this.info_array.birthdate = this.props.navigation.getParam('birthdate', '');
-        const value = this.props.navigation.getParam('toggle', '');
-        if (value=='true'){
-          this.info_array.toggle="Business"
-        }
-        else{
-          this.info_array.toggle="Employee"
-        }
-
-        this.info_array.profession = this.props.navigation.getParam('profession', '');
-        this.info_array.gotra = this.props.navigation.getParam('gotra', '');
+       
         
 
         return (
@@ -424,7 +433,7 @@ _onPressHandle=()=>{
           ref={o => (this.ActionSheet = o)}
           options={['Take a photo', 'Choose from Camera Roll', 'cancel']}
           cancelButtonIndex={2}
-          destructiveButtonIndex={1}
+         // destructiveButtonIndex={1}
           onPress={index => this.handleImageSource(index)}
         />
       </View>

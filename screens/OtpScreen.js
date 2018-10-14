@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View ,Alert,StatusBar} from 'react-native';
-import { Header, Form, Item ,Input, Label } from 'native-base';
+// import { Header, Form, Item ,Input, Label } from 'native-base';
 import { UpdateOtp,CheckOtp } from "../assets/ApiUrl";
 import {LoginButton,ButtonText2 ,FlexColumn,ScreenTitle,FlexRow
   ,StyledTextInput,TextField,TextLabel} from "../utils/styles";
@@ -14,6 +14,7 @@ export default class OtpScreen extends React.Component {
   }
   state={
     mobile_num:"",
+    check_field:"",
     otp:""
   }
 
@@ -61,6 +62,8 @@ export default class OtpScreen extends React.Component {
 
   componentDidMount(){
     this.state.mobile_num = this.props.navigation.getParam('mobile_num');
+    this.state.check_field=this.props.navigation.getParam('Signupfield','no');
+
     this.reset()
     console.log(this.state.mobile_num)
   }
@@ -85,9 +88,16 @@ export default class OtpScreen extends React.Component {
       .then(data => {
         console.log("Checkotp Response", data)
         if(data.message=="verify OTP"){
-          this.props.navigation.navigate('Newpassword',{
-            mobile_num:this.state.mobile_num
-          })
+          if(this.state.check_field=='yes'){
+            console.log('signing up')
+            this.props.navigation.state.params.Signup()
+          }
+          else{
+            this.props.navigation.navigate('Newpassword',{
+              mobile_num:this.state.mobile_num
+            })
+          }
+         
                   
         }
         else {
@@ -102,6 +112,8 @@ export default class OtpScreen extends React.Component {
   
     }
 
+
+   
 
   render() {
     

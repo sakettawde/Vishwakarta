@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet,  StatusBar ,Alert} from 'react-native';
-import { Header, Form,Item ,Input, Label } from 'native-base';
-import { AddProfUrl } from "../assets/ApiUrl";
+// import { Header, Form,Item ,Input, Label } from 'native-base';
+import { AddEduUrl } from "../assets/ApiUrl";
 import {LoginButton,ButtonText2 ,FlexColumn,ScreenTitle,FlexRow
   ,StyledTextInput,TextField,TextLabel} from "../utils/styles";
 import {LinearGradient} from 'expo';
@@ -10,28 +10,28 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 
 
-export default class AddProf extends React.Component {
+export default class Addedu extends React.Component {
   static navigationOptions = {
-    title: 'Add New Profession',
+    title: 'Add Your Education',
   }
   state={
-   prof:""
+   edu:""
   }
 
 
-  addProfApi = () =>{
-    if(this.state.prof==''){
+  addeduApi = () =>{
+    if(this.state.edu==''){
       return
     }
-    console.log("In AddProfApi",this.state.prof)
-    fetch(AddProfUrl, {
+    console.log("In AddeduApi",this.state.edu)
+    fetch(AddEduUrl, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name:this.state.prof
+        name:this.state.edu
       })
     })
       .then(data => {
@@ -39,8 +39,8 @@ export default class AddProf extends React.Component {
       })
       .then(data => {
         console.log("AddGotra Response", data)
-        if(data.message=="Profession Added"){
-          this.props.navigation.state.params.updateProf()  
+        if(data.message=="Education Added"){
+          this.props.navigation.state.params.updateEdu()  
           this.props.navigation.navigate('SignupScreen')
                   
         }
@@ -69,18 +69,17 @@ export default class AddProf extends React.Component {
       style={{ width: "100%", height: "100%"}}
     >
       <FlexColumn style={{marginTop:StatusBar.currentHeight }}>
-        {/* <Header ><Text style={styles.headline}>Add New Profession</Text></Header> */}
 
           <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>
 
 
             <TextField style={{alignSelf: 'center',marginTop: 12,}}>
               <FlexRow style={{alignItems:"center",}}>
-                <TextLabel>Enter your Profession</TextLabel>
+                <TextLabel>Enter your Education</TextLabel>
                 <StyledTextInput
                 selectionColor="#3f51b5"
                 underlineColorAndroid="transparent"
-                onChangeText={(text)=>{this.setState({prof:text})}}
+                onChangeText={(text)=>{this.setState({edu:text})}}
                 />
               </FlexRow>
               </TextField> 
@@ -88,7 +87,7 @@ export default class AddProf extends React.Component {
 
 
             <LoginButton 
-             onPress={()=>this.addProfApi()}
+             onPress={()=>this.addeduApi()}
             style={{marginTop: 10,marginBottom:20}}
             >
               <ButtonText2>Add</ButtonText2>

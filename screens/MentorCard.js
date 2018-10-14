@@ -128,7 +128,7 @@ sendMessage = () => {
               </Left>
               <Right>
                     <View style={{flexDirection: 'column',justifyContent:'center',alignItems: 'center',}}>
-                    <Octicon size={30} name="verified" />
+                    <Octicon size={30} name="verified" style={{color:"green"}}/>
                     <Text note>Approved</Text>
                     </View>
               </Right>

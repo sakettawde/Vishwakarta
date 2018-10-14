@@ -3,7 +3,7 @@ import { StatusBar,  View ,Alert ,ScrollView} from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Label , Button ,DatePicker, Text, Left, Right 
 , Radio, Picker,Icon, Row} from 'native-base';
 //import Dialog from "react-native-dialog";
-import { ListGotra ,ListProf} from "../assets/ApiUrl";
+import { ListGotra ,ListProf,ListEdu} from "../assets/ApiUrl";
 import styled from 'styled-components';
 import {LoginButton,ButtonText2 ,FlexColumn,ScreenTitle,FlexRow
       ,StyledTextInput,TextField,TextLabel} from "../utils/styles";
@@ -22,10 +22,13 @@ export default class SignUp extends React.Component {
       chosenDate: new Date(),
       isSelect1: true,
       isSelect2: false,
+      isSelect3:false,
       selected_prof: 1,
       prof_name:"",
       gotra_name:"",
       selected_gotra: 1,
+      selected_edu:1,
+      edu_name:"",
       name:"",
       mobile_num:"",
       password:"",
@@ -51,6 +54,15 @@ export default class SignUp extends React.Component {
     },
    ],
 
+   edulist:[ {
+    "name": "C.A.",
+    "id": 0,
+ },
+ {
+   "name": "B.E.",
+   "id": 1,
+},
+],
      };
     this.setDate = this.setDate.bind(this);
 
@@ -61,6 +73,7 @@ export default class SignUp extends React.Component {
     componentDidMount(){
       this.gotra_renderer()    
       this.prof_renderer()  
+      this.edu_renderer()
      
     }
   
@@ -79,6 +92,17 @@ export default class SignUp extends React.Component {
       Alert.alert("Password cannot be less than 5 characters")
       return
     } 
+    let type=""
+    if(this.state.isSelect1){
+      type='Business'
+    }
+    else if(this.state.isSelect2){
+      type='Employee'
+    }
+    else{
+      type='Student'
+    }
+    
     console.log(this.state.name)
     console.log(this.state.mobile_num)
     console.log(this.state.password)
@@ -86,6 +110,8 @@ export default class SignUp extends React.Component {
     console.log(this.state.isSelect1)
     console.log(this.state.prof_name)
     console.log(this.state.gotra_name)
+    console.log(this.state.edu_name)
+    console.log(type)
 
    
 
@@ -96,9 +122,10 @@ export default class SignUp extends React.Component {
       mobile_num :this.state.mobile_num,
       password:this.state.password,
       birthdate: this.state.chosenDate.toString().substr(4,12),
-      toggle:this.state.isSelect1.toString(),
       profession:this.state.prof_name,
-      gotra:this.state.gotra_name
+      gotra:this.state.gotra_name,
+      education:this.state.edu_name,
+      type:type
     })
   
   }
@@ -138,6 +165,19 @@ export default class SignUp extends React.Component {
     });
     //console.log(this.state.gotra_name)
   }
+  onEduChange=async(value)=>{
+    await this.setState({
+      selected_edu: value
+    });
+    console.log(value)
+    var temp=this.state.edulist.find((item)=>{
+      return item.id ==value
+    })
+    console.log(temp)
+    await this.setState({
+      edu_name: temp.name
+    });
+  }
   addGotraHandler=()=>{
     
     this.props.navigation.navigate('AddGotra', {updateGotra: this.gotra_renderer})
@@ -146,6 +186,11 @@ export default class SignUp extends React.Component {
   addProfHandler=()=>{
     
     this.props.navigation.navigate('AddProf', {updateProf: this.prof_renderer})
+    
+  }
+  addEduHandler=()=>{
+    
+    this.props.navigation.navigate('AddEdu', {updateEdu: this.edu_renderer})
     
   }
 
@@ -201,10 +246,14 @@ export default class SignUp extends React.Component {
       })
       .then(data => {
         if(data.message=="Data available"){
-          this.setState({proflist:data.records,selected_prof:this.state.proflist[this.state.proflist.length-1].id})
-          var temp=this.data.records.find((item)=>{
-            return item.id == "1"
+
+         
+
+          this.setState({proflist:data.records,selected_prof:data.records[data.records.length-1].id})
+          var temp=data.records.find((item)=>{
+            return item.id == this.state.selected_prof
           })
+          // console.log(temp)
           this.setState({
             prof_name: temp.name
           });
@@ -221,7 +270,45 @@ export default class SignUp extends React.Component {
         console.log(error.message);
      });
   }
-  
+
+  edu_renderer=()=>{
+    fetch(ListEdu, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({  })
+    })
+      .then(data => {
+        return data.json()
+      })
+      .then(data => {
+        if(data.message=="list displayed"){
+          // this.setState({})
+          console.log(data.records)
+          this.setState({edulist:data.records,selected_edu:data.records[data.records.length-1].id})
+          var temp=data.records.find((item)=>{
+            return item.id ===this.state.selected_edu
+          })
+          //console.log(temp)
+          this.setState({
+            edu_name: temp.name
+          });
+          //console.log(this.state.records)
+          //console.log(data.records)                  
+          //console.log(this.state.gotralist.length)            
+        }
+        else {
+          Alert.alert(data)
+        }
+          
+      })
+      .catch((error)=>{
+        console.log("Api call error");
+        console.log(error.message);
+     });
+  }
  
   render() {
     return (
@@ -322,7 +409,7 @@ export default class SignUp extends React.Component {
             </FlexRow>
           </TextField>
           
-            <TextField style={{alignSelf: 'center',marginTop: 12}}>
+            {/* <TextField style={{alignSelf: 'center',marginTop: 12}}>
             <FlexRow style={{alignItems:"center",}}>
                   <View style={{flex:5,flexDirection:"row"}}>
                   <View style={{flex:1}}>
@@ -345,6 +432,55 @@ export default class SignUp extends React.Component {
                    </View>
                 </View>
             </FlexRow>
+           
+          </TextField> */}
+          <TextField style={{alignSelf: 'center',marginTop: 12}}>
+            <FlexColumn style={{alignItems:"center",}}>
+                  <View style={{flex:1,flexDirection:"row"}}>
+                  <View style={{flex:1}}>
+                    <Radio selected={this.state.isSelect1} onPress={()=>{
+                      this.setState({
+                        isSelect1:true,
+                        isSelect2:false,
+                        isSelect3:false
+                      })}}
+                    selectedColor='#007a5d'/>
+                    </View>
+                  <View style={{flex:3,flexDirection:'row'}}>
+                   <Text style={{color:'#fff'}}>Business</Text>
+                   </View>
+                </View>
+                <View style={{flex:1,flexDirection:"row"}}>
+                  
+                    <View style={{flex:1}}>
+                    <Radio selected={this.state.isSelect2} onPress={()=>{
+                      this.setState({
+                        isSelect1:false,
+                        isSelect2:true,
+                        isSelect3:false
+                      })}}
+                    selectedColor='#007a5d'/>
+                    </View>
+                    <View style={{flex:3,flexDirection:'row'}}>
+                   <Text style={{color:'#fff'}}>Employed</Text>
+                   </View>
+                </View>
+                <View style={{flex:1,flexDirection:"row"}}>
+                  
+                    <View style={{flex:1}}>
+                    <Radio selected={this.state.isSelect3}onPress={()=>{
+                      this.setState({
+                        isSelect1:false,
+                        isSelect2:false,
+                        isSelect3:true
+                      })}}
+                    selectedColor='#007a5d'/>
+                    </View>
+                    <View style={{flex:3,flexDirection:'row'}}>
+                   <Text style={{color:'#fff'}}>Student</Text>
+                   </View>
+                </View>
+            </FlexColumn>
            
           </TextField>
             
@@ -372,6 +508,8 @@ export default class SignUp extends React.Component {
           </Button>
           </Item> */}
           <TextField style={{alignSelf: 'center',marginTop: 12}}>
+          <FlexColumn>
+            <TextLabel >Select Profession</TextLabel>
             <FlexRow style={{alignItems:"center",flex:1}}>
               
               
@@ -393,6 +531,7 @@ export default class SignUp extends React.Component {
             <Icon name='md-add' />
            </Button>
             </FlexRow>
+            </FlexColumn>
 
             
           </TextField>
@@ -422,6 +561,8 @@ export default class SignUp extends React.Component {
           </Item> */}
 
            <TextField style={{alignSelf: 'center',marginTop: 12}}>
+           <FlexColumn>
+            <TextLabel >Select Gotra</TextLabel>
             <FlexRow style={{alignItems:"center",flex:1}}>
               
               
@@ -442,6 +583,35 @@ export default class SignUp extends React.Component {
             <Icon name='md-add' />
            </Button>
             </FlexRow>
+            </FlexColumn>
+
+            
+          </TextField>
+
+          <TextField style={{alignSelf: 'center',marginTop: 12}}>
+           <FlexColumn>
+            <TextLabel >Education</TextLabel>
+            <FlexRow style={{alignItems:"center",flex:1}}>
+              
+              
+            <Picker
+              style={{borderWidth: 1 ,borderColor:'#A9A9A9'}}
+              mode="dropdown"
+              Icon={<Icon name="ios-arrow-down-outline" />}
+              selectedValue={this.state.selected_edu}
+              onValueChange={this.onEduChange.bind(this)}
+            >
+
+              
+              {this.state.edulist.map(item => (
+                <Picker.Item key={item.id} label={item.name} value={item.id}></Picker.Item>
+               ))}
+            </Picker>
+            <Button icon rounded light small onPress={()=>this.addEduHandler()} style={{marginTop:5}}>
+            <Icon name='md-add' />
+           </Button>
+            </FlexRow>
+            </FlexColumn>
 
             
           </TextField>

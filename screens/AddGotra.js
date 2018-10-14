@@ -18,6 +18,9 @@ export default class AddGotra extends React.Component {
 
 
   addGotraApi = () =>{
+    if(this.state.gotra==''){
+      return
+    }
     console.log("In AddGotraApi",this.state.gotra)
     fetch(AddGotraUrl, {
       method: "POST",
