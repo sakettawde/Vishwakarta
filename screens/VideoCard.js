@@ -69,7 +69,7 @@ export const FlexColumn = styled.View`
 `
 const NameText=styled.Text`
 height: 30px;
-font-size: 22px;
+font-size: 15px;
 font-weight: 500;
 font-style: normal;
 text-align: center;

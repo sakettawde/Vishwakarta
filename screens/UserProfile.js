@@ -11,6 +11,7 @@ import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
 import styled from 'styled-components';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
 
 
 
@@ -75,17 +76,56 @@ UserInfoApi = (val) =>{
     return (
       <StyleProvider style={getTheme(material)}>
 
+      
+
       <Container >
         {/* <Header /> */}
         <Content style={ { zIndex: 0 }}>
-          <Image source={{uri:this.state.records[0].avatar }} 
-          style={{marginTop:15,height:80,width:80 ,borderRadius:40,alignSelf:"center",
-                elevation:8}}/>
-         
-         
-         
          
 
+          <View style={{ flexDirection: 'row'}} >
+
+
+          <View style={{ flex:1}} >
+          <Button icon large rounded light style={{elevation:6,marginTop:13,alignSelf:"center",
+          padding:2}}
+          onPress={()=>{
+            this.props.navigation.navigate('ChatPage',{
+              user_id:this.state.user_id,
+              user_name:this.state.records[0].name
+            })}}
+            >
+    <Feather size={50} name="phone-call" style ={{color : '#00aa8a'}}/>
+    </Button>
+
+    </View>
+
+    <View style={{ flex:1}} >
+
+    <Image source={{uri:this.state.records[0].avatar }} 
+    style={{marginTop:15,height:80,width:80 ,borderRadius:40,alignSelf:"center",
+          elevation:8}}/>
+
+     </View>
+
+     <View style={{ flex:1}} >
+          <Button icon large rounded light style={{elevation:6,marginTop:13,alignSelf:"center",
+          padding:2}}
+          onPress={()=>{
+            this.props.navigation.navigate('ChatPage',{
+              user_id:this.state.user_id,
+              user_name:this.state.records[0].name
+            })}}
+            >
+    <MaterialIcon size={50} name="message-text-outline"  style ={{color : '#00aa8a'}}/>
+    </Button>
+
+    </View>
+          
+          </View>
+
+
+        
 
           <CardView>
             
@@ -100,7 +140,7 @@ UserInfoApi = (val) =>{
             </BoxView>
 
             <BoxView style={{marginTop:12}}>
-              <TagText>BirthDate</TagText>
+              <TagText>Birth Date</TagText>
               <ValueText>{this.state.records[0].dob}</ValueText>
             </BoxView>
 
@@ -120,9 +160,40 @@ UserInfoApi = (val) =>{
             </BoxView>
 
             <BoxView style={{marginTop:12}}>
-              <TagText>Home Pincode</TagText>
-              <ValueText>{this.state.records[0].home_pincode}</ValueText>
-            </BoxView>         
+            <TagText>Current Village</TagText>
+             <ValueText>{this.state.records[0].cvillage}</ValueText>           
+            </BoxView>
+
+            <BoxView style={{marginTop:12}}>
+              <TagText>Current Taluka</TagText>
+              <ValueText>{this.state.records[0].ctaluka}</ValueText>
+            </BoxView>
+
+            <BoxView style={{marginTop:12}}>
+              <TagText>Current State</TagText>
+              <ValueText>{this.state.records[0].cstate}</ValueText>
+            </BoxView> 
+            
+            <BoxView style={{marginTop:12}}>
+            <TagText>Home Pincode</TagText>
+             <ValueText>{this.state.records[0].home_pincode}</ValueText>           
+            </BoxView>
+            
+        
+            <BoxView style={{marginTop:12}}>
+            <TagText>Home Village</TagText>
+             <ValueText>{this.state.records[0].hvillage}</ValueText>           
+            </BoxView>
+
+            <BoxView style={{marginTop:12}}>
+              <TagText>Home Taluka</TagText>
+              <ValueText>{this.state.records[0].htaluka}</ValueText>
+            </BoxView>
+
+            <BoxView style={{marginTop:12}}>
+              <TagText>Home State</TagText>
+              <ValueText>{this.state.records[0].hstate}</ValueText>
+            </BoxView>  
             
 
           </CardView>
@@ -135,16 +206,7 @@ UserInfoApi = (val) =>{
             })}
           }><Text>Chat</Text></Button> */}
 
-          <Button icon large rounded light style={{elevation:6,marginTop:-40,alignSelf:"flex-end",
-                padding:2,marginRight:20}}
-                onPress={()=>{
-                  this.props.navigation.navigate('ChatPage',{
-                    user_id:this.state.user_id,
-                    user_name:this.state.records[0].name
-                  })}}
-                  >
-          <MaterialIcon size={50} name="message-text-outline" />
-          </Button>
+ 
 
 
           

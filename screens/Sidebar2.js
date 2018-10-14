@@ -125,7 +125,7 @@ export default class SideBar extends React.Component {
     return (
       <FlexColumn style={{marginTop: StatusBar.currentHeight,flex:1}}>
         
-         <View style={{width:"100%",height:150}}>
+         <View style={{width:"100%",height:150,backgroundColor:'#00aa8a'}}>
         
             <TouchableOpacity  onPress={()=>{this.props.navigation.navigate('Profile')}}> 
             <Image  source={{uri:this.state.avatar}}
@@ -141,9 +141,9 @@ export default class SideBar extends React.Component {
           </TouchableOpacity>
           </View>
 
-            <FlexRow style={{flex:.3}}></FlexRow>
+            <FlexRow style={{flex:.3,backgroundColor:'#00aa8a'}}></FlexRow>
             <FlexRow style={{flex:.8}}>
-              <View style={{flex: 1,}}>
+              <View style={{flex: 1,backgroundColor:'#00aa8a'}}>
                 <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
                 onPress={()=>{this.props.navigation.navigate('List',{
                   info:"prof"
@@ -152,7 +152,7 @@ export default class SideBar extends React.Component {
                   <NumberSubText>{this.state.prof}</NumberSubText>
                 </ColumnButton>
               </View>
-              <View style={{flex: 1,}}>
+              <View style={{flex: 1,backgroundColor:'#00aa8a'}}>
                 <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
                 onPress={()=>{this.props.navigation.navigate('List',{
                   info:"near_me"
@@ -161,7 +161,7 @@ export default class SideBar extends React.Component {
                   <NumberSubText>Near Me</NumberSubText>
                 </ColumnButton>
               </View>
-              <View style={{flex: 1,}}>
+              <View style={{flex: 1,backgroundColor:'#00aa8a'}}>
                 <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
                 onPress={()=>{this.props.navigation.navigate('Contacts')}}>
                   <NumberText>10</NumberText>
@@ -182,7 +182,7 @@ export default class SideBar extends React.Component {
                   <ColumnButton style={{alignItems:'center',justifyContent: 'center',}}
                   onPress={()=>{this.props.navigation.navigate('Contacts')}}>
                   <Icon active name="md-contact" />
-                    <Text>Explore</Text>
+                    <Text>Search</Text>
                   </ColumnButton>
                 </View>
                 <View style={{flex: 1,}}>

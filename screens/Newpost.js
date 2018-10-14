@@ -124,24 +124,24 @@ export default class Newpost extends Component {
     
        <KeyboardAwareScrollView >
           <Form >
-            <Item stackedLabel>
-              <Label>Select Image</Label>
-              <Right>
-              <Button iconLeft light onPress={()=>this.showActionSheet()}>
-            <Icon name='md-add' />
-            <Text>Select Image</Text>
-          </Button>
-              </Right>
-            </Item>
-            
-           
-
+          
             <Item stackedLabel last >
-              <Label>Caption</Label>    
+              <Label>Text</Label>    
               <KeyboardAwareScrollView enableOnAndroid={true} style={{width:'100%'}}>
               <Input multiline={true} numberOfLines={8} onChangeText={(text)=>this.caption_handler(text)}/>
               </KeyboardAwareScrollView>        
             </Item>
+
+            <Item stackedLabel>
+            <Label>Select Image</Label>
+            <Right>
+            <Button iconLeft light onPress={()=>this.showActionSheet()}>
+          <Icon name='md-add' />
+          <Text>Select Image</Text>
+        </Button>
+            </Right>
+          </Item>
+
           </Form>
           {this.state.loading_image && <ActivityIndicator size="large"/>}
           <NextButton 
