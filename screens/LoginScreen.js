@@ -140,7 +140,8 @@ export default class LoginScreen extends Component {
           <TextField style={{alignSelf: 'center'}}>
             <FlexRow style={{alignItems:"center",}}>
               <TextLabel>Mobile</TextLabel>
-              <StyledTextInput
+              <TextInput
+              style={{fontSize: 18, color:'#fff',  flex:1}}
               selectionColor="#fff"
               underlineColorAndroid="transparent"
                 onChangeText={text => {
@@ -148,6 +149,9 @@ export default class LoginScreen extends Component {
                 }}
                 keyboardType="numeric"
                 maxLength={10}
+                onSubmitEditing={() => this.passwordInput.focus()}
+                returnKeyType="next"
+                ref={(input1) => {this.emailInput = input1;}}
               />
             </FlexRow>
           </TextField>
@@ -158,11 +162,14 @@ export default class LoginScreen extends Component {
           <TextField style={{marginTop:12,alignSelf: 'center',}}>
             <FlexRow style={{alignItems:"center"}}>
               <TextLabel>Password</TextLabel>
-              <StyledTextInput
+              <TextInput
+              style={{fontSize: 18, color:'#fff',  flex:1}}
               selectionColor="#fff"
               underlineColorAndroid="transparent"
               secureTextEntry={true}
               onChangeText={text => this.setState({ pwd: text })}
+              returnKeyType="go"
+              ref={(input2) => {this.passwordInput = input2}}
               />
             </FlexRow>
            </TextField>
